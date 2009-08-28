@@ -1,7 +1,5 @@
 package haxigniter.libraries;
 
-import php.Lib;
-
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.WebTypes;
 import haxigniter.application.config.Controllers;
@@ -18,9 +16,9 @@ class Controller implements haxe.rtti.Infos
 	public static function Run(uriSegments : Array<String>) : Void
 	{
 		var controllerClass : String = (uriSegments[0] == null) ? Controller.DefaultController : uriSegments[0];
-		controllerClass = Controller.namespace + '.' + controllerClass.substr(0, 1).toUpperCase() + controllerClass.substr(1);
-		
 		var controllerMethod : String = (uriSegments[1] == null) ? Controller.DefaultMethod : uriSegments[1];
+
+		controllerClass = Controller.namespace + '.' + controllerClass.substr(0, 1).toUpperCase() + controllerClass.substr(1);
 		
 		// Instantiate a controller with this class name.
 		var classType : Class<Dynamic> = Type.resolveClass(controllerClass);
@@ -42,7 +40,7 @@ class Controller implements haxe.rtti.Infos
 	}
 	
 	/**
-	* Cast int and float, other formats will be kept as string.
+	* Cast arguments to controller (from Uri) to correct type, throwing WebTypeException if typecast fails.
 	*/
 	private static function typecastArguments(classType : Class<Dynamic>, classMethod : String, arguments : Array<String>) : Array<Dynamic>
 	{

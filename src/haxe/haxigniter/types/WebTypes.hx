@@ -1,5 +1,6 @@
 package haxigniter.types;
 
+import haxigniter.libraries.Debug;
 import haxigniter.exceptions.Exception;
 
 /**
@@ -26,14 +27,18 @@ class DbID
 
 class WebTypeFactory
 {
+	public static var ArrayDelimiter : String = '-';
+	
 	public static function CreateType(typeString : String, value : String) : Class<Dynamic>
 	{
 		var output : Dynamic = null;
 		
-		//trace('Create type: ' + typeString + '<br>');
+		//Debug.trace('[WebTypeFactory] Creating type: ' + typeString);
 		
 		switch(typeString)
 		{
+			///// Built-in types ////////////////////////////////////
+			
 			case 'Int':
 				output = Std.parseInt(value);
 				if(output == null)
@@ -47,7 +52,22 @@ class WebTypeFactory
 			case 'String':
 				output = value;
 			
-			default:
+			case 'Array<Int>':
+				output = [];
+				for(val in value.split(ArrayDelimiter))
+				{
+					var tempInt = Std.parseInt(val);
+					if(tempInt == null)
+						throw new WebTypeException(Int, val);
+					
+					output.push(tempInt);
+				}
+
+			/////////////////////////////////////////////////////////
+			
+			default:			
+				// Other types will be created by reflection with the string value as argument.
+				// It's up to those classes to determine if the value is legal or not.
 				var classType = Type.resolveClass(typeString);
 				if(classType == null)
 					throw new Exception('[WebTypeFactory] Type not found: ' + typeString);
@@ -55,7 +75,7 @@ class WebTypeFactory
 				output = Type.createInstance(classType, [value]);
 		}
 
-		//trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')<br>');
+		//Debug.trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')');
 
 		return output;
 	}

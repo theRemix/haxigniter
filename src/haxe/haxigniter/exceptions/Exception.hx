@@ -16,6 +16,9 @@ class Exception
 	
 	public function new(message : String, ?code : Int = 0, ?stack : haxe.PosInfos )
 	{
+#if php
+		message = StringTools.htmlEscape(message);
+#end
 		this.message = message;
 		this.code = code;
 		this.stack = stack;

@@ -1,15 +1,15 @@
 package haxigniter.application.controllers;
 
+import haxigniter.libraries.Debug;
 import haxigniter.types.WebTypes;
 
 class Start extends haxigniter.libraries.Controller
 {
 	public var test : Bool;
 	
-	public function index(id : DbID, name : Int)
+	public function index(id : Array<Int>)
 	{
-		trace(id.toInt);
-		
+		//Debug.trace(id);
 		//trace(Type.typeof(id));
 		//trace('<br>Very nice:' + id);
 	}

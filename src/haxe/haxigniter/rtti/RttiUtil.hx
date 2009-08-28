@@ -14,7 +14,7 @@ class RttiUtil
 	{
 		var output = new Hash<List<CArgument>>();
 		
-		var root : Xml = Xml.parse(RttiUtil.getRtti(classType)).firstElement();
+		var root : Xml = Xml.parse(getRtti(classType)).firstElement();
 		var infos = new haxe.rtti.XmlParser().processElement(root);
 
 		// Find class declaration and all functions in it.
@@ -33,9 +33,10 @@ class RttiUtil
 							{
 								switch(arg.t)
 								{
-									// Finally, create the CArgument type.
+									// Create the CArgument type and test for 
 									case CClass(name, params):
-										argList.add({type: name, opt: arg.opt, name: arg.name});
+										var typeName = TypeName(arg.t, arg.opt);										
+										argList.add({type: typeName, opt: arg.opt, name: arg.name});
 									
 									default:
 										// Do nothing if not an argument.
@@ -55,6 +56,35 @@ class RttiUtil
 
 		return output;
 	}	
+
+	public static function TypeName(type : CType, opt : Bool) : String 
+	{
+		switch(type)
+		{
+			case CFunction(_,_):
+				return opt ? 'Null<function>' : 'function';
+			
+			case CUnknown:
+				return opt ? 'Null<unknown>' : 'unknown';
+			
+			case CAnonymous(_), CDynamic(_):
+				return opt ? 'Null<Dynamic>' : 'Dynamic';
+			
+			case CEnum(name, params), CClass(name, params), CTypedef(name, params):
+				var t = name;
+				
+				if(params != null && params.length > 0) 
+				{
+					var types = new List<String>();
+					for(p in params)
+						types.add(TypeName(p, false));
+					
+					t += '<' + types.join(',') + '>';
+				}
+				
+				return name != 'Null' && opt ? 'Null<'+t+'>' : t;
+		}
+	}
 	
 	public static function getRtti(classType : Class<Dynamic>) : String
 	{
