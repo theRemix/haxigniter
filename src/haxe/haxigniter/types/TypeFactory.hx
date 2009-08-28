@@ -19,13 +19,13 @@ class DbID
 		var intValue : Int = Std.parseInt(input);
 
 		if(intValue == null || intValue <= 0)
-			throw new WebTypeException(Type.getClassName(Type.getClass(this)), input);
+			throw new TypeException(Type.getClassName(Type.getClass(this)), input);
 		
 		this.intValue = intValue;
 	}
 }
 
-class WebTypeFactory
+class TypeFactory
 {
 	public static var ArrayDelimiter : String = '-';
 	
@@ -36,7 +36,10 @@ class WebTypeFactory
 		
 		//Debug.trace('[WebTypeFactory] Creating type: ' + typeString);
 		
-		switch(typeString.substr(0, typeString.indexOf('<')))
+		var typeParam = typeString.indexOf('<');
+		var mainType = typeParam > 0 ? typeString.substr(0, typeParam) : typeString;
+		
+		switch(mainType)
 		{
 			///// Built-in types ////////////////////////////////////
 			
@@ -63,7 +66,7 @@ class WebTypeFactory
 
 			/////////////////////////////////////////////////////////
 			
-			default:			
+			default:
 				// Other types will be created by reflection with the string value as argument.
 				// It's up to those classes to determine if the value is legal or not.
 				var classType = Type.resolveClass(typeString);
@@ -74,7 +77,7 @@ class WebTypeFactory
 		}
 
 		if(output == null)
-			throw new WebTypeException(typeString, value);
+			throw new TypeException(typeString, value);
 
 		//Debug.trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')');
 
@@ -82,7 +85,7 @@ class WebTypeFactory
 	}
 }
 
-class WebTypeException extends Exception
+class TypeException extends Exception
 {
 	public var ClassName(getClassName, null) : String;
 	private var className : String;

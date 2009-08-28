@@ -1,7 +1,7 @@
 package haxigniter.libraries;
 
 import haxigniter.rtti.RttiUtil;
-import haxigniter.types.WebTypes;
+import haxigniter.types.TypeFactory;
 import haxigniter.application.config.Controllers;
 
 class ControllerException extends haxigniter.exceptions.Exception {}
@@ -51,8 +51,17 @@ class Controller implements haxe.rtti.Infos
 		
 		for(method in methods.get(classMethod))
 		{
-			// The methods come in the same order as the arguments, so match each argument with a method type.
-			output.push(WebTypeFactory.CreateType(method.type, arguments[c++]));
+			// Test if value is optional, then push a null argument.
+			if(method.opt && arguments[c] == '')
+			{
+				++c;
+				output.push(null);
+			}
+			else
+			{
+				// The methods come in the same order as the arguments, so match each argument with a method type.
+				output.push(TypeFactory.CreateType(method.type, arguments[c++]));
+			}
 		}
 
 		return output;		

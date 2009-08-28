@@ -35,7 +35,8 @@ class RttiUtil
 								{
 									// Create the CArgument type and test for 
 									case CClass(name, params):
-										var typeName = TypeName(arg.t, arg.opt);										
+										// Set optional to false to avoid Null<T> since it can be deducted from the type itself.
+										var typeName = TypeName(arg.t, false);										
 										argList.add({type: typeName, opt: arg.opt, name: arg.name});
 									
 									default:
