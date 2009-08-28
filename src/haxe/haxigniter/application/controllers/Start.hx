@@ -7,7 +7,7 @@ class Start extends haxigniter.libraries.Controller
 {
 	public var test : Bool;
 	
-	public function index(id : Array<Int>)
+	public function index(id : Array<DbID>)
 	{
 		//Debug.trace(id);
 		//trace(Type.typeof(id));

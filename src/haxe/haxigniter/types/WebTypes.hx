@@ -19,7 +19,7 @@ class DbID
 		var intValue : Int = Std.parseInt(input);
 
 		if(intValue == null || intValue <= 0)
-			throw new WebTypeException(Type.getClass(this), input);
+			throw new WebTypeException(Type.getClassName(Type.getClass(this)), input);
 		
 		this.intValue = intValue;
 	}
@@ -31,36 +31,34 @@ class WebTypeFactory
 	
 	public static function CreateType(typeString : String, value : String) : Class<Dynamic>
 	{
+		// If output is null at the end, an error will be thrown.
 		var output : Dynamic = null;
 		
 		//Debug.trace('[WebTypeFactory] Creating type: ' + typeString);
 		
-		switch(typeString)
+		switch(typeString.substr(0, typeString.indexOf('<')))
 		{
 			///// Built-in types ////////////////////////////////////
 			
 			case 'Int':
 				output = Std.parseInt(value);
-				if(output == null)
-					throw new WebTypeException(Int, value);
 
 			case 'Float':
 				output = Std.parseFloat(value);
-				if(output == null)
-					throw new WebTypeException(Float, value);
 			
 			case 'String':
 				output = value;
 			
-			case 'Array<Int>':
+			case 'Array':
+				// Find out type parameter and create types from it.
+				// NOTE: Right now only one parameter is supported!
+				var typeParameter = typeString.substr(typeString.indexOf('<') + 1);
+				typeParameter = typeParameter.substr(0, typeParameter.length - 1);
+				
 				output = [];
 				for(val in value.split(ArrayDelimiter))
 				{
-					var tempInt = Std.parseInt(val);
-					if(tempInt == null)
-						throw new WebTypeException(Int, val);
-					
-					output.push(tempInt);
+					output.push(CreateType(typeParameter, val));
 				}
 
 			/////////////////////////////////////////////////////////
@@ -75,6 +73,9 @@ class WebTypeFactory
 				output = Type.createInstance(classType, [value]);
 		}
 
+		if(output == null)
+			throw new WebTypeException(typeString, value);
+
 		//Debug.trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')');
 
 		return output;
@@ -83,19 +84,19 @@ class WebTypeFactory
 
 class WebTypeException extends Exception
 {
-	public var Type(getType, null) : Class<Dynamic>;
-	private var type : Class<Dynamic>;
-	private function getType() { return this.type; }
+	public var ClassName(getClassName, null) : String;
+	private var className : String;
+	private function getClassName() { return this.className; }
 
 	public var Value(getValue, null) : String;
 	private var value : String;
 	private function getValue() { return this.value; }
 	
-	public function new(type : Class<Dynamic>, value : String)
+	public function new(className : String, value : String)
 	{
-		this.type = type;
+		this.className = className;
 		this.value = value;
 		
-		super('Invalid value for ' + type + ': "' + value + '"');
+		super('Invalid value for ' + className + ': "' + value + '"');
 	}
 }
