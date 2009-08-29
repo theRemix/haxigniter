@@ -2,12 +2,17 @@ package haxigniter.libraries;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
+
+import haxigniter.application.config.Config;
 import haxigniter.application.config.Controllers;
 
 class ControllerException extends haxigniter.exceptions.Exception {}
 
 class Controller implements haxe.rtti.Infos
 {
+	public var Config(getConfig, null) : Config;
+	private function getConfig() { return Config.Instance(); }
+	
 	public static var DefaultController : String = 'start';
 	public static var DefaultMethod : String = 'index';
 	
@@ -40,7 +45,7 @@ class Controller implements haxe.rtti.Infos
 	}
 	
 	/**
-	* Cast arguments to controller (from Uri) to correct type, throwing WebTypeException if typecast fails.
+	* Cast arguments to controller (from Uri) to correct type, throwing TypeException if typecast fails.
 	*/
 	private static function typecastArguments(classType : Class<Dynamic>, classMethod : String, arguments : Array<String>) : Array<Dynamic>
 	{

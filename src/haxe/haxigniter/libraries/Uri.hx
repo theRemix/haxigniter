@@ -1,11 +1,11 @@
 package haxigniter.libraries;
 
+import haxigniter.application.config.Config;
 import php.Web;
 
 class Uri
 {
-	//'a-z 0-9~%.:=_åäöÅÄÖáéü-'
-	public static var PermittedUriChars : String = 'a-z 0-9~%.:_-';
+	public static var PermittedUriChars : String = Config.Instance().PermittedUriChars;
 	
 	public static var Segments(getSegments, null) : Array<String>;
 	private static var segments : Array<String>;
