@@ -12,13 +12,10 @@ class RttiUtil
 {
 	public static function getMethods(classType : Class<Dynamic>) : Hash<List<CArgument>>
 	{
-		var output = new Hash<List<CArgument>>();
-		
-		var root : Xml = Xml.parse(getRtti(classType)).firstElement();
-		var infos = new haxe.rtti.XmlParser().processElement(root);
+		var output = new Hash<List<CArgument>>();		
 
 		// Find class declaration and all functions in it.
-		switch(infos)
+		switch(GetTypeTree(classType))
 		{
 			case TClassdecl(cl):
 				for(f in cl.fields)
@@ -87,12 +84,18 @@ class RttiUtil
 		}
 	}
 	
-	public static function getRtti(classType : Class<Dynamic>) : String
+	public static function GetTypeTree(classType : Class<Dynamic>) : TypeTree
+	{
+		var root : Xml = Xml.parse(GetRtti(classType)).firstElement();
+		return new haxe.rtti.XmlParser().processElement(root);
+	}
+	
+	public static function GetRtti(classType : Class<Dynamic>) : String
 	{
 		var rtti : String = untyped classType.__rtti;
 		if(rtti == null)
 		{
-			throw 'No RTTI information found in ' + classType + ' (class must implement haxe.rtti.Infos)';
+			throw new haxigniter.exceptions.Exception('No RTTI information found in ' + classType + ' (class must implement haxe.rtti.Infos)');
 		}
 		
 		return rtti;

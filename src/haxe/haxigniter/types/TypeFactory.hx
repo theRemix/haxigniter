@@ -36,12 +36,11 @@ class TypeFactory
 		
 		//Debug.trace('[WebTypeFactory] Creating type: ' + typeString);
 		
-		var typeParam = typeString.indexOf('<');
-		var mainType = typeParam > 0 ? typeString.substr(0, typeParam) : typeString;
+		var typeParam = splitType(typeString);
 		
-		switch(mainType)
+		switch(typeParam[0])
 		{
-			///// Built-in types ////////////////////////////////////
+			///// Primitive types ///////////////////////////////////
 			
 			case 'Int':
 				output = Std.parseInt(value);
@@ -51,19 +50,24 @@ class TypeFactory
 			
 			case 'String':
 				output = value;
-			
-			case 'Array':
-				// Find out type parameter and create types from it.
-				// NOTE: Right now only one parameter is supported!
-				var typeParameter = typeString.substr(typeString.indexOf('<') + 1);
-				typeParameter = typeParameter.substr(0, typeParameter.length - 1);
+
+			case 'Array', 'List':
+				// NOTE: How to make the instance with a type parameter?
+				// NOTE: Right now only one type parameter is supported!
+				output = Type.createInstance(Type.resolveClass(typeParam[0]), []);
 				
-				output = [];
+				var isArray = typeParam[0] == 'Array';
+
 				for(val in value.split(ArrayDelimiter))
 				{
-					output.push(CreateType(typeParameter, val));
+					var newType = CreateType(typeParam[1], val);
+					
+					if(isArray)
+						output.push(newType);
+					else
+						output.add(newType);
 				}
-
+			
 			/////////////////////////////////////////////////////////
 			
 			default:
@@ -82,6 +86,21 @@ class TypeFactory
 		//Debug.trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')');
 
 		return output;
+	}
+	
+	private static function splitType(typeString : String) : Array<String>
+	{
+		var typeParam = typeString.indexOf('<');
+		
+		if(typeParam == -1)
+			return [typeString, null];
+		
+		var mainType = typeString.substr(0, typeParam);
+		
+		var typeParameter = typeString.substr(typeString.indexOf('<') + 1);
+		typeParameter = typeParameter.substr(0, typeParameter.length - 1);		
+		
+		return [mainType, typeParameter];
 	}
 }
 
