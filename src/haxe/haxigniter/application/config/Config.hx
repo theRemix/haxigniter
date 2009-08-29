@@ -1,19 +1,10 @@
-package haxigniter.application.config; class Config extends haxigniter.config.Config { public function new() {
+package haxigniter.application.config; import haxigniter.libraries.Debug;
+class Config extends haxigniter.config.Config { public function new() {
 var documentRoot : String = untyped __var__('_SERVER', 'DOCUMENT_ROOT');
 
 /* =============================================================== */
 /* ===== Configuration file start, edit only below here ========== */
 /* =============================================================== */
-
-/*
-|--------------------------------------------------------------------------
-| Development setting
-|--------------------------------------------------------------------------
-|
-| Determine here when the system is in development mode, or set to false.
-|
-*/
-this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
 
 /*
 |--------------------------------------------------------------------------
@@ -113,17 +104,17 @@ this.PermittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 | You can enable error logging by setting a threshold over zero. The
 | threshold determines what gets logged. Threshold options are:
 |
-|	0 = Disables logging, Error logging TURNED OFF
-|	1 = Error Messages (including PHP errors)
-|	2 = Informational Messages
-|	3 = Debug Messages			// NOTE: Info/debug swapped in MY_Log.php
-|	4 = All Messages
+|	DebugLevel.Off = Disables logging, Error logging TURNED OFF
+|	DebugLevel.Error = Error Messages (including PHP errors)
+|	DebugLevel.Warning = Warning Messages
+|	DebugLevel.Info = Info Messages
+|	DebugLevel.Verbose = All Messages
 |
 | For a live site you'll usually only enable Errors (1) to be logged otherwise
 | your log files will fill up very fast.
 |
 */
-this.LogThreshold = 2;
+this.LogThreshold = DebugLevel.Error;
 
 /*
 |--------------------------------------------------------------------------
@@ -160,6 +151,30 @@ this.CachePath = '';
 
 /*
 |--------------------------------------------------------------------------
+| Encryption Key
+|--------------------------------------------------------------------------
+|
+| If you use the Encryption class or the Sessions class with encryption
+| enabled you MUST set an encryption key.  See the user guide for info.
+|
+*/
+this.EncryptionKey = '';
+
+/*
+|--------------------------------------------------------------------------
+| Development setting
+|--------------------------------------------------------------------------
+|
+| Determine here when the system is in development mode, or set to false.
+|
+| If you're on a Windows machine when developing and Linux when live,
+| try this one: php.Sys.getEnv('OS') == 'Windows_NT';
+|
+*/
+this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+
+/*
+|--------------------------------------------------------------------------
 | Private Directory Path
 |--------------------------------------------------------------------------
 |
@@ -181,26 +196,13 @@ this.PrivatePath = documentRoot.substr(0, documentRoot.lastIndexOf('/')) + '/www
 */
 this.SessionPath = this.PrivatePath + 'session';
 
-/*
-|--------------------------------------------------------------------------
-| Encryption Key
-|--------------------------------------------------------------------------
-|
-| If you use the Encryption class or the Sessions class with encryption
-| enabled you MUST set an encryption key.  See the user guide for info.
-|
-*/
-this.EncryptionKey = '';
-
 /* =============================================================== */
 /* ===== Configuration file end, edit only above here ============ */
 /* =============================================================== */
 
 super();
-
 }
 
 public static function Instance() { return instance; }
 private static var instance = new Config();
-
 }

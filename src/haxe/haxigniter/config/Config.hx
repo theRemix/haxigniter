@@ -1,5 +1,7 @@
 package haxigniter.config; 
 
+import haxigniter.libraries.Debug;
+
 class Config implements Dynamic 
 {
 	public var Development : Bool;
@@ -8,7 +10,7 @@ class Config implements Dynamic
 	public var Language : String;
 	public var Charset : String;
 	public var PermittedUriChars : String;
-	public var LogThreshold : Int;
+	public var LogThreshold : DebugLevel;
 	public var LogPath : String;
 	public var LogDateFormat : String;
 	public var CachePath : String;
