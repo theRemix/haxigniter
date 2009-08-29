@@ -10,14 +10,15 @@ class ControllerException extends haxigniter.exceptions.Exception {}
 
 class Controller implements haxe.rtti.Infos
 {
-	public var Config(getConfig, null) : Config;
-	private function getConfig() { return Config.Instance(); }
-	
 	public static var DefaultController : String = 'start';
 	public static var DefaultMethod : String = 'index';
 	
 	private static var namespace : String = 'haxigniter.application.controllers';
-	
+
+	public var Config(getConfig, null) : Config;
+	// Must specify full namespace here, php exception otherwise (why?)
+	private function getConfig() : Config { return haxigniter.application.config.Config.Instance(); }
+
 	public static function Run(uriSegments : Array<String>) : Void
 	{
 		var controllerClass : String = (uriSegments[0] == null) ? Controller.DefaultController : uriSegments[0];

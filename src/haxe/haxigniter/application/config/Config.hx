@@ -1,4 +1,4 @@
-package haxigniter.application.config; class Config implements Dynamic { public function new() {
+package haxigniter.application.config; class Config extends haxigniter.config.Config { public function new() {
 var documentRoot : String = untyped __var__('_SERVER', 'DOCUMENT_ROOT');
 
 /* =============================================================== */
@@ -32,15 +32,14 @@ this.IndexPage = 'index.php';
 | Base Site URL
 |--------------------------------------------------------------------------
 |
-| URL to your CodeIgniter root. Typically this will be your base URL,
-| WITH a trailing slash:
+| URL to your haxIgniter root. Set to null to auto-detect, which should
+| work most of the time. Typically this will be your base URL, WITH a 
+| trailing slash:
 |
 |	http://www.your-site.com/
 |
 */
-this.BaseUrl = untyped __var__('_SERVER', 'SERVER_PORT') == '443' ? 'https' : 'http';
-this.BaseUrl += '://' + untyped __var__('_SERVER', 'HTTP_HOST');
-this.BaseUrl += StringTools.replace(untyped __var__('_SERVER', 'SCRIPT_NAME'), this.IndexPage, '');
+this.BaseUrl = null;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,26 +196,11 @@ this.EncryptionKey = '';
 /* ===== Configuration file end, edit only above here ============ */
 /* =============================================================== */
 
-if(this.SessionPath != '')
-{
-	php.Session.setSavePath(this.SessionPath);
-}
+super();
 
 }
-
-public var Development : Bool;
-public var IndexPage : String;
-public var BaseUrl : String;
-public var Language : String;
-public var Charset : String;
-public var PermittedUriChars : String;
-public var LogThreshold : Int;
-public var LogPath : String;
-public var LogDateFormat : String;
-public var CachePath : String;
-public var PrivatePath : String;
-public var EncryptionKey : String;
 
 public static function Instance() { return instance; }
 private static var instance = new Config();
+
 }
