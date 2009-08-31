@@ -8,6 +8,23 @@ var documentRoot : String = untyped __var__('_SERVER', 'DOCUMENT_ROOT');
 
 /*
 |--------------------------------------------------------------------------
+| Development setting
+|--------------------------------------------------------------------------
+|
+| Determine here when the system is in development mode, or set to false.
+| Here are a few examples for auto-detecting:
+|
+| If you're on a Windows machine when developing and Linux when live:
+|    php.Sys.getEnv('OS') == 'Windows_NT';
+|
+| To test depending on host name: 
+|    php.Web.getHostName() == 'localhost';
+|
+*/
+this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+
+/*
+|--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
 |
@@ -159,19 +176,6 @@ this.CachePath = '';
 |
 */
 this.EncryptionKey = '';
-
-/*
-|--------------------------------------------------------------------------
-| Development setting
-|--------------------------------------------------------------------------
-|
-| Determine here when the system is in development mode, or set to false.
-|
-| If you're on a Windows machine when developing and Linux when live,
-| try this one: php.Sys.getEnv('OS') == 'Windows_NT';
-|
-*/
-this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
 
 /*
 |--------------------------------------------------------------------------
