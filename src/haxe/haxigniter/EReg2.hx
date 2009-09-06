@@ -1,3 +1,4 @@
+package haxigniter;
 
 class EReg2 extends EReg
 {

@@ -1,11 +1,12 @@
 package haxigniter.libraries;
 
+import haxigniter.EReg2;
 import haxigniter.application.config.Config;
 import php.Web;
 
 class Uri
 {
-	public static var PermittedUriChars : String = Config.Instance().PermittedUriChars;
+	public static var PermittedUriChars : String = Config.Instance.PermittedUriChars;
 	
 	public static var Segments(getSegments, null) : Array<String>;
 	private static var segments : Array<String>;

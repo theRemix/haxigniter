@@ -17,7 +17,7 @@ class Controller implements haxe.rtti.Infos
 
 	public var Config(getConfig, null) : Config;
 	// Must specify full namespace here, php exception otherwise (why?)
-	private function getConfig() : Config { return haxigniter.application.config.Config.Instance(); }
+	private function getConfig() : Config { return haxigniter.application.config.Config.Instance; }
 
 	public static function Run(uriSegments : Array<String>) : Void
 	{

@@ -204,9 +204,4 @@ this.SessionPath = this.PrivatePath + 'session';
 /* ===== Configuration file end, edit only above here ============ */
 /* =============================================================== */
 
-super();
-}
-
-public static function Instance() { return instance; }
-private static var instance = new Config();
-}
+super(); } public static var Instance = new Config(); }

@@ -24,11 +24,11 @@ class Debug
 		
 #if php
 		php.Lib.print('<pre>');
-
-		untyped __call__('ob_start');
+		Debug.StartPhpBuffer();
+		
 		haxe.Log.trace(data, pos);
-		php.Lib.print(StringTools.htmlEscape(untyped __call__('ob_get_clean')));
 
+		php.Lib.print(StringTools.htmlEscape(Debug.EndPhpBuffer()));
 		php.Lib.print('</pre>');
 #else
 		haxe.Log.trace(data, pos);
@@ -46,4 +46,16 @@ class Debug
 			case Verbose: 4;
 		}
 	}
+	
+#if php
+	public static function StartPhpBuffer() : Void
+	{
+		untyped __call__('ob_start');
+	}
+	
+	public static function EndPhpBuffer() : String
+	{
+		return untyped __call__('ob_get_clean');
+	}
+#end
 }
