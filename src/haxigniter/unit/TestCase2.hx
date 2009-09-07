@@ -28,7 +28,7 @@ class TestCase2 extends TestCase
 		if(isTrue)
 			assertFunction = this.assertTrue;
 		else
-			assertFunction = this.assertFalse;			
+			assertFunction = this.assertFalse;
 		
 		if(inputClass != null)
 			assertFunction(inputClass == typeTest, null);

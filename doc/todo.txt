@@ -1,3 +1,4 @@
+- Unit tests with autorun
 - Views: Integration of template system 
 - Database config
 - Database methods
