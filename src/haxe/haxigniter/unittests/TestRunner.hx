@@ -2,13 +2,15 @@ package haxigniter.unittests;
 
 import haxigniter.libraries.Debug;
 import haxigniter.unittests.given_a_TestCase2.When_UnitTesting_With_TestCase2;
+import haxigniter.unittests.given_a_TypeFactory.When_using_a_TypeFactory;
 
 class TestRunner extends haxe.unit.TestRunner
 {
 	public function new()
 	{
 		super();
-		this.add(new When_Asserting_With_TestCase2());
+		this.add(new When_UnitTesting_With_TestCase2());
+		this.add(new When_using_a_TypeFactory());
 		
 #if php
 		Debug.StartPhpBuffer();

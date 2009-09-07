@@ -41,9 +41,9 @@ class TestCase2 extends TestCase
 		this.assertIsA(input, typeTest, false);
 	}
 	
-	public function assertEqual(input : Dynamic, input2 : Dynamic) : Void
+	public function assertEqual<T>(expected : T, actual : T) : Void
 	{
-		this.assertEquals(input, input2);
+		this.assertEquals(expected, actual);
 	}
 
 	public function assertNotEqual<T>( expected: T , actual: T,  ?c : PosInfos ) : Void 
@@ -66,5 +66,15 @@ class TestCase2 extends TestCase
 	public function assertNotPattern(pattern : EReg, input : Dynamic) : Void
 	{
 		this.assertFalse(pattern.match(Std.string(input)));
+	}
+	
+	public function expectException(expected : String, e : Dynamic) : Void
+	{
+		this.assertTrue(Std.string(e) == expected);
+	}
+
+	public function expectExceptionPattern(expected : EReg, e : Dynamic) : Void
+	{
+		this.assertTrue(expected.match(Std.string(e)));
 	}
 }

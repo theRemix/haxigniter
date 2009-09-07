@@ -7,7 +7,7 @@ import haxigniter.unit.TestCase2;
 /**
 * This is fun, unit testing a unit test class.
 */
-class When_Asserting_With_TestCase2 extends TestCase2
+class When_UnitTesting_With_TestCase2 extends TestCase2
 {
 	public function test_Then_assertNull_should_null_if_null()
 	{
@@ -79,5 +79,29 @@ class When_Asserting_With_TestCase2 extends TestCase2
 	{
 		var a = "I am a string";
 		this.assertNotPattern(~/not a string$/, a);
+	}
+	
+	public function test_Then_expectException_should_work_with_exceptions()
+	{
+		try
+		{
+			throw 'I am Error.';
+		}
+		catch(e : Dynamic)
+		{
+			this.expectException('I am Error.', e);
+		}
+	}
+
+	public function test_Then_expectExceptionPattern_should_work_with_regexps()
+	{
+		try
+		{
+			throw 'I am Errrrrrrrrror.';
+		}
+		catch(e : Dynamic)
+		{
+			this.expectExceptionPattern(~/Er+or/, e);
+		}
 	}
 }
