@@ -1,6 +1,7 @@
 package haxigniter.config; 
 
 import haxigniter.libraries.Debug;
+import haxigniter.views.IViewEngine;
 
 class Config implements Dynamic 
 {
@@ -16,6 +17,7 @@ class Config implements Dynamic
 	public var CachePath : String;
 	public var PrivatePath : String;
 	public var EncryptionKey : String;
+	public var View : IViewEngine;
 
 	/**
 	* This class is abstract, so constructor is private.

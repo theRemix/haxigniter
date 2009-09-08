@@ -21,7 +21,7 @@ class TestRunner extends haxe.unit.TestRunner
 		var errorTest : EReg = ~/\b[1-9]\d* failed\b/;
 		
 		if(errorTest.match(output))
-			php.Lib.print(output);
+			php.Lib.print('<pre style="border:1px dashed green; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
 #end
 	}
 }

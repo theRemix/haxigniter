@@ -23,7 +23,7 @@ class Debug
 			return;
 		
 #if php
-		php.Lib.print('<pre>');
+		php.Lib.print('<pre style="border:1px dashed green; padding:2px; background-color:#F9F8F6;">');
 		Debug.StartPhpBuffer();
 		
 		haxe.Log.trace(data, pos);

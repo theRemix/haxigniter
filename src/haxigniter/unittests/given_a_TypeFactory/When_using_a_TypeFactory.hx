@@ -24,5 +24,27 @@ class When_using_a_TypeFactory extends TestCase2
 		var c = TypeFactory.CreateType('String', 'Nice');
 		
 		this.assertEqual('Nice', cast(c, String));
+		
+		var d : Array<Int> = untyped TypeFactory.CreateType('Array<Int>', '1-2-3-4');
+		
+		this.assertIsA(d, Array);
+		
+		this.assertEqual(1, d[0]);
+		this.assertEqual(2, d[1]);
+		this.assertEqual(3, d[2]);
+		this.assertEqual(4, d[3]);
+		
+		// Test the DbID class, which only accepts integers > 0
+		var db : DbID = untyped TypeFactory.CreateType('haxigniter.types.DbID', '123');		
+		this.assertIsA(db, haxigniter.types.DbID);
+		
+		try
+		{
+			var db2 : DbID = untyped TypeFactory.CreateType('haxigniter.types.DbID', '0');
+		}
+		catch (e : Dynamic)
+		{
+			this.expectExceptionPattern(~/Invalid value for haxigniter.types.DbID: "0"/, e);
+		}
 	}
 }

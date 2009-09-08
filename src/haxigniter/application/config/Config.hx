@@ -1,6 +1,6 @@
-package haxigniter.application.config; import haxigniter.libraries.Debug;
+package haxigniter.application.config; 
+import haxigniter.libraries.Debug; import haxigniter.libraries.Server;
 class Config extends haxigniter.config.Config { public function new() {
-var documentRoot : String = untyped __var__('_SERVER', 'DOCUMENT_ROOT');
 
 /* =============================================================== */
 /* ===== Configuration file start, edit only below here ========== */
@@ -65,7 +65,7 @@ this.BaseUrl = null;
 | 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
 |
 */
-// TODO: Is this needed?
+// TODO: Is Uri protocol detection needed?
 
 /*
 |--------------------------------------------------------------------------
@@ -116,9 +116,7 @@ this.PermittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 | Error Logging Threshold
 |--------------------------------------------------------------------------
 |
-| If you have enabled error logging, you can set an error threshold to 
-| determine what gets logged. Threshold options are:
-| You can enable error logging by setting a threshold over zero. The
+| You can enable error logging by setting a threshold over Off. The
 | threshold determines what gets logged. Threshold options are:
 |
 |	DebugLevel.Off = Disables logging, Error logging TURNED OFF
@@ -127,7 +125,7 @@ this.PermittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 |	DebugLevel.Info = Info Messages
 |	DebugLevel.Verbose = All Messages
 |
-| For a live site you'll usually only enable Errors (1) to be logged otherwise
+| For a live site you'll usually only enable Error (1) to be logged otherwise
 | your log files will fill up very fast.
 |
 */
@@ -186,8 +184,13 @@ this.EncryptionKey = '';
 | has access. Can be used for session, sensitive data, etc.
 | Use a full server path with trailing slash.
 |
+| A tip is to use Server.DocumentRoot to specify a folder one step above
+| the http folder. For example:
+|
+| this.PrivatePath = Server.DocumentRoot.substr(0, Server.DocumentRoot.lastIndexOf('/')) + '/www_private/';
+|
 */
-this.PrivatePath = documentRoot.substr(0, documentRoot.lastIndexOf('/')) + '/www_private/';
+this.PrivatePath = Server.DocumentRoot.substr(0, Server.DocumentRoot.lastIndexOf('/')) + '/www_private/';
 
 /*
 |--------------------------------------------------------------------------
@@ -199,6 +202,21 @@ this.PrivatePath = documentRoot.substr(0, documentRoot.lastIndexOf('/')) + '/www
 |
 */
 this.SessionPath = this.PrivatePath + 'session';
+
+/*
+|--------------------------------------------------------------------------
+| View Engine
+|--------------------------------------------------------------------------
+|
+| The Views are displayed by a ViewEngine, which is any class implementing 
+| the IViewEngine interface.
+|
+| As default, a wrapper around haxe.Template is used as ViewEngine. If you 
+| want to use another template system, make a class implement 
+| haxigniter.views.IViewEngine and instantiate it here.
+|
+*/
+this.View = new haxigniter.views.HaxeTemplate();
 
 /* =============================================================== */
 /* ===== Configuration file end, edit only above here ============ */
