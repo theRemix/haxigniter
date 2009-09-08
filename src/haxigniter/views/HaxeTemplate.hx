@@ -1,22 +1,27 @@
 ﻿package haxigniter.views;
 
+class HaxeTemplateVars
+{
+	public function new() {}
+}
+
 class HaxeTemplate implements haxigniter.views.IViewEngine
 {
-	private var templateVars : Hash<Dynamic>;
+	private var templateVars : HaxeTemplateVars;
 	
 	public function new()
 	{
-		this.templateVars = new Hash<Dynamic>();
+		this.templateVars = new HaxeTemplateVars();
 	}
 	
 	public function Assign(name : String, value : Dynamic) : Void
 	{
-		this.templateVars.set(name, value);
+		Reflect.setField(this.templateVars, name, value);
 	}
 	
 	public function ClearAssign(name : String) : Bool
 	{
-		return this.templateVars.remove(name);
+		return Reflect.deleteField(this.templateVars, name);
 	}
 	
 	public function Render(content : String) : String
