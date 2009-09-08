@@ -15,10 +15,13 @@ class Config extends haxigniter.config.Config { public function new() {
 | Here are a few examples for auto-detecting:
 |
 | If you're on a Windows machine when developing and Linux when live:
-|    php.Sys.getEnv('OS') == 'Windows_NT';
+|    this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
 |
 | To test depending on host name: 
-|    php.Web.getHostName() == 'localhost';
+|    this.Development = php.Web.getHostName() == 'localhost';
+|
+| Or IP address: 
+|    this.Development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 |
 */
 this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
@@ -187,10 +190,10 @@ this.EncryptionKey = '';
 | A tip is to use Server.DocumentRoot to specify a folder one step above
 | the http folder. For example:
 |
-| this.PrivatePath = Server.DocumentRoot.substr(0, Server.DocumentRoot.lastIndexOf('/')) + '/www_private/';
+| this.PrivatePath = Server.dirname(Server.DocumentRoot) + '/www_private/';
 |
 */
-this.PrivatePath = Server.DocumentRoot.substr(0, Server.DocumentRoot.lastIndexOf('/')) + '/www_private/';
+this.PrivatePath = Server.dirname(Server.DocumentRoot) + '/www_private/';
 
 /*
 |--------------------------------------------------------------------------
@@ -212,7 +215,7 @@ this.SessionPath = this.PrivatePath + 'session';
 | the IViewEngine interface.
 |
 | As default, a wrapper around haxe.Template is used as ViewEngine. If you 
-| want to use another template system, make a class implement 
+| want to use another template system, make a class implementing
 | haxigniter.views.IViewEngine and instantiate it here.
 |
 */
