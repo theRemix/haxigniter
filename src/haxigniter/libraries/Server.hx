@@ -23,7 +23,7 @@ class Server
 	 * @param	path
 	 * @return  given a string containing a path to a file, this function will return the name of the directory.
 	 */
-	public static function dirname(path : String) : String
+	public static function Dirname(path : String) : String
 	{
 		var slashIndex = path.lastIndexOf('/');
 		if(slashIndex >= 0)

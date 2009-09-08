@@ -190,10 +190,10 @@ this.EncryptionKey = '';
 | A tip is to use Server.DocumentRoot to specify a folder one step above
 | the http folder. For example:
 |
-| this.PrivatePath = Server.dirname(Server.DocumentRoot) + '/www_private/';
+| this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
 |
 */
-this.PrivatePath = Server.dirname(Server.DocumentRoot) + '/www_private/';
+this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
 
 /*
 |--------------------------------------------------------------------------
