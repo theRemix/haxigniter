@@ -211,12 +211,12 @@ this.SessionPath = this.PrivatePath + 'session';
 | View Engine
 |--------------------------------------------------------------------------
 |
-| The Views are displayed by a ViewEngine, which is any class implementing 
-| the IViewEngine interface.
+| The Views are displayed by a ViewEngine, which is any class extending 
+| the haxigniter.views.ViewEngine class.
 |
-| As default, a wrapper around haxe.Template is used as ViewEngine. If you 
-| want to use another template system, make a class implementing
-| haxigniter.views.IViewEngine and instantiate it here.
+| As default, a wrapper around haxe.Template is used. If you 
+| want to use another template system, make a class extending
+| haxigniter.views.ViewEngine and instantiate it here.
 |
 */
 this.View = new haxigniter.views.HaxeTemplate();

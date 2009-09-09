@@ -27,7 +27,7 @@ class Start extends haxigniter.libraries.Controller
 		this.View.Assign('name', 'Turvia');
 		this.View.Assign('users', users);
 
-		php.Lib.print(this.View.Render(template));
+		this.View.Display('start/index.htt');
 		
 		//Debug.trace(php.Web.getHostName());
 		//Debug.trace(haxigniter.application.config.Config.Instance.BaseUrl);

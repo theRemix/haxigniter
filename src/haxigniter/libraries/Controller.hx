@@ -2,7 +2,7 @@ package haxigniter.libraries;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
-import haxigniter.views.IViewEngine;
+import haxigniter.views.ViewEngine;
 
 import haxigniter.application.config.Config;
 import haxigniter.application.config.Controllers;
@@ -20,8 +20,8 @@ class Controller implements haxe.rtti.Infos
 	// Must specify full namespace here, php exception otherwise (why?)
 	private function getConfig() : Config { return haxigniter.application.config.Config.Instance; }
 
-	public var View(getView, null) : IViewEngine;
-	private function getView() : IViewEngine { return haxigniter.application.config.Config.Instance.View; }
+	public var View(getView, null) : ViewEngine;
+	private function getView() : ViewEngine { return haxigniter.application.config.Config.Instance.View; }
 
 	public static function Run(uriSegments : Array<String>) : Void
 	{
