@@ -35,16 +35,22 @@ class DatabaseConnection
 	public var Socket : String;
 	public var Driver : DatabaseDriver;
 	public var Debug : Bool;
-
+	
 	public var Connection : Connection;
-
-	private var enabled : Bool;
+	
+	/**
+	 * Set this value to change the string which is replaced by a parameter when executing a query.
+	 * Default is '?'
+	 */
+	public var ParameterString : String;
 
 	public var LastQuery(getLastQuery, null) : String;
 	private var lastQuery : String;
 	private function getLastQuery() : String { return this.lastQuery; }
 
 	private static var AlphaRegexp : EReg = ~/^\w+$/;
+
+	private var enabled : Bool;
 	
 	public function Open() : Void
 	{
@@ -213,7 +219,7 @@ class DatabaseConnection
 	{
 		for(param in params)
 		{
-			var pos = query.indexOf('?');
+			var pos = query.indexOf(this.ParameterString == null ? '?' : this.ParameterString);
 			if(pos == -1)
 				throw new DatabaseException('Not enough parameters in query.', this);
 			
