@@ -4,8 +4,11 @@ import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
 import haxigniter.views.ViewEngine;
 
+import haxigniter.libraries.Database;
+
 import haxigniter.application.config.Config;
 import haxigniter.application.config.Controllers;
+import haxigniter.application.config.Database;
 
 class ControllerException extends haxigniter.exceptions.Exception {}
 
@@ -22,6 +25,24 @@ class Controller implements haxe.rtti.Infos
 
 	public var View(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return haxigniter.application.config.Config.Instance.View; }
+
+	public var DB(getDB, null) : DatabaseConnection;
+	private var db : DatabaseConnection;
+	private function getDB() : DatabaseConnection
+	{
+		if(this.db == null)
+		{
+			if(this.Config.Development && DevelopmentConnection.Enabled)
+				this.db = new DevelopmentConnection();
+			else if(!this.Config.Development && OnlineConnection.Enabled)
+				this.db = new OnlineConnection();
+			
+			if(this.db != null)
+				this.db.Open();
+		}
+		
+		return this.db;
+	}
 
 	public static function Run(uriSegments : Array<String>) : Void
 	{
@@ -47,6 +68,16 @@ class Controller implements haxe.rtti.Infos
 
 		// Execute the controller class with the method specified, and the arguments.
 		Reflect.callMethod(obj, method, arguments);
+
+		// Clean up controller after it's done.
+		cleanupController(obj);
+	}
+	
+	private static function cleanupController(controller : Controller)
+	{
+		// Close database connection
+		if(controller.DB != null)
+			controller.DB.Close();
 	}
 	
 	/**
