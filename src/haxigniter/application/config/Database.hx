@@ -26,7 +26,7 @@ class DevelopmentConnection extends DatabaseConnection
 		this.Host = 'localhost';
 		this.User = 'root';
 		this.Pass = '';
-		this.Database = 'evenemang';
+		this.Database = 'selfimprove';
 		this.Driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
 		this.Debug = true; // Displays debug information on database/query errors
 		this.Port = 3306;
