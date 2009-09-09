@@ -2,8 +2,18 @@
 
 import haxigniter.libraries.Server;
 
+/**
+ * This is an abstract class which is the base of the views of haXigniter.
+ * The following methods needs to be implemented:
+ * 
+ * Assign(name : String, value : Dynamic)
+ * ClearAssign(name : String)
+ * Render(content : String)
+ * 
+ */
 class ViewEngine
 {
+	// TODO: Caching system for ViewEngine
 	public var TemplatePath : String;
 	
 	private function new(templatePath : String = null)
