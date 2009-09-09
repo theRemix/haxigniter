@@ -1,5 +1,7 @@
 ﻿package haxigniter.libraries;
 
+import haxigniter.exceptions.Exception;
+
 import php.db.Mysql;
 import php.db.Sqlite;
 import php.db.Connection;
@@ -11,6 +13,9 @@ enum DatabaseDriver
 	Sqlite;
 }
 
+class DatabaseException extends Exception {}
+
+// TODO: Debug query on error
 class DatabaseConnection
 {	
 	public var Host : String;
@@ -28,7 +33,7 @@ class DatabaseConnection
 	public function Open() : Void
 	{
 		if(this.connection != null)
-			throw new haxigniter.exceptions.Exception('[DatabaseConnection] Connection is already open.');
+			throw new DatabaseException('Connection is already open.');
 		
 		if(this.Driver == DatabaseDriver.Mysql)
 			this.connection = php.db.Mysql.connect({ 
@@ -52,9 +57,26 @@ class DatabaseConnection
 		}
 	}
 	
-	public function Query(query : String, ?params : List<Dynamic> = null) : ResultSet
+	public function Query(query : String, ?params : Iterable<Dynamic> = null) : ResultSet
 	{
+		if(params != null)
+			query = this.queryParams(query, params);
+		
 		return this.connection.request(query);
+	}
+	
+	private function queryParams(query : String, params : Iterable<Dynamic>)
+	{
+		for(param in params)
+		{
+			var pos = query.indexOf('?');
+			if(pos == -1)
+				throw new DatabaseException('Not enough parameters in query.');
+			
+			query = query.substr(0, pos) + this.connection.quote(param) + query.substr(pos+1);
+		}
+		
+		return query;
 	}
 }
 
