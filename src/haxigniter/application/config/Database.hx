@@ -1,5 +1,4 @@
-﻿package haxigniter.application.config; 
-import haxigniter.libraries.Database;
+﻿package haxigniter.application.config; import haxigniter.libraries.Database;
 
 /* =============================================================== */
 /* ===== Database configuration file, edit only below here ======= */
@@ -11,16 +10,11 @@ import haxigniter.libraries.Database;
 |--------------------------------------------------------------------------
 |
 | These database settings will be used when Config.Development is true.
-| Set them as appropriate. Disable database completely by setting the
-| static variable to false.
-|
-| NOTE: If no host is set, database will be disabled!
+| Set them as appropriate.
 |
 */
 class DevelopmentConnection extends DatabaseConnection
 {
-	public static var Enabled = true;
-	
 	public function new()
 	{
 		this.Host = 'localhost';
@@ -40,13 +34,10 @@ class DevelopmentConnection extends DatabaseConnection
 |--------------------------------------------------------------------------
 |
 | These database settings will be used when Config.Development is false.
-| Disable database completely by setting the static variable to false.
 |
 */
 class OnlineConnection extends DatabaseConnection
 {
-	public static var Enabled = false;
-	
 	public function new()
 	{
 		this.Host = '';

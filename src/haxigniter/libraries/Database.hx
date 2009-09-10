@@ -48,10 +48,8 @@ class DatabaseConnection
 	private var lastQuery : String;
 	private function getLastQuery() : String { return this.lastQuery; }
 
-	private static var AlphaRegexp : EReg = ~/^\w+$/;
+	private static var alphaRegexp : EReg = ~/^\w+$/;
 
-	private var enabled : Bool;
-	
 	public function Open() : Void
 	{
 		if(this.Connection != null)
@@ -211,7 +209,7 @@ class DatabaseConnection
 	
 	private inline function testAlphaNumeric(value : String) : Void
 	{	
-		if(value == null || !DatabaseConnection.AlphaRegexp.match(value))
+		if(value == null || !DatabaseConnection.alphaRegexp.match(value))
 			throw new DatabaseException('Invalid parameter: ' + value, this);
 	}
 	

@@ -32,13 +32,12 @@ class Controller implements haxe.rtti.Infos
 	{
 		if(this.db == null)
 		{
-			if(this.Config.Development && DevelopmentConnection.Enabled)
+			if(this.Config.Development)
 				this.db = new DevelopmentConnection();
-			else if(!this.Config.Development && OnlineConnection.Enabled)
+			else
 				this.db = new OnlineConnection();
 			
-			if(this.db != null)
-				this.db.Open();
+			this.db.Open();
 		}
 		
 		return this.db;
