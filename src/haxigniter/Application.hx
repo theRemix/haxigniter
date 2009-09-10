@@ -1,11 +1,16 @@
 package haxigniter;
 
+// This important package imports all application controllers so they will be referenced by the compiler.
+// See application/config/Config.hx for more info.
+import haxigniter.application.config.Controllers;
+
 import haxigniter.libraries.Uri;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
 
 import haxigniter.application.config.Config;
+import haxigniter.application.config.Session;
 
 import haxigniter.libraries.Controller;
 
@@ -51,13 +56,33 @@ class Application
 	public var View(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return this.Config.View; }
 	
-	// TODO: Session
+	public var Session(getSession, null) : Session;
+	private var session : Session;
+	private function getSession() : Session
+	{
+		if(this.session == null)
+		{
+			if(php.Session.exists(sessionNamespace + 'Session'))
+				this.session = php.Session.get(sessionNamespace + 'Session');
+			else
+			{
+				this.session = new haxigniter.application.config.Session();
+				php.Session.set(sessionNamespace + 'Session', this.session);
+			}
+		}
+		
+		return this.session;
+	}
+	
+	///// Static vars ///////////////////////////////////////////////
 
 	public static var Instance = new Application();
 
 	private static var defaultController : String = 'start';
 	private static var defaultMethod : String = 'index';
+	
 	private static var defaultNamespace : String = 'haxigniter.application.controllers';
+	private static var sessionNamespace : String = '_haxigniter_';
 	
 	///// Application entrypoint ////////////////////////////////////
 
@@ -106,14 +131,16 @@ class Application
 		Reflect.callMethod(this.controller, method, arguments);
 
 		// Clean up controller after it's done.
-		this.cleanupController();
+		this.cleanup();
 	}
 	
-	private function cleanupController()
+	private function cleanup()
 	{
 		// Close database connection
 		if(this.controller.DB != null)
 			this.controller.DB.Close();
+			
+		// TODO: Save session? (Hopefully not)
 	}
 	
 	/**

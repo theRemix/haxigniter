@@ -203,6 +203,10 @@ this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
 | Set this to an existing folder to automatically set session save path.
 | Make sure the server can write to the folder.
 |
+| The PrivatePath variable can be useful here. For example:
+|
+| this.SessionPath = this.PrivatePath + 'session';
+|
 */
 this.SessionPath = this.PrivatePath + 'session';
 
