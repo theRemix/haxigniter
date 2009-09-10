@@ -25,6 +25,8 @@ class DatabaseException extends Exception
 }
 
 // TODO: Debug query on error
+// TODO: Operators in where queries
+// TODO: Unquoted fields in where/data queries
 class DatabaseConnection
 {	
 	public var Host : String;
@@ -112,7 +114,7 @@ class DatabaseConnection
 		return result.hasNext() ? result.getResult(0) : null;
 	}
 
-	///// CRUD methods //////////////////////////////////////////////
+	///// C(R)UD methods ////////////////////////////////////////////
 	
 	public function Insert(table : String, data : Hash<Dynamic>, ?replace = false) : Int
 	{

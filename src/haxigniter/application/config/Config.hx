@@ -225,4 +225,4 @@ this.View = new haxigniter.views.HaxeTemplate();
 /* ===== Configuration file end, edit only above here ============ */
 /* =============================================================== */
 
-super(); } public static var Instance = new Config(); }
+super(); } }

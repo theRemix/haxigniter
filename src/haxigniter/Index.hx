@@ -1,5 +1,7 @@
 package haxigniter;
 
+import haxigniter.libraries.Application;
+
 // Main configuration file, the other config files are usually loaded by the 
 // respective library.
 import haxigniter.application.config.Config;
@@ -14,12 +16,12 @@ class Index
 {
 	public static function main()
 	{
-		if(Config.Instance.Development)
+		if(Application.Instance.Config.Development)
 		{
 			// Run the haXigniter unit tests.
 			new haxigniter.unittests.TestRunner();
 		}
 		
-		Controller.Run(Uri.Segments);
+		Controller.Run(Uri.Segments);		
 	}	
 }

@@ -1,12 +1,14 @@
 package haxigniter.libraries;
 
+import haxigniter.libraries.Application;
+
 import haxigniter.EReg2;
 import haxigniter.application.config.Config;
 import php.Web;
 
 class Uri
 {
-	public static var PermittedUriChars : String = Config.Instance.PermittedUriChars;
+	public static var PermittedUriChars : String = Application.Instance.Config.PermittedUriChars;
 	
 	public static var Segments(getSegments, null) : Array<String>;
 	private static var segments : Array<String>;
@@ -21,7 +23,7 @@ class Uri
 				Uri.testValidUri(currentUri);
 			
 			// TODO: SCRIPT_NAME may cause problems on other systems, watch for it.
-			var scriptName : String = untyped __var__('_SERVER', 'SCRIPT_NAME');
+			var scriptName : String = haxigniter.libraries.Server.Param('SCRIPT_NAME');
 			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash
 
 			// Strip empty segment at the end of the string.

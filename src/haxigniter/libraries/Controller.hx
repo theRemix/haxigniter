@@ -1,5 +1,7 @@
 package haxigniter.libraries;
 
+import haxigniter.libraries.Application;
+
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
 import haxigniter.views.ViewEngine;
@@ -20,28 +22,13 @@ class Controller implements haxe.rtti.Infos
 	private static var namespace : String = 'haxigniter.application.controllers';
 
 	public var Config(getConfig, null) : Config;
-	// Must specify full namespace here, php exception otherwise (why?)
-	private function getConfig() : Config { return haxigniter.application.config.Config.Instance; }
+	private function getConfig() : Config { return haxigniter.libraries.Application.Instance.Config; }
 
 	public var View(getView, null) : ViewEngine;
-	private function getView() : ViewEngine { return haxigniter.application.config.Config.Instance.View; }
+	private function getView() : ViewEngine { return haxigniter.libraries.Application.Instance.View; }
 
 	public var DB(getDB, null) : DatabaseConnection;
-	private var db : DatabaseConnection;
-	private function getDB() : DatabaseConnection
-	{
-		if(this.db == null)
-		{
-			if(this.Config.Development)
-				this.db = new DevelopmentConnection();
-			else
-				this.db = new OnlineConnection();
-			
-			this.db.Open();
-		}
-		
-		return this.db;
-	}
+	private function getDB() : DatabaseConnection { return haxigniter.libraries.Application.Instance.DB; }
 
 	public static function Run(uriSegments : Array<String>) : Void
 	{
