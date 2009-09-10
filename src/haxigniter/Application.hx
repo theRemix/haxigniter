@@ -62,12 +62,14 @@ class Application
 	{
 		if(this.session == null)
 		{
-			if(php.Session.exists(sessionNamespace + 'Session'))
-				this.session = php.Session.get(sessionNamespace + 'Session');
+			if(php.Session.exists(sessionName))
+			{
+				this.session = php.Session.get(sessionName);
+			}
 			else
 			{
 				this.session = new haxigniter.application.config.Session();
-				php.Session.set(sessionNamespace + 'Session', this.session);
+				php.Session.set(sessionName, this.session);
 			}
 		}
 		
@@ -82,7 +84,7 @@ class Application
 	private static var defaultMethod : String = 'index';
 	
 	private static var defaultNamespace : String = 'haxigniter.application.controllers';
-	private static var sessionNamespace : String = '_haxigniter_';
+	private static var sessionName : String = '__haxigniter_session';
 	
 	///// Application entrypoint ////////////////////////////////////
 

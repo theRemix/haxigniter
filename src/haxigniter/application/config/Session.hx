@@ -1,6 +1,5 @@
-﻿package haxigniter.application.config; 
-class Session extends haxigniter.libraries.Session {
-
+﻿package haxigniter.application.config; class Session extends haxigniter.libraries.Session {
+	
 /* =============================================================== */
 /* ===== Session configuration file, edit only below here ======== */
 /* =============================================================== */
@@ -8,8 +7,16 @@ class Session extends haxigniter.libraries.Session {
 public var Name : String;
 public var Age : Int;
 
+// For initializing the instance variables, if needed.
+public function new()
+{	
+	
+	
+	super(); // This is required, do not remove.
+}
+
 /* =============================================================== */
 /* ===== Session configuration file end, edit only above here ==== */
 /* =============================================================== */
 
-public function new() { super(); } }
+}
