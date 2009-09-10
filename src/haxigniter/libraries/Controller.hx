@@ -1,6 +1,6 @@
 package haxigniter.libraries;
 
-import haxigniter.libraries.Application;
+import haxigniter.Application;
 
 import haxigniter.application.config.Config;
 import haxigniter.views.ViewEngine;

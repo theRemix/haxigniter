@@ -1,4 +1,6 @@
-package haxigniter.libraries;
+package haxigniter;
+
+import haxigniter.libraries.Uri;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
@@ -57,8 +59,21 @@ class Application
 	private static var defaultMethod : String = 'index';
 	private static var defaultNamespace : String = 'haxigniter.application.controllers';
 	
-	/////////////////////////////////////////////////////////////////
+	///// Application entrypoint ////////////////////////////////////
 
+	public static function main()
+	{
+		if(Application.Instance.Config.Development)
+		{
+			// Run the haXigniter unit tests.
+			new haxigniter.unittests.TestRunner();
+		}
+		
+		Application.Instance.Run(Uri.Segments);
+	}
+	
+	/////////////////////////////////////////////////////////////////
+	
 	public function new()
 	{
 		// Config is used internally, so it's created when instantiating.

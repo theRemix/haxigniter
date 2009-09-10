@@ -1,6 +1,6 @@
 package haxigniter.application.config; 
 import haxigniter.libraries.Debug; import haxigniter.libraries.Server;
-class Config extends haxigniter.config.Config { public function new() {
+class Config extends haxigniter.libraries.Config { public function new() {
 
 /* =============================================================== */
 /* ===== Configuration file start, edit only below here ========== */

@@ -19,7 +19,7 @@
   <build>
     <option directives="" />
     <option flashStrict="False" />
-    <option mainClass="haxigniter.Index" />
+    <option mainClass="haxigniter.Application" />
     <option override="False" />
     <option verbose="False" />
     <option additional="" />
