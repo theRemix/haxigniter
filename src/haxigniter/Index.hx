@@ -22,6 +22,6 @@ class Index
 			new haxigniter.unittests.TestRunner();
 		}
 		
-		Controller.Run(Uri.Segments);		
+		Application.Instance.Run(Uri.Segments);
 	}	
 }
