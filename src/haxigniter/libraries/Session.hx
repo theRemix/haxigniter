@@ -10,7 +10,7 @@ class Session implements Dynamic
 	private static var namespace = '_haxigniter_';
 	private static var flashNamespace = '_flash_';
 
-	public var Flash(getFlash, setFlash) : Dynamic;
+	public var FlashVar(getFlash, setFlash) : Dynamic;
 	private function getFlash()
 	{
 		// If no flash request is done, get the current flash var and remove it.
