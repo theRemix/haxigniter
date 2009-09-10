@@ -4,7 +4,7 @@ package haxigniter;
 // See application/config/Config.hx for more info.
 import haxigniter.application.config.Controllers;
 
-import haxigniter.libraries.Uri;
+import haxigniter.libraries.Url;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
@@ -96,7 +96,7 @@ class Application
 			new haxigniter.unittests.TestRunner();
 		}
 		
-		Application.Instance.Run(Uri.Segments);
+		Application.Instance.Run(Url.Segments);
 	}
 	
 	/////////////////////////////////////////////////////////////////
