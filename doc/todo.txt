@@ -10,6 +10,7 @@
 - Multi-language support
 - Form validation (check out CI docs for ideas)
 -- Error handling and logging
+- Integrity tester
 - Caching of templates
 - UTF-8 support
 - XSS filtering
