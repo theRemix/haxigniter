@@ -10,11 +10,22 @@ class Server
 	/**
 	 * Gives access to any php $_SERVER variable.
 	 * @param	varName
-	 * @return  the variable as a string.
+	 * @return  the variable as a string, or null if variable didn't exist.
 	 */
 	public static inline function Param(parameter : String) : String
 	{
-		return untyped __var__('_SERVER', parameter);
+		try
+		{
+			return untyped __var__('_SERVER', parameter);
+		}
+		catch(e : String)
+		{
+			// Test for correct exception message
+			if(e.indexOf('Undefined index:') == -1)
+				throw e;
+			
+			return null;
+		}
 	}
 	
 	/**

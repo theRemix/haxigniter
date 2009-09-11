@@ -74,6 +74,52 @@ class Url
 		var output : String = Url.Segments.join('/');
 		return output.length > 0 ? '/' + output : '';
 	}
+
+	/**
+	 * Redirect to another page. If url isn't absolute, SiteUrl() is used to create a local redirect.
+	 * Note: In order for this function to work it must be used before anything is outputted to the browser since it utilizes server headers.
+	 * @param	?url
+	 * @param	?flashMessage
+	 * @param	?https
+	 * @param	?responseCode
+	 */
+	public static function Redirect(?url : String = null, ?flashMessage : String = null, ?https : Bool = null, ?responseCode : Int = null)
+	{
+		if(flashMessage != null)
+			Application.Instance.Session.FlashVar = flashMessage;
+
+		if(responseCode != null)
+			php.Web.setReturnCode(responseCode);
+
+		if(url == null)
+			url = Url.SiteUrl(Url.UriString());
+		else if(url.indexOf('://') == -1)
+			url = Url.SiteUrl(url);
+				
+		if(https != null)
+			url = (https ? 'https' : 'http') + url.substr(url.indexOf(':'));
+
+        // No SSL redirect in development mode.
+        if(config.Development)
+            url = StringTools.replace(url, 'https://', 'http://');
+		
+		php.Web.redirect(url);
+	}
+	
+	public static function ForceSsl(ssl = true)
+	{
+		// No SSL redirect in development mode.
+		if(config.Development) return;
+		
+		var sslActive : Bool = haxigniter.libraries.Server.Param('HTTPS') == 'on';
+		
+		if((sslActive && ssl) || !(sslActive || ssl))
+			return;
+		
+		Url.Redirect(null, Application.Instance.Session.FlashVar, ssl);
+	}
+	
+	/////////////////////////////////////////////////////////////////
 	
 	private static function testValidUri(uri : String) : Void
 	{
