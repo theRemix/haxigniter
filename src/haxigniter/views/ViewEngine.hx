@@ -1,5 +1,6 @@
 ﻿package haxigniter.views;
 
+import haxigniter.Application;
 import haxigniter.libraries.Server;
 
 /**
@@ -15,14 +16,12 @@ class ViewEngine
 {
 	// TODO: Caching system for ViewEngine
 	public var TemplatePath : String;
+	public var CompiledPath : String;
 	
-	private function new(templatePath : String = null)
+	private function new(templatePath : String, compiledPath : String)
 	{
-		// Set default template path if not specified
-		if(templatePath == null)
-			this.TemplatePath = Server.DocumentRoot + '/lib/haxigniter/application/views/';
-		else
-			this.TemplatePath = templatePath;
+		this.TemplatePath = templatePath;
+		this.CompiledPath = compiledPath;
 	}
 	
 	public function Assign(name : String, value : Dynamic) : Void
@@ -36,23 +35,14 @@ class ViewEngine
 		return null;
 	}
 	
-	public function Render(content : String) : String
+	public function Render(fileName : String) : String
 	{
 		throw 'Render() must be implemented in an inherited class.';
 		return null;
 	}
 	
-	public function RenderFile(fileName : String) : String
-	{
-		if(this.TemplatePath != null)
-			fileName = this.TemplatePath + fileName;
-		
-		var content = php.io.File.getContent(fileName);
-		return this.Render(content);
-	}
-	
 	public function Display(fileName : String) : Void
 	{
-		php.Lib.print(this.RenderFile(fileName));
+		php.Lib.print(this.Render(fileName));
 	}
 }

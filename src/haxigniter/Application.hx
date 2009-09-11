@@ -9,7 +9,7 @@ import haxigniter.libraries.Url;
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
 
-import haxigniter.application.config.Config;
+import haxigniter.libraries.Config;
 import haxigniter.application.config.Session;
 
 import haxigniter.libraries.Controller;
@@ -22,8 +22,8 @@ import haxigniter.views.ViewEngine;
 class Application
 {
 	public var Config(getConfig, null) : Config;
-	private var config : Config;
-	private function getConfig() : Config { return this.config; }
+	private static var config : Config = new haxigniter.application.config.Config();
+	private function getConfig() : Config { return Application.config; }
 
 	public var Controller(getController, null) : Controller;
 	private var controller : Controller;
@@ -36,44 +36,44 @@ class Application
 	}
 
 	public var DB(getDB, null) : DatabaseConnection;
-	private var db : DatabaseConnection;
+	private static var db : DatabaseConnection;
 	private function getDB() : DatabaseConnection
 	{
 		// Database is a resource-intensive object, so it's created on demand.
-		if(this.db == null)
+		if(Application.db == null)
 		{
 			if(this.Config.Development)
-				this.db = new DevelopmentConnection();
+				Application.db = new DevelopmentConnection();
 			else
-				this.db = new OnlineConnection();
+				Application.db = new OnlineConnection();
 			
-			this.db.Open();
+			Application.db.Open();
 		}
 		
-		return this.db;
+		return Application.db;
 	}
 	
 	public var View(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return this.Config.View; }
 	
 	public var Session(getSession, null) : Session;
-	private var session : Session;
+	private static var session : Session;
 	private function getSession() : Session
 	{
-		if(this.session == null)
+		if(Application.session == null)
 		{
 			if(php.Session.exists(sessionName))
 			{
-				this.session = php.Session.get(sessionName);
+				Application.session = php.Session.get(sessionName);
 			}
 			else
 			{
-				this.session = new haxigniter.application.config.Session();
-				php.Session.set(sessionName, this.session);
+				Application.session = new haxigniter.application.config.Session();
+				php.Session.set(sessionName, Application.session);
 			}
 		}
 		
-		return this.session;
+		return Application.session;
 	}
 	
 	///// Static vars ///////////////////////////////////////////////
@@ -101,11 +101,7 @@ class Application
 	
 	/////////////////////////////////////////////////////////////////
 	
-	public function new()
-	{
-		// Config is used internally, so it's created when instantiating.
-		this.config = new haxigniter.application.config.Config();
-	}
+	public function new() {}
 	
 	public function Run(uriSegments : Array<String>) : Void
 	{

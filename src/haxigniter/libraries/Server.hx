@@ -20,10 +20,6 @@ class Server
 		}
 		catch(e : String)
 		{
-			// Test for correct exception message
-			if(e.indexOf('Undefined index:') == -1)
-				throw e;
-			
 			return null;
 		}
 	}

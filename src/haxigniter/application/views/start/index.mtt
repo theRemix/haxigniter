@@ -1,0 +1,16 @@
+<h2>Welcome to ::name::, my lord!</h2> 
+The habitants are: 
+<ul>
+	::foreach user users::
+		<li>
+			::user.name:: - 
+			::if (user.age > 18)::
+				Grownup
+			::elseif (user.age <= 2)::
+				Baby
+			::else::
+				Young
+			::end::
+		</li>
+	::end::
+</ul>

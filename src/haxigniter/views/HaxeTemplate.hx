@@ -11,7 +11,7 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 	
 	public function new(templatePath : String = null)
 	{
-		super(templatePath);
+		super(templatePath, null);
 		this.templateVars = new HaxeTemplateVars();
 	}
 	
@@ -25,10 +25,13 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 		return Reflect.deleteField(this.templateVars, name);
 	}
 	
-	public override function Render(content : String) : String
+	public override function Render(fileName : String) : String
 	{
+		fileName = this.TemplatePath + fileName;
+		
+		var content = php.io.File.getContent(fileName);
         var t = new haxe.Template(content);
-        
+		
 		return t.execute(this.templateVars);
 	}
 }

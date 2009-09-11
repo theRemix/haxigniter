@@ -1,9 +1,12 @@
 package haxigniter.application.controllers;
 
-import haxe.Template;
+//import haxe.Template;
+
 import haxigniter.libraries.Debug;
 import haxigniter.libraries.Server;
 import haxigniter.types.TypeFactory;
+
+import haxigniter.libraries.Url;
 
 import php.db.ResultSet;
 
@@ -11,8 +14,43 @@ class Start extends haxigniter.libraries.Controller
 {
 	public var test : Bool;
 	
-	public function index(id : Int)
+	public function index(?id : Int)
 	{
+		if(id != null)
+		{
+			this.Session.Age = id;
+			this.Session.FlashVar = id;
+		}
+		
+		var users = new List<Dynamic>();
+		users.add( { name: 'Boris', age: 40 } );
+		users.add( { name: 'Doris', age: 15 } );
+
+		this.View.Assign('name', 'Lurvia');
+		this.View.Assign('users', users);
+
+		this.View.Display('start/index.mtt');
+		
+		return;
+		
+		//var template : String = 'The habitants of <em>::name::</em> are : <ul>::foreach users::<li>::name:: - ::if (age > 18)::Grownup::elseif (age <= 2)::Baby::else::Young::end::</li>::end::</ul>';
+
+		/*
+		var users = new List<Dynamic>();
+		users.add( { name: 'Boris', age: 40 } );
+		users.add( { name: 'Doris', age: 15 } );
+
+		this.View.Assign('name', 'Turvia');
+		this.View.Assign('users', users);
+		*/
+
+		//this.View.Display('start/index.htt');
+		
+		//Debug.trace(php.Web.getHostName());
+		//Debug.trace(this.Config.BaseUrl);
+		//Debug.trace(this.Config.Development);		
+		//Debug.trace(id);
+
 		/*
 		var where = new Hash<Dynamic>();
 		var args = new Hash<Dynamic>();
@@ -33,29 +71,6 @@ class Start extends haxigniter.libraries.Controller
 		
 		return;
 		*/
-		
-		var template : String = 'The habitants of <em>::name::</em> are : <ul>::foreach users::<li>::name:: - ::if (age > 18)::Grownup::elseif (age <= 2)::Baby::else::Young::end::</li>::end::</ul>';
-		/*
-		var input = { name : 'Turvia', users: {
-			{ name: 'Boris', age: 40 }, 
-			{ name: 'Doris', age: 15 },
-			{ name: 'Snoris', age: 1}
-		}};
-		*/
-
-		var users = new List<Dynamic>();
-		users.add( { name: 'Boris', age: 40 } );
-		users.add( { name: 'Doris', age: 15 } );
-
-		this.View.Assign('name', 'Turvia');
-		this.View.Assign('users', users);
-
-		this.View.Display('start/index.htt');
-		
-		//Debug.trace(php.Web.getHostName());
-		//Debug.trace(this.Config.BaseUrl);
-		//Debug.trace(this.Config.Development);		
-		//Debug.trace(id);
 	}
 
 	public function phpinfo()

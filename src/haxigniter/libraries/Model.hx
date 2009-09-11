@@ -2,20 +2,20 @@ package haxigniter.libraries;
 
 import haxigniter.Application;
 
-import haxigniter.libraries.Config;
-import haxigniter.views.ViewEngine;
+import haxigniter.application.config.Config;
+import haxigniter.libraries.Controller;
 import haxigniter.libraries.Database;
 import haxigniter.application.config.Session;
 
-class ControllerException extends haxigniter.exceptions.Exception {}
+//class ModelException extends haxigniter.exceptions.Exception {}
 
-class Controller implements haxe.rtti.Infos
+class Model
 {
 	public var Config(getConfig, null) : Config;
 	private function getConfig() : Config { return Application.Instance.Config; }
 
-	public var View(getView, null) : ViewEngine;
-	private function getView() : ViewEngine { return Application.Instance.View; }
+	public var Controller(getController, null) : Controller;
+	private function getController() : Controller { return Application.Instance.Controller; }
 
 	public var DB(getDB, null) : DatabaseConnection;
 	private function getDB() : DatabaseConnection { return Application.Instance.DB; }
