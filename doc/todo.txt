@@ -1,16 +1,23 @@
-- Unit tests with autorun
-- Views: Integration of template system 
-- Database config
-- Database methods
-- Session handling (hibernator?)
-- Redirection helpers (flash messages)
-- Libraries/plugins (merge them?)
-- Models
-- Useful stuff from MY_libs
+-- Unit tests with autorun
+-- Views: Integration of template system 
+-- Database config
+-- Database methods
+-- Session handling (hibernator?)
+-- Redirection helpers (flash messages)
+-- Libraries/plugins (merge them?)
+-- Models
+-- Useful stuff from MY_libs
 - Multi-language support
 - Form validation (check out CI docs for ideas)
-- Error handling and logging
+-- Error handling and logging
 - Caching of templates
 - UTF-8 support
 - XSS filtering
 - CURL support
+- Email class
+- FirePHP
+- Pagination
+- OpenID (RPXnow)
+- DB convenience functions
+- Encryption
+- Encrypted cookies
