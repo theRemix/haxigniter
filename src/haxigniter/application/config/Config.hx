@@ -12,6 +12,27 @@ class Config extends haxigniter.libraries.Config
 	{
 		/*
 		|--------------------------------------------------------------------------
+		| Development setting
+		|--------------------------------------------------------------------------
+		|
+		| Determine here when the system is in development mode, or set to false.
+		| Here are a few examples for auto-detecting:
+		|
+		| If you're on a Windows machine when developing and Linux when live:
+		|    this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+		|
+		| To test depending on host name: 
+		|    this.Development = php.Web.getHostName() == 'localhost';
+		|
+		| Or IP address: 
+		|    this.Development = Server.Param('SERVER_ADDR') == '127.0.0.1';
+		|
+		*/
+		// TODO: Description for Development mode, usefulness
+		this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+
+		/*
+		|--------------------------------------------------------------------------
 		| Index File
 		|--------------------------------------------------------------------------
 		|
@@ -114,12 +135,11 @@ class Config extends haxigniter.libraries.Config
 		|	DebugLevel.Info = Info Messages
 		|	DebugLevel.Verbose = All Messages
 		|
-		| For a live site you'll usually only enable Error (1) to be logged otherwise
+		| For a live site you'll usually only enable Error or Warning otherwise
 		| your log files will fill up very fast.
 		|
 		*/
-		// TODO: Error logging (also next statement)
-		this.LogThreshold = DebugLevel.Error;
+		this.LogLevel = this.Development ? DebugLevel.Info : DebugLevel.Warning;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -137,11 +157,11 @@ class Config extends haxigniter.libraries.Config
 		| Date Format for Logs
 		|--------------------------------------------------------------------------
 		|
-		| Each item that is logged has an associated date. You can use PHP date
-		| codes to set your own date formatting
+		| Each item that is logged has an associated date. You can use PHP strftime
+		| codes to set your own date formatting.
 		|
 		*/
-		this.LogDateFormat = 'Y-m-d H:i:s';
+		this.LogDateFormat = '%Y-%m-%d %H:%M:%S';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -164,33 +184,6 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		this.EncryptionKey = null;
-	}
-	
-	/**
-	* Variables dependent on default values.
-	*/
-	private override function initDependencies()
-	{
-		/*
-		|--------------------------------------------------------------------------
-		| Development setting
-		|--------------------------------------------------------------------------
-		|
-		| Determine here when the system is in development mode, or set to false.
-		| Here are a few examples for auto-detecting:
-		|
-		| If you're on a Windows machine when developing and Linux when live:
-		|    this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
-		|
-		| To test depending on host name: 
-		|    this.Development = php.Web.getHostName() == 'localhost';
-		|
-		| Or IP address: 
-		|    this.Development = Server.Param('SERVER_ADDR') == '127.0.0.1';
-		|
-		*/
-		// TODO: Description for Development mode, usefulness
-		this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -208,7 +201,13 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
-
+	}
+	
+	/**
+	* Variables dependent on default values.
+	*/
+	private override function initDependencies()
+	{
 		/*
 		|--------------------------------------------------------------------------
 		| View Engine

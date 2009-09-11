@@ -12,7 +12,7 @@ class Config implements Dynamic
 	public var Language : String;
 	public var Charset : String;
 	public var PermittedUriChars : String;
-	public var LogThreshold : DebugLevel;
+	public var LogLevel : DebugLevel;
 	public var LogPath : String;
 	public var LogDateFormat : String;
 	public var CachePath : String;

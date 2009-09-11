@@ -8,6 +8,7 @@ import haxigniter.libraries.Url;
 
 import haxigniter.rtti.RttiUtil;
 import haxigniter.types.TypeFactory;
+import haxigniter.libraries.Debug;
 
 import haxigniter.libraries.Config;
 import haxigniter.application.config.Session;
@@ -97,6 +98,18 @@ class Application
 		}
 		
 		Application.Instance.Run(Url.Segments);
+	}
+	
+	///// Convenience methods for debug and logging /////////////////
+
+	public static function Trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
+	{
+		Debug.Trace(data, debugLevel, pos);
+	}
+	
+	public static function Log(message : Dynamic, ?debugLevel : DebugLevel) : Void
+	{
+		Debug.Log(message, debugLevel);
 	}
 	
 	/////////////////////////////////////////////////////////////////

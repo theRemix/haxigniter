@@ -13,11 +13,11 @@ class TestRunner extends haxe.unit.TestRunner
 		this.add(new When_using_a_TypeFactory());
 		
 #if php
-		Debug.StartPhpBuffer();
+		Debug.StartBuffer();
 #end
 		this.run();
 #if php
-		var output : String = Debug.EndPhpBuffer();
+		var output : String = Debug.EndBuffer();
 		var errorTest : EReg = ~/\b[1-9]\d* failed\b/;
 		
 		if(errorTest.match(output))
