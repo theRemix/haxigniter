@@ -1,7 +1,6 @@
 package haxigniter.types;
 
 import haxigniter.libraries.Debug;
-import haxigniter.exceptions.Exception;
 
 /**
 * This file contains all special classes that transforms input data from the user to
@@ -17,10 +16,12 @@ class DbID
 	public function new(input : String)
 	{
 		var intValue : Int = Std.parseInt(input);
-
-		if(intValue == null || intValue <= 0)
-			throw new TypeException(Type.getClassName(Type.getClass(this)), input);
 		
+		if(intValue == null || intValue <= 0)
+		{
+			throw new TypeException(Type.getClassName(Type.getClass(this)), input);
+		}
+
 		this.intValue = intValue;
 	}
 }
@@ -75,7 +76,7 @@ class TypeFactory
 				// It's up to those classes to determine if the value is legal or not.
 				var classType = Type.resolveClass(typeString);
 				if(classType == null)
-					throw new Exception('[WebTypeFactory] Type not found: ' + typeString);
+					throw new haxigniter.exceptions.Exception('[WebTypeFactory] Type not found: ' + typeString);
 				
 				output = Type.createInstance(classType, [value]);
 		}
@@ -104,7 +105,7 @@ class TypeFactory
 	}
 }
 
-class TypeException extends Exception
+class TypeException extends haxigniter.exceptions.Exception
 {
 	public var ClassName(getClassName, null) : String;
 	private var className : String;

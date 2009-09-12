@@ -1,7 +1,5 @@
 ﻿package haxigniter.libraries;
 
-import haxigniter.exceptions.Exception;
-
 import php.db.Mysql;
 import php.db.Sqlite;
 import php.db.Connection;
@@ -13,7 +11,7 @@ enum DatabaseDriver
 	Sqlite;
 }
 
-class DatabaseException extends Exception
+class DatabaseException extends haxigniter.exceptions.Exception
 {
 	public var Connection : DatabaseConnection;
 	

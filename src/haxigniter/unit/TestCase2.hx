@@ -67,14 +67,4 @@ class TestCase2 extends TestCase
 	{
 		this.assertFalse(pattern.match(Std.string(input)));
 	}
-	
-	public function expectException(expected : String, e : Dynamic) : Void
-	{
-		this.assertTrue(Std.string(e) == expected);
-	}
-
-	public function expectExceptionPattern(expected : EReg, e : Dynamic) : Void
-	{
-		this.assertTrue(expected.match(Std.string(e)));
-	}
 }

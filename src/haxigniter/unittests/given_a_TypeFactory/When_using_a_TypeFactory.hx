@@ -42,9 +42,9 @@ class When_using_a_TypeFactory extends TestCase2
 		{
 			var db2 : DbID = untyped TypeFactory.CreateType('haxigniter.types.DbID', '0');
 		}
-		catch (e : Dynamic)
+		catch (e : haxigniter.types.TypeException)
 		{
-			this.expectExceptionPattern(~/Invalid value for haxigniter.types.DbID: "0"/, e);
+			this.assertPattern(~/Invalid value for haxigniter.types.DbID: "0"/, e.Message);
 		}
 	}
 }

@@ -89,7 +89,7 @@ class When_UnitTesting_With_TestCase2 extends TestCase2
 		}
 		catch(e : Dynamic)
 		{
-			this.expectException('I am Error.', e);
+			this.assertEqual('I am Error.', e);
 		}
 	}
 
@@ -101,7 +101,7 @@ class When_UnitTesting_With_TestCase2 extends TestCase2
 		}
 		catch(e : Dynamic)
 		{
-			this.expectExceptionPattern(~/Er+or/, e);
+			this.assertPattern(~/Er+or/, e);
 		}
 	}
 }

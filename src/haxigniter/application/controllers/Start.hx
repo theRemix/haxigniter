@@ -2,6 +2,7 @@ package haxigniter.application.controllers;
 
 //import haxe.Template;
 
+import haxe.Firebug;
 import haxigniter.libraries.Debug;
 import haxigniter.libraries.Server;
 import haxigniter.types.TypeFactory;
@@ -21,15 +22,20 @@ class Start extends haxigniter.libraries.Controller
 			this.Session.Age = id;
 			this.Session.FlashVar = id;
 		}
-		
+
+		/*
 		var users = new List<Dynamic>();
 		users.add( { name: 'Boris', age: 40 } );
-		users.add( { name: 'Doris', age: 15 } );
+		users.add( { name: 'Doris', age: 15.33 } );
+
+		haxigniter.Application.Log('Testing testing');
+		haxigniter.Application.Log(123, DebugLevel.Warning);
 
 		this.View.Assign('name', 'Lurvia');
 		this.View.Assign('users', users);
 
 		this.View.Display('start/index.mtt');
+		*/
 		
 		return;
 		
@@ -72,9 +78,14 @@ class Start extends haxigniter.libraries.Controller
 		return;
 		*/
 	}
-
-	public function phpinfo()
+	
+	/**
+	 * Run integrity tests, good when rolling out application for the first time.
+	 * @param	password default password is 'dev'. Change when deployed.
+	 */
+	public function integrity(password = '')
 	{
-		untyped __php__("phpinfo();");		
+		if(Config.Development || password == 'dev')
+			new haxigniter.application.libraries.Integrity().Run();
 	}
 }

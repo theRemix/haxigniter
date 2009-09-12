@@ -136,10 +136,28 @@ class Application
 			throw new ControllerException(controllerClass + ' method "' + controllerMethod + '" not found.');
 
 		// Typecast the arguments.
-		var arguments : Array<Dynamic> = this.typecastArguments(classType, controllerMethod, uriSegments.slice(2));		
+		var arguments : Array<Dynamic> = this.typecastArguments(classType, controllerMethod, uriSegments.slice(2));
+		var exception : Dynamic;
 
-		// Execute the controller class with the method specified, and the arguments.
-		Reflect.callMethod(this.controller, method, arguments);
+		// TODO: When rethrow is fixed, factorize this code so errors will be logged in development too.
+		if(this.Config.Development)
+		{
+			// Execute the controller with no exception handling in development mode.
+			Reflect.callMethod(this.controller, method, arguments);		
+		}
+		else
+		{
+			try
+			{
+				// Execute the controller class with the method specified, and the arguments.
+				Reflect.callMethod(this.controller, method, arguments);
+			}
+			catch(e : Dynamic)
+			{
+				Debug.Log(e, DebugLevel.Error);
+				// TODO: User-friendly display of errors
+			}			
+		}	
 
 		// Clean up controller after it's done.
 		this.cleanup();
