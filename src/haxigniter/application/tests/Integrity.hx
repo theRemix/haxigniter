@@ -5,20 +5,19 @@ import php.Lib;
 import php.Web;
 
 /**
- * 
+ * This is a template for your own integrity tests.
+ * Browse to /start/integrity to run the tests.
  */
 class Integrity extends haxigniter.tests.Integrity
 {
-	/*
-	// Test template
-	public function Test1(title : { value : String }) : Bool
+	// Integrity test template method
+	public function TestLogic(title : { value : String }) : Bool
 	{
-		printHeader('Header');
+		printHeader('Logic tests');
 		
-		title.value = 'Test title';
-		return 1 == 2;
+		title.value = 'Test if not false is true';
+		return !false == true;
 	}
-	*/
 
 	public function new() {	super(); }
 }

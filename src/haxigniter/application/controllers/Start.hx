@@ -73,4 +73,10 @@ class Start extends haxigniter.libraries.Controller
 		if(Config.Development || password == 'dev')
 			new haxigniter.application.tests.Integrity().Run();
 	}
+
+	public function phpinfo()
+	{
+		if(Config.Development)
+			untyped __php__("phpinfo();");
+	}	
 }

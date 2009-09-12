@@ -11,4 +11,3 @@ package haxigniter.application.config;
 *
 */
 import haxigniter.application.controllers.Start;
-import haxigniter.application.controllers.Dev;
