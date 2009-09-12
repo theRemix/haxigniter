@@ -94,14 +94,19 @@ class Application
 		if(Application.Instance.Config.Development)
 		{
 			// Run the haXigniter unit tests.
-			new haxigniter.unittests.TestRunner();
+			Application.RunTests();
 		}
 		
 		Application.Instance.Run(Url.Segments);
 	}
 	
+	public static function RunTests()
+	{
+		new haxigniter.application.tests.TestRunner().RunAndDisplayOnError();
+	}
+	
 	///// Convenience methods for debug and logging /////////////////
-
+	
 	public static function Trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
 	{
 		Debug.Trace(data, debugLevel, pos);

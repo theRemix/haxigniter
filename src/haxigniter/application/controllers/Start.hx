@@ -13,7 +13,6 @@ class Start extends haxigniter.libraries.Controller
 			this.Session.anything = 'nice';
 		}
 
-		
 		var users = new List<Dynamic>();
 		users.add( { name: 'Boris', age: this.Session.Age } );
 		users.add( { name: 'Doris', age: 15 } );
@@ -72,6 +71,6 @@ class Start extends haxigniter.libraries.Controller
 	public function integrity(password = '')
 	{
 		if(Config.Development || password == 'dev')
-			new haxigniter.application.libraries.Integrity().Run();
+			new haxigniter.application.tests.Integrity().Run();
 	}
 }

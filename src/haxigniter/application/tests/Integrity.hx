@@ -1,4 +1,4 @@
-﻿package haxigniter.application.libraries;
+﻿package haxigniter.application.tests;
 
 import php.FileSystem;
 import php.Lib;
@@ -7,7 +7,7 @@ import php.Web;
 /**
  * 
  */
-class Integrity extends haxigniter.libraries.Integrity
+class Integrity extends haxigniter.tests.Integrity
 {
 	/*
 	// Test template

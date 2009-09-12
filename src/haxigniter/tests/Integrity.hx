@@ -1,4 +1,5 @@
-﻿package haxigniter.libraries;
+﻿package haxigniter.tests;
+
 import php.FileSystem;
 import php.Lib;
 import php.Web;
