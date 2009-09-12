@@ -12,6 +12,14 @@ class TestRunner extends haxigniter.tests.TestRunner
 	{
 		this.add(new haxigniter.application.tests.unit.When_doing_math());
 	}
+
+	/////////////////////////////////////////////////////////////////
 	
-	public function new() {	super(); }
+	/**
+	 * @param	runHaxigniterTests If false, haXigniter test suite is not run automatically.
+	 */
+	public function new(runHaxigniterTests : Bool = true)
+	{
+		super(runHaxigniterTests);
+	}
 }
