@@ -1,46 +1,32 @@
 package haxigniter.application.controllers;
-
-//import haxe.Template;
-
 import haxe.Firebug;
-import haxigniter.libraries.Debug;
-import haxigniter.libraries.Server;
-import haxigniter.types.TypeFactory;
-
-import haxigniter.libraries.Url;
-
 import php.db.ResultSet;
+import php.Web;
 
 class Start extends haxigniter.libraries.Controller
 {
-	public var test : Bool;
-	
 	public function index(?id : Int)
 	{
 		if(id != null)
 		{
 			this.Session.Age = id;
-			this.Session.FlashVar = id;
+			this.Session.anything = 'nice';
 		}
 
-		/*
+		
 		var users = new List<Dynamic>();
-		users.add( { name: 'Boris', age: 40 } );
-		users.add( { name: 'Doris', age: 15.33 } );
+		users.add( { name: 'Boris', age: this.Session.Age } );
+		users.add( { name: 'Doris', age: 15 } );
 
-		haxigniter.Application.Log('Testing testing');
-		haxigniter.Application.Log(123, DebugLevel.Warning);
+		Firebug.trace(users);
 
-		this.View.Assign('name', 'Lurvia');
+		this.View.Assign('name', 'Örnsköldsvik');
 		this.View.Assign('users', users);
 
 		this.View.Display('start/index.mtt');
-		*/
 		
 		return;
 		
-		//var template : String = 'The habitants of <em>::name::</em> are : <ul>::foreach users::<li>::name:: - ::if (age > 18)::Grownup::elseif (age <= 2)::Baby::else::Young::end::</li>::end::</ul>';
-
 		/*
 		var users = new List<Dynamic>();
 		users.add( { name: 'Boris', age: 40 } );

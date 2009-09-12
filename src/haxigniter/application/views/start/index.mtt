@@ -6,7 +6,7 @@ The habitants are:
 			::user.name:: - 
 			::if (user.age > 18)::
 				Grownup
-			::elseif (user.age <= 2)::
+			::elseif (user.age < 3)::
 				Baby
 			::else::
 				Young
