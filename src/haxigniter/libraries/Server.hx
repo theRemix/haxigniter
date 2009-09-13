@@ -43,4 +43,13 @@ class Server
 		
 		return '.';
 	}
+	
+	/**
+	 * Convenience method for external libraries.
+	 * @param	path
+	 */
+	public static inline function RequireExternal(path : String) : Void
+	{
+		untyped __call__('require_once', haxigniter.Application.Instance.Config.ApplicationPath + 'external/' + path);		
+	}
 }
