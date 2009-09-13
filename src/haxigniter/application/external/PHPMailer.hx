@@ -39,9 +39,6 @@ extern class PHPMailer
 	
 	/////////////////////////////////////////////////////////////////
 	
-	public var Subject : String;
-	public var AltBody : String;
-	
 	public var Priority : Int;
 	public var CharSet : String;
 	public var ContentType : String;
