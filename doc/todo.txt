@@ -1,15 +1,16 @@
-- Multi-language support
+- Multi-language support (from CI)
 - Form validation (check out CI docs for ideas)
-- Caching of templates
+- Caching of templates (ViewEngine)
 - UTF-8 support
 - XSS filtering
-- Email class
 - Pagination
 - OpenID (RPXnow)
-- DB convenience functions
-- Encryption
-- Encrypted cookies
+- DB convenience functions (DBTools)
+- Encryption (Encrypted cookies)
+- Error pages/messages
+- Routes (CI)
 
+-- Email class (Wrapper around PHPMailer)
 -- Unit tests with autorun
 -- Views: Integration of template system 
 -- Database config

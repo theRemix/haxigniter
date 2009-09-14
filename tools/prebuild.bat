@@ -24,3 +24,7 @@ robocopy /NJH /NJS /MIR %APP%\views %OUTPUT%\views /XD .svn
 :: ----- Synchronize external libraries -----------------------------
 
 robocopy /NJH /NJS /MIR %APP%\external %OUTPUT%\external *.php /XD .svn
+
+:: Exit code must be explicitly set sometimes.
+:: Thanks for the hint: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/#Implementation
+exit /B 0
