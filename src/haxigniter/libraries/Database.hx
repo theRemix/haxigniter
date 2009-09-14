@@ -13,11 +13,11 @@ enum DatabaseDriver
 
 class DatabaseException extends haxigniter.exceptions.Exception
 {
-	public var Connection : DatabaseConnection;
+	public var connection : DatabaseConnection;
 	
 	public function new(message : String, connection : DatabaseConnection)
 	{
-		this.Connection = connection;
+		this.connection = connection;
 		super(message);
 	}
 }
@@ -27,94 +27,87 @@ class DatabaseException extends haxigniter.exceptions.Exception
 // TODO: Unquoted fields in where/data queries
 class DatabaseConnection
 {	
-	public var Host : String;
-	public var Port : Int;
-	public var User : String;
-	public var Pass : String;
-	public var Database : String;
-	public var Socket : String;
-	public var Driver : DatabaseDriver;
-	public var Debug : Bool;
+	public var host : String;
+	public var port : Int;
+	public var user : String;
+	public var pass : String;
+	public var database : String;
+	public var socket : String;
+	public var driver : DatabaseDriver;
+	public var debug : Bool;
 	
-	public var Connection : Connection;
+	public var connection : Connection;
 	
 	/**
 	 * Set this value to change the string which is replaced by a parameter when executing a query.
 	 * Default is '?'
 	 */
-	public var ParameterString : String;
+	public var parameterString : String;
 
-	public var LastQuery(getLastQuery, null) : String;
-	private var lastQuery : String;
-	private function getLastQuery() : String { return this.lastQuery; }
+	public var lastQuery(getLastQuery, null) : String;
+	private var my_lastQuery : String;
+	private function getLastQuery() : String { return this.my_lastQuery; }
 
 	private static var alphaRegexp : EReg = ~/^\w+$/;
 
-	public function Open() : Void
+	public function open() : Void
 	{
-		if(this.Connection != null)
+		if(this.connection != null)
 			throw new DatabaseException('Connection is already open.', this);
 		
-		if(this.Driver == DatabaseDriver.Mysql)
-			this.Connection = php.db.Mysql.connect({ 
-				user: this.User, 
-				socket: this.Socket, 
-				port: this.Port, 
-				pass: this.Pass, 
-				host: this.Host, 
-				database: this.Database
-			});
-		else // if(this.Driver == DatabaseDriver.Sqlite)
-			this.Connection = php.db.Sqlite.open(this.Database);
+		if(this.driver == DatabaseDriver.Mysql)
+			this.connection = php.db.Mysql.connect(this);
+		else // if(this.driver == DatabaseDriver.Sqlite)
+			this.connection = php.db.Sqlite.open(this.database);
 	}
 	
-	public function Close() : Void
+	public function close() : Void
 	{
-		if(this.Connection != null)
+		if(this.connection != null)
 		{
-			this.Connection.close();
-			this.Connection = null;
+			this.connection.close();
+			this.connection = null;
 		}
 	}
 
 	///// Query methods /////////////////////////////////////////////
 	
-	public function Query(query : String, ?params : Iterable<Dynamic>) : ResultSet
+	public function query(query : String, ?params : Iterable<Dynamic>) : ResultSet
 	{
 		if(params != null)
 			query = this.queryParams(query, params);
 		
-		this.lastQuery = query;
-		return this.Connection.request(query);
+		this.my_lastQuery = query;
+		return this.connection.request(query);
 	}
 
-	public function QueryRow(query : String, ?params : Iterable<Dynamic>) : Dynamic
+	public function queryRow(query : String, ?params : Iterable<Dynamic>) : Dynamic
 	{
-		var result = this.Query(query, params);
+		var result = this.query(query, params);
 		return result.hasNext() ? result.next() : {};
 	}
 
-	public function QueryInt(query : String, ?params : Iterable<Dynamic>) : Int
+	public function queryInt(query : String, ?params : Iterable<Dynamic>) : Int
 	{
-		var result = this.Query(query, params);
+		var result = this.query(query, params);
 		return result.hasNext() ? result.getIntResult(0) : null;
 	}
 
-	public function QueryFloat(query : String, ?params : Iterable<Dynamic>) : Float
+	public function queryFloat(query : String, ?params : Iterable<Dynamic>) : Float
 	{
-		var result = this.Query(query, params);
+		var result = this.query(query, params);
 		return result.hasNext() ? result.getFloatResult(0) : null;
 	}
 
-	public function QueryString(query : String, ?params : Iterable<Dynamic>) : String
+	public function queryString(query : String, ?params : Iterable<Dynamic>) : String
 	{
-		var result = this.Query(query, params);
+		var result = this.query(query, params);
 		return result.hasNext() ? result.getResult(0) : null;
 	}
 
 	///// C(R)UD methods ////////////////////////////////////////////
 	
-	public function Insert(table : String, data : Hash<Dynamic>, ?replace = false) : Int
+	public function insert(table : String, data : Hash<Dynamic>, ?replace = false) : Int
 	{
 		this.testAlphaNumeric(table);
 		
@@ -125,22 +118,22 @@ class DatabaseConnection
 		{
 			this.testAlphaNumeric(key);
 			keys += ', ' + key;
-			values += ', ' + this.Connection.quote(Std.string(data.get(key)));
+			values += ', ' + this.connection.quote(Std.string(data.get(key)));
 		}
 		
 		var query = (replace ? 'REPLACE' : 'INSERT') + ' INTO ' + table + ' (' + keys.substr(2) + ') VALUES (' + values.substr(2) + ')';
-		var result : ResultSet = this.Connection.request(query);
+		var result : ResultSet = this.connection.request(query);
 		
-		this.lastQuery = query;		
+		this.my_lastQuery = query;		
 		return result.length;
 	}
 
-	public function Replace(table : String, data : Hash<Dynamic>) : Int
+	public function replace(table : String, data : Hash<Dynamic>) : Int
 	{
-		return this.Insert(table, data, true);
+		return this.insert(table, data, true);
 	}
 	
-	public function Update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int) : Int
+	public function update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int) : Int
 	{
 		this.testAlphaNumeric(table);
 		
@@ -150,7 +143,7 @@ class DatabaseConnection
 		for(key in data.keys())
 		{
 			this.testAlphaNumeric(key);
-			set += ', ' + key + '=' + this.Connection.quote(Std.string(data.get(key)));
+			set += ', ' + key + '=' + this.connection.quote(Std.string(data.get(key)));
 		}
 
 		if(where != null)
@@ -158,7 +151,7 @@ class DatabaseConnection
 			for(key in where.keys())
 			{
 				this.testAlphaNumeric(key);
-				whereStr += ' AND ' + key + '=' + this.Connection.quote(Std.string(where.get(key)));
+				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(where.get(key)));
 			}
 		}
 
@@ -170,13 +163,13 @@ class DatabaseConnection
 		if(limit != null)
 			query += ' LIMIT ' + limit;
 
-		var result : ResultSet = this.Connection.request(query);
+		var result : ResultSet = this.connection.request(query);
 		
-		this.lastQuery = query;
+		this.my_lastQuery = query;
 		return result.length;
 	}
 	
-	public function Delete(table : String, ?where : Hash<Dynamic>, ?limit : Int) : Int
+	public function delete(table : String, ?where : Hash<Dynamic>, ?limit : Int) : Int
 	{
 		this.testAlphaNumeric(table);
 		
@@ -187,7 +180,7 @@ class DatabaseConnection
 			for(key in where.keys())
 			{
 				this.testAlphaNumeric(key);
-				whereStr += ' AND ' + key + '=' + this.Connection.quote(Std.string(where.get(key)));
+				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(where.get(key)));
 			}
 		}
 
@@ -199,9 +192,9 @@ class DatabaseConnection
 		if(limit != null)
 			query += ' LIMIT ' + limit;
 
-		var result : ResultSet = this.Connection.request(query);
+		var result : ResultSet = this.connection.request(query);
 		
-		this.lastQuery = query;
+		this.my_lastQuery = query;
 		return result.length;
 	}	
 
@@ -217,11 +210,11 @@ class DatabaseConnection
 	{
 		for(param in params)
 		{
-			var pos = query.indexOf(this.ParameterString == null ? '?' : this.ParameterString);
+			var pos = query.indexOf(this.parameterString == null ? '?' : this.parameterString);
 			if(pos == -1)
 				throw new DatabaseException('Not enough parameters in query.', this);
 			
-			query = query.substr(0, pos) + this.Connection.quote(param) + query.substr(pos+1);
+			query = query.substr(0, pos) + this.connection.quote(param) + query.substr(pos+1);
 		}
 		
 		return query;

@@ -10,18 +10,18 @@ class ControllerException extends haxigniter.exceptions.Exception {}
 
 class Controller implements haxe.rtti.Infos
 {
-	public var Application(getApplication, null) : haxigniter.Application;
-	private function getApplication() : haxigniter.Application { return haxigniter.Application.Instance; }
+	public var application(getApplication, null) : haxigniter.Application;
+	private function getApplication() : haxigniter.Application { return haxigniter.Application.instance; }
 
-	public var Config(getConfig, null) : Config;
-	private function getConfig() : Config { return Application.Config; }
+	public var config(getConfig, null) : Config;
+	private function getConfig() : Config { return application.config; }
 
-	public var View(getView, null) : ViewEngine;
-	private function getView() : ViewEngine { return Application.View; }
+	public var view(getView, null) : ViewEngine;
+	private function getView() : ViewEngine { return application.view; }
 
 	public var DB(getDB, null) : DatabaseConnection;
-	private function getDB() : DatabaseConnection { return Application.DB; }
+	private function getDB() : DatabaseConnection { return application.DB; }
 
-	public var Session(getSession, null) : Session;
-	private function getSession() : Session { return Application.Session; }	
+	public var session(getSession, null) : Session;
+	private function getSession() : Session { return application.session; }	
 }

@@ -4,35 +4,35 @@ import haxigniter.libraries.Server;
 import haxigniter.libraries.Debug;
 import haxigniter.views.ViewEngine;
 
-class Config implements Dynamic 
+class Config
 {
-	public var Development : Bool;
-	public var IndexPage : String;
-	public var BaseUrl : String;
-	public var Language : String;
-	public var Charset : String;
-	public var PermittedUriChars : String;
-	public var LogLevel : DebugLevel;
-	public var LogPath : String;
-	public var LogDateFormat : String;
-	public var CachePath : String;
-	public var PrivatePath : String;
-	public var EncryptionKey : String;
-	public var View : ViewEngine;	
-	public var ApplicationPath : String;
+	public var development : Bool;
+	public var indexPage : String;
+	public var baseUrl : String;
+	public var language : String;
+	public var charset : String;
+	public var permittedUriChars : String;
+	public var logLevel : DebugLevel;
+	public var logPath : String;
+	public var logDateFormat : String;
+	public var cachePath : String;
+	public var privatePath : String;
+	public var encryptionKey : String;
+	public var view : ViewEngine;	
+	public var applicationPath : String;
 
 	private var runtimePath : String;
 	private var viewPath : String;
 	
-	public var SessionPath(getSessionPath, setSessionPath) : String;
-	private var sessionPath : String;
-	private function getSessionPath() : String { return this.sessionPath; }
+	public var sessionPath(getSessionPath, setSessionPath) : String;
+	private var my_sessionPath : String;
+	private function getSessionPath() : String { return this.my_sessionPath; }
 	private function setSessionPath(path : String)
 	{
 		php.Session.setSavePath(path);
-		this.sessionPath = path;
+		this.my_sessionPath = path;
 		
-		return this.sessionPath;
+		return this.my_sessionPath;
 	}
 	
 	/**
@@ -47,44 +47,44 @@ class Config implements Dynamic
 	{
 		// ApplicationPath and BaseUrl always goes on top, since other vars will probably use them.
 		
-		if(this.ApplicationPath == null)
+		if(this.applicationPath == null)
 		{
-			this.ApplicationPath = Server.DocumentRoot;
-			this.ApplicationPath += StringTools.replace(Server.Param('SCRIPT_NAME'), this.IndexPage, '');
-			this.ApplicationPath += 'lib/haxigniter/application/';
+			this.applicationPath = Server.documentRoot;
+			this.applicationPath += StringTools.replace(Server.param('SCRIPT_NAME'), this.indexPage, '');
+			this.applicationPath += 'lib/haxigniter/application/';
 		}
 		
-		if(this.BaseUrl == null)
+		if(this.baseUrl == null)
 		{
-			this.BaseUrl = Server.Param('SERVER_PORT') == '443' ? 'https' : 'http';
-			this.BaseUrl += '://' + Server.Param('HTTP_HOST');
-			this.BaseUrl += StringTools.replace(Server.Param('SCRIPT_NAME'), this.IndexPage, '');
+			this.baseUrl = Server.param('SERVER_PORT') == '443' ? 'https' : 'http';
+			this.baseUrl += '://' + Server.param('HTTP_HOST');
+			this.baseUrl += StringTools.replace(Server.param('SCRIPT_NAME'), this.indexPage, '');
 		}
 
 		// Set runtime and view path based on application path.
-		this.runtimePath = this.ApplicationPath + 'runtime/';
-		this.viewPath = this.ApplicationPath + 'views/';
+		this.runtimePath = this.applicationPath + 'runtime/';
+		this.viewPath = this.applicationPath + 'views/';
 		
 		// Other paths that can be specified in config.
-		if(this.CachePath == null)
+		if(this.cachePath == null)
 		{
-			this.CachePath = this.runtimePath + 'cache/';
+			this.cachePath = this.runtimePath + 'cache/';
 		}
 		
-		if(this.LogPath == null)
+		if(this.logPath == null)
 		{
-			this.LogPath = this.runtimePath + 'logs/';
+			this.logPath = this.runtimePath + 'logs/';
 		}
 
-		if(this.SessionPath == null)
+		if(this.sessionPath == null)
 		{
-			this.SessionPath = this.runtimePath + 'session/';
+			this.sessionPath = this.runtimePath + 'session/';
 		}
 	}
 	
 	/**
 	 * Set variables that are dependent on other config variables or default values.
-	 * Inherited by application.config.Config
+	 * Inherited by application.config.config
 	 */
 	private function initDependencies() {}
 

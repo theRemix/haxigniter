@@ -6,75 +6,75 @@ import php.io.FileOutput;
 
 enum DebugLevel
 {
-	Off;
-	Error;
-	Warning;
-	Info;
-	Verbose;
+	off;
+	error;
+	warning;
+	info;
+	verbose;
 }
 
 class Debug
 {
-	public static var TraceLevel : DebugLevel = Info;
+	public static var traceLevel : DebugLevel = DebugLevel.info;
 	
-	private static var config = haxigniter.Application.Instance.Config;
+	private static var config = haxigniter.Application.instance.config;
 	
-	public static function Log(message : Dynamic, ?debugLevel : DebugLevel) : Void
+	public static function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
 	{
-		if(debugLevel == null) debugLevel = DebugLevel.Info;
+		if(debugLevel == null) debugLevel = DebugLevel.info;
 
-		if(Debug.ToInt(debugLevel) > Debug.ToInt(config.LogLevel))
+		if(Debug.toInt(debugLevel) > Debug.toInt(config.logLevel))
 			return;
 		
-		var logFile = config.LogPath + 'log-' + DateTools.format(Date.now(), "%Y-%m-%d") + ".php";
+		var logFile = config.logPath + 'log-' + DateTools.format(Date.now(), "%Y-%m-%d") + ".php";
 		var output = '';
 		
 		if(!php.FileSystem.exists(logFile))
 			output += "<?php exit; ?>\n\n";
 		
-		output += Std.string(debugLevel).toUpperCase() + ' - ' + DateTools.format(Date.now(), config.LogDateFormat) + ' --> ' + message + "\n";
+		output += Std.string(debugLevel).toUpperCase() + ' - ' + DateTools.format(Date.now(), config.logDateFormat) + ' --> ' + message + "\n";
 		
 		var file : FileOutput = php.io.File.append(logFile, false);
 		file.writeString(output);
 		file.close();
 	}
 	
-	public static function Trace(data : Dynamic, ?traceLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
+	public static function trace(data : Dynamic, ?traceLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
 	{
-		if(traceLevel == null) traceLevel = DebugLevel.Info;
+		if(traceLevel == null) traceLevel = DebugLevel.info;
 		
-		if(Debug.ToInt(traceLevel) > Debug.ToInt(Debug.TraceLevel))
+		if(Debug.toInt(traceLevel) > Debug.toInt(Debug.traceLevel))
 			return;
 		
 		php.Lib.print('<pre style="border:1px dashed green; padding:2px; background-color:#F9F8F6;">');
-		Debug.StartBuffer();
+		Debug.startBuffer();
 		
 		haxe.Log.trace(data, pos);
 		
-		var output = StringTools.htmlEscape(Debug.EndBuffer());
+		var output = StringTools.htmlEscape(Debug.endBuffer());
 
 		php.Lib.print(Debug.colorize(output));
 		php.Lib.print('</pre>');
 	}
 	
-	public static function ToInt(level : DebugLevel) : Int
+	public static function toInt(level : DebugLevel) : Int
 	{
 		return switch(level)
 		{
-			case Off: 0;
-			case Error: 1;
-			case Warning: 2;
-			case Info: 3;
-			case Verbose: 4;
+			case off: 0;
+			case error: 1;
+			case warning: 2;
+			case info: 3;
+			case verbose: 4;
 		}
 	}
 	
-	public static function StartBuffer() : Void
+	public static function startBuffer() : Void
 	{
 		untyped __call__('ob_start');
 	}
 	
-	public static function EndBuffer() : String
+	public static function endBuffer() : String
 	{
 		return untyped __call__('ob_get_clean');
 	}

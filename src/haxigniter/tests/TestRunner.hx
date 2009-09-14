@@ -24,23 +24,23 @@ class TestRunner extends haxe.unit.TestRunner
 		this.addTestClasses();		
 	}
 	
-	public function RunTests() : String
+	public function runTests() : String
 	{
-		Debug.StartBuffer();
+		Debug.startBuffer();
 		this.run();
 
-		return Debug.EndBuffer();
+		return Debug.endBuffer();
 	}
 
-	public function RunAndDisplay() : Void
+	public function runAndDisplay() : Void
 	{
-		var output : String = this.RunTests();
+		var output : String = this.runTests();
 		php.Lib.print('<pre style="border:1px dashed blue; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
 	}
 	
-	public function RunAndDisplayOnError() : Void
+	public function runAndDisplayOnError() : Void
 	{
-		var output : String = this.RunTests();
+		var output : String = this.runTests();
 		var errorTest : EReg = ~/\b[1-9]\d* failed\b/;
 		
 		if(errorTest.match(output))

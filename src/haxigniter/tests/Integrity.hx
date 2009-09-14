@@ -6,20 +6,20 @@ import php.Web;
 
 class Integrity
 {
-	public var TestMethodPrefix : String;
+	public var testMethodPrefix : String;
 	private var config : haxigniter.libraries.Config;
 	
 	public function new()
 	{
-		this.config = haxigniter.Application.Instance.Config;
-		this.TestMethodPrefix = 'Test';
+		this.config = haxigniter.Application.instance.config;
+		this.testMethodPrefix = 'test';
 	}
 	
-	public function Run()
+	public function run()
 	{
 		for(field in Type.getInstanceFields(Type.getClass(this)))
 		{
-			if(StringTools.startsWith(field, this.TestMethodPrefix) && Reflect.isFunction(Reflect.field(this, field)))
+			if(StringTools.startsWith(field, this.testMethodPrefix) && Reflect.isFunction(Reflect.field(this, field)))
 				runTest(field);
 		}
 	}
@@ -57,31 +57,31 @@ class Integrity
 	
 	/////////////////////////////////////////////////////////////////
 	
-	public function TestHX1(title : { value : String }) : Bool
+	public function testHX1(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] Directory access');
 		
-		title.value = 'Cache path <b>"' + config.CachePath + '"</b> exists and is writable';
-		return this.isWritable(config.CachePath);
+		title.value = 'Cache path <b>"' + config.cachePath + '"</b> exists and is writable';
+		return this.isWritable(config.cachePath);
 	}
 
-	public function TestHX2(title : { value : String }) : Bool
+	public function testHX2(title : { value : String }) : Bool
 	{
-		title.value = 'Log path <b>"' + config.LogPath + '"</b> exists and is writable';
-		return this.isWritable(config.LogPath);
+		title.value = 'Log path <b>"' + config.logPath + '"</b> exists and is writable';
+		return this.isWritable(config.logPath);
 	}
 
-	public function TestHX3(title : { value : String }) : Bool
+	public function testHX3(title : { value : String }) : Bool
 	{
-		title.value = 'Session path <b>"' + config.SessionPath + '"</b> exists and is writable';
-		return this.isWritable(config.SessionPath);
+		title.value = 'Session path <b>"' + config.sessionPath + '"</b> exists and is writable';
+		return this.isWritable(config.sessionPath);
 	}
 
-	public function TestHX4(title : { value : String }) : Bool
+	public function testHX4(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] File integrity');
 
-		var htaccess = FileSystem.fullPath(config.ApplicationPath + '../../.htaccess');
+		var htaccess = FileSystem.fullPath(config.applicationPath + '../../.htaccess');
 
 		title.value = '<b>"' + htaccess + '"</b> exists to prevent access to haXigniter files';
 		

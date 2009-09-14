@@ -11,7 +11,7 @@ import php.Web;
 class Integrity extends haxigniter.tests.Integrity
 {
 	// Integrity test template method
-	public function TestLogic(title : { value : String }) : Bool
+	public function testLogic(title : { value : String }) : Bool
 	{
 		printHeader('Logic tests');
 		

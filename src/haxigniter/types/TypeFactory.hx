@@ -28,9 +28,9 @@ class DbID
 
 class TypeFactory
 {
-	public static var ArrayDelimiter : String = '-';
+	public static var arrayDelimiter : String = '-';
 	
-	public static function CreateType(typeString : String, value : String) : Class<Dynamic>
+	public static function createType(typeString : String, value : String) : Class<Dynamic>
 	{
 		// If output is null at the end, an error will be thrown.
 		var output : Dynamic = null;
@@ -59,9 +59,9 @@ class TypeFactory
 				
 				var isArray = typeParam[0] == 'Array';
 
-				for(val in value.split(ArrayDelimiter))
+				for(val in value.split(arrayDelimiter))
 				{
-					var newType = CreateType(typeParam[1], val);
+					var newType = TypeFactory.createType(typeParam[1], val);
 					
 					if(isArray)
 						output.push(newType);
@@ -107,18 +107,18 @@ class TypeFactory
 
 class TypeException extends haxigniter.exceptions.Exception
 {
-	public var ClassName(getClassName, null) : String;
-	private var className : String;
-	private function getClassName() { return this.className; }
+	public var className(getClassName, null) : String;
+	private var my_className : String;
+	private function getClassName() { return this.my_className; }
 
-	public var Value(getValue, null) : String;
-	private var value : String;
-	private function getValue() { return this.value; }
+	public var value(getValue, null) : String;
+	private var my_value : String;
+	private function getValue() { return this.my_value; }
 	
 	public function new(className : String, value : String)
 	{
-		this.className = className;
-		this.value = value;
+		this.my_className = className;
+		this.my_value = value;
 		
 		super('Invalid value for ' + className + ': "' + value + '"');
 	}

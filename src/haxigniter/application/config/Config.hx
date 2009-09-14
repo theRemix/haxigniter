@@ -19,17 +19,17 @@ class Config extends haxigniter.libraries.Config
 		| Here are a few examples for auto-detecting:
 		|
 		| If you're on a Windows machine when developing and Linux when live:
-		|    this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+		|    this.development = php.Sys.getEnv('OS') == 'Windows_NT';
 		|
 		| To test depending on host name: 
-		|    this.Development = php.Web.getHostName() == 'localhost';
+		|    this.development = php.Web.getHostName() == 'localhost';
 		|
 		| Or IP address: 
-		|    this.Development = Server.Param('SERVER_ADDR') == '127.0.0.1';
+		|    this.development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 		|
 		*/
 		// TODO: Description for Development mode, usefulness
-		this.Development = php.Sys.getEnv('OS') == 'Windows_NT';
+		this.development = php.Sys.getEnv('OS') == 'Windows_NT';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ class Config extends haxigniter.libraries.Config
 		| variable so that it is blank.
 		|
 		*/
-		this.IndexPage = 'index.php';
+		this.indexPage = 'index.php';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ class Config extends haxigniter.libraries.Config
 		|	http://www.your-site.com/
 		|
 		*/
-		this.BaseUrl = null;
+		this.baseUrl = null;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		// TODO: Multiple languages
-		//this.Language = 'english';
+		//this.language = 'english';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -98,7 +98,7 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		// TODO: Charset handling
-		//this.Charset = 'UTF-8';
+		//this.charset = 'UTF-8';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ class Config extends haxigniter.libraries.Config
 		| NOTE: When adding swedish charaters, the dash must be placed after them
 		| and the equal sign before... Must be some regexp problem.
 		*/
-		this.PermittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
+		this.permittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -129,17 +129,17 @@ class Config extends haxigniter.libraries.Config
 		| You can enable error logging by setting a threshold over Off. The
 		| threshold determines what gets logged. Threshold options are:
 		|
-		|	DebugLevel.Off = Disables logging, Error logging TURNED OFF
-		|	DebugLevel.Error = Error Messages (including PHP errors)
-		|	DebugLevel.Warning = Warning Messages
-		|	DebugLevel.Info = Info Messages
-		|	DebugLevel.Verbose = All Messages
+		|	DebugLevel.off = Disables logging, Error logging TURNED OFF
+		|	DebugLevel.error = Error Messages (including PHP errors)
+		|	DebugLevel.warning = Warning Messages
+		|	DebugLevel.info = Info Messages
+		|	DebugLevel.verbose = All Messages
 		|
 		| For a live site you'll usually only enable Error or Warning otherwise
 		| your log files will fill up very fast.
 		|
 		*/
-		this.LogLevel = this.Development ? DebugLevel.Info : DebugLevel.Warning;
+		this.logLevel = this.development ? DebugLevel.info : DebugLevel.warning;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -150,7 +150,7 @@ class Config extends haxigniter.libraries.Config
 		| system/logs/ folder.  Use a full server path with trailing slash.
 		|
 		*/
-		this.LogPath = null;
+		this.logPath = null;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -161,7 +161,7 @@ class Config extends haxigniter.libraries.Config
 		| codes to set your own date formatting.
 		|
 		*/
-		this.LogDateFormat = '%Y-%m-%d %H:%M:%S';
+		this.logDateFormat = '%Y-%m-%d %H:%M:%S';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -172,7 +172,7 @@ class Config extends haxigniter.libraries.Config
 		| system/cache/ folder.  Use a full server path with trailing slash.
 		|
 		*/
-		this.CachePath = null;
+		this.cachePath = null;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ class Config extends haxigniter.libraries.Config
 		| enabled you MUST set an encryption key.  See the user guide for info.
 		|
 		*/
-		this.EncryptionKey = null;
+		this.encryptionKey = null;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -194,13 +194,13 @@ class Config extends haxigniter.libraries.Config
 		| has access. Can be used for session, sensitive data, etc.
 		| Use a full server path with trailing slash.
 		|
-		| A tip is to use Server.DocumentRoot to specify a folder one step above
+		| A tip is to use Server.documentRoot to specify a folder one step above
 		| the http folder. For example:
 		|
-		| this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
+		| this.privatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
 		|
 		*/
-		this.PrivatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
+		this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
 	}
 	
 	/**
@@ -214,20 +214,20 @@ class Config extends haxigniter.libraries.Config
 		|--------------------------------------------------------------------------
 		|
 		| The Views are displayed by a ViewEngine, which is any class extending 
-		| the haxigniter.views.ViewEngine class.
+		| the haxigniter.views.viewEngine class.
 		|
 		| Because the ViewEngine requires access to Config variables, the ViewEngine
 		| class cannot be instantiated here. A class name must be specified here.
 		| The two engines supplied by haXigniter are:
 		|
-		| 	haxigniter.views.Templo - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
-		|   haxigniter.views.HaxeTemplate - haxe.Template (http://haxe.org/doc/cross/template)
+		| 	haxigniter.views.templo - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
+		|   haxigniter.views.haxeTemplate - haxe.Template (http://haxe.org/doc/cross/template)
 		|
 		| If you want to use another template system, make a class extending
-		| haxigniter.views.ViewEngine and specify it here.
+		| haxigniter.views.viewEngine and specify it here.
 		|
 		*/
-		this.View = new haxigniter.views.Templo(this.viewPath, this.CachePath);
+		this.view = new haxigniter.views.Templo(this.viewPath, this.cachePath);
 	}
 
 	public function new() {	super(); }

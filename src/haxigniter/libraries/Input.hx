@@ -2,7 +2,7 @@
 
 class Input 
 {
-	public static inline function Post(param : String) : String
+	public static inline function post(param : String) : String
 	{
 		try
 		{
@@ -14,7 +14,7 @@ class Input
 		}		
 	}
 
-	public static inline function Get(param : String) : String
+	public static inline function get(param : String) : String
 	{
 		try
 		{
@@ -26,8 +26,8 @@ class Input
 		}		
 	}
 	
-	public static inline function IpAddress() : String
+	public static inline function ipAddress() : String
 	{
-		return haxigniter.libraries.Server.Param('REMOTE_ADDR');
+		return haxigniter.libraries.Server.param('REMOTE_ADDR');
 	}
 }

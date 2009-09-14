@@ -9,7 +9,7 @@
 | Development (local) connection
 |--------------------------------------------------------------------------
 |
-| These database settings will be used when Config.Development is true.
+| These database settings will be used when Config.development is true.
 | Set them as appropriate.
 |
 */
@@ -17,14 +17,14 @@ class DevelopmentConnection extends DatabaseConnection
 {
 	public function new()
 	{
-		this.Host = 'localhost';
-		this.User = 'root';
-		this.Pass = '';
-		this.Database = 'selfimprove';
-		this.Driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
-		this.Debug = true; // Displays debug information on database/query errors
-		this.Port = 3306;
-		this.Socket = null;
+		this.host = 'localhost';
+		this.user = 'root';
+		this.pass = '';
+		this.database = 'selfimprove';
+		this.driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
+		this.debug = true; // Displays debug information on database/query errors
+		this.port = 3306;
+		this.socket = null;
 	}
 }
 
@@ -33,21 +33,21 @@ class DevelopmentConnection extends DatabaseConnection
 | Online (live) connection
 |--------------------------------------------------------------------------
 |
-| These database settings will be used when Config.Development is false.
+| These database settings will be used when Config.development is false.
 |
 */
 class OnlineConnection extends DatabaseConnection
 {
 	public function new()
 	{
-		this.Host = '';
-		this.User = '';
-		this.Pass = '';
-		this.Database = '';
-		this.Driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
-		this.Debug = false; // Displays debug information on database/query errors
-		this.Port = 3306;
-		this.Socket = null;
+		this.host = '';
+		this.user = '';
+		this.pass = '';
+		this.database = '';
+		this.driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
+		this.debug = false; // Displays debug information on database/query errors
+		this.port = 3306;
+		this.socket = null;
 	}
 }
 

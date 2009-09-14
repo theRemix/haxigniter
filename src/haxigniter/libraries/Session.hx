@@ -10,16 +10,16 @@ class Session implements Dynamic
 	private static var namespace = '_haxigniter_';
 	private static var flashNamespace = '_flash_';
 
-	public var FlashVar(getFlash, setFlash) : Dynamic;
+	public var flashVar(getFlash, setFlash) : Dynamic;
 	private function getFlash()
 	{
 		// If no flash request is done, get the current flash var and remove it.
-		if(!gotCurrentFlash && this.Exists(flashNamespace))
+		if(!gotCurrentFlash && this.exists(flashNamespace))
 		{
 			gotCurrentFlash = true;
 			
-			Session.currentFlash = this.Get(flashNamespace);
-			this.Remove(flashNamespace);
+			Session.currentFlash = this.get(flashNamespace);
+			this.remove(flashNamespace);
 		}
 		
 		return Session.currentFlash;
@@ -29,7 +29,7 @@ class Session implements Dynamic
 		// Need to set gotCurrentFlash here so it's not removed by getFlash() in the same request.
 		gotCurrentFlash = true;
 
-		this.Set(flashNamespace, value);
+		this.set(flashNamespace, value);
 
 		Session.currentFlash = value;
 		return Session.currentFlash;
@@ -40,24 +40,24 @@ class Session implements Dynamic
 	*/
 	private function new() { }
 
-	public function Get(name : String) : Dynamic
+	public function get(name : String) : Dynamic
 	{
 		return php.Session.get(namespace + name);
 	}
 
-	public function Set(name : String, value : Dynamic) : Void
+	public function set(name : String, value : Dynamic) : Void
 	{
 		php.Session.set(namespace + name, value);
 	}
 
-	public function Exists(name : String) : Bool
+	public function exists(name : String) : Bool
 	{
 		return php.Session.exists(namespace + name);
 	}
 
-	public function Remove(name : String) : Bool
+	public function remove(name : String) : Bool
 	{
-		var output = this.Exists(name);
+		var output = this.exists(name);
 		php.Session.remove(namespace + name);
 		
 		return output;

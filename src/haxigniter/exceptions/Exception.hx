@@ -2,26 +2,25 @@ package haxigniter.exceptions;
 
 class Exception
 {
-	public var Message(getMessage, null) : String;
-	private var message : String;
-	private function getMessage() { return this.message; }
+	public var message(getMessage, null) : String;
+	private var my_message : String;
+	private function getMessage() { return this.my_message; }
 
-	public var Code(getCode, null) : Int;
-	private var code : Int;
-	private function getCode() { return this.code; }
+	public var code(getCode, null) : Int;
+	private var my_code : Int;
+	private function getCode() { return this.my_code; }
 	
-	public var Stack(getStack, null) : haxe.PosInfos;
-	private var stack : haxe.PosInfos;
-	private function getStack() { return this.stack; }
+	public var stack(getStack, null) : haxe.PosInfos;
+	private var my_stack : haxe.PosInfos;
+	private function getStack() { return this.my_stack; }
 	
-	public function new(message : String, ?code : Int = 0, ?stack : haxe.PosInfos )
+	public function new(message : String, ?code : Int = 0, ?stack : haxe.PosInfos)
 	{
-#if php
 		message = StringTools.htmlEscape(message);
-#end
-		this.message = message;
-		this.code = code;
-		this.stack = stack;
+
+		this.my_message = message;
+		this.my_code = code;
+		this.my_stack = stack;
 	}
 	
 	public function toString() : String

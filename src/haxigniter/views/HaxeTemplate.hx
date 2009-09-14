@@ -15,21 +15,21 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 		this.templateVars = new HaxeTemplateVars();
 	}
 	
-	public override function Assign(name : String, value : Dynamic) : Void
+	public override function assign(name : String, value : Dynamic) : Void
 	{
 		Reflect.setField(this.templateVars, name, value);
 	}
 	
-	public override function ClearAssign(name : String) : Bool
+	public override function clearAssign(name : String) : Bool
 	{
 		return Reflect.deleteField(this.templateVars, name);
 	}
 	
-	public override function Render(fileName : String) : String
+	public override function render(fileName : String) : String
 	{
-		fileName = this.TemplatePath + fileName;
+		fileName = this.templatePath + fileName;
 		
-		var content = php.io.File.getContent(fileName);
+		var content = php.io.file.getContent(fileName);
         var t = new haxe.Template(content);
 		
 		return t.execute(this.templateVars);

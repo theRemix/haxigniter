@@ -14,25 +14,25 @@ class Templo extends haxigniter.views.ViewEngine
 		// super() will set correct variables for TemplatePath and CompiledPath
 		super(templatePath, compiledPath);
 		
-		templo.Loader.BASE_DIR = this.TemplatePath;
-		templo.Loader.TMP_DIR = this.CompiledPath;
+		templo.Loader.BASE_DIR = this.templatePath;
+		templo.Loader.TMP_DIR = this.compiledPath;
 		templo.Loader.MACROS = macros;
 		templo.Loader.OPTIMIZED = optimized;
 
 		this.templateVars = new TemploVars();
 	}
 	
-	public override function Assign(name : String, value : Dynamic) : Void
+	public override function assign(name : String, value : Dynamic) : Void
 	{
 		Reflect.setField(this.templateVars, name, value);
 	}
 	
-	public override function ClearAssign(name : String) : Bool
+	public override function clearAssign(name : String) : Bool
 	{
 		return Reflect.deleteField(this.templateVars, name);
 	}
 
-	public override function Render(fileName : String) : String
+	public override function render(fileName : String) : String
 	{
 		var t = new templo.Loader(fileName);
 		return t.execute(this.templateVars);

@@ -13,20 +13,20 @@ class Start extends haxigniter.libraries.Controller
 		
 		if(id != null)
 		{
-			this.Session.Age = id;
-			this.Session.anything = 'nice';
+			this.session.age = id;
+			this.session.anything = 'nice';
 		}
 
 		var users = new List<Dynamic>();
-		users.add( { name: 'Boris', age: this.Session.Age } );
+		users.add( { name: 'Boris', age: this.session.age } );
 		users.add( { name: 'Doris', age: 15 } );
 
 		Firebug.trace(users);
 
-		this.View.Assign('name', 'Örnsköldsvik');
-		this.View.Assign('users', users);
+		this.view.assign('name', 'Örnsköldsvik');
+		this.view.assign('users', users);
 
-		this.View.Display('start/index.mtt');
+		this.view.display('start/index.mtt');
 		
 		return;
 		
@@ -35,15 +35,15 @@ class Start extends haxigniter.libraries.Controller
 		users.add( { name: 'Boris', age: 40 } );
 		users.add( { name: 'Doris', age: 15 } );
 
-		this.View.Assign('name', 'Turvia');
-		this.View.Assign('users', users);
+		this.View.assign('name', 'Turvia');
+		this.View.assign('users', users);
 		*/
 
-		//this.View.Display('start/index.htt');
+		//this.View.display('start/index.htt');
 		
 		//Debug.trace(php.Web.getHostName());
-		//Debug.trace(this.Config.BaseUrl);
-		//Debug.trace(this.Config.Development);		
+		//Debug.trace(this.Config.baseUrl);
+		//Debug.trace(this.Config.development);		
 		//Debug.trace(id);
 
 		/*
@@ -54,13 +54,13 @@ class Start extends haxigniter.libraries.Controller
 		args.set('sortorder', 0);
 		args.set('userid', 'HTTPS');
 		
-		var result = this.DB.Insert("items", args);
+		var result = this.DB.insert("items", args);
 		
 		where.set('id', 48);
-		var result = this.DB.Delete('items', where, 1);
+		var result = this.DB.delete('items', where, 1);
 		
 		Debug.trace(result);
-		Debug.trace(this.DB.LastQuery);
+		Debug.trace(this.DB.lastQuery);
 		
 		//php.Lib.print(result.name + ' ' + result.letter + '<br>');
 		
@@ -74,13 +74,13 @@ class Start extends haxigniter.libraries.Controller
 	 */
 	public function integrity(password = '')
 	{
-		if(Config.Development || password == 'dev')
-			new haxigniter.application.tests.Integrity().Run();
+		if(config.development || password == 'dev')
+			new haxigniter.application.tests.Integrity().run();
 	}
 
 	public function phpinfo()
 	{
-		if(Config.Development)
+		if(config.development)
 			untyped __php__("phpinfo();");
 	}	
 }

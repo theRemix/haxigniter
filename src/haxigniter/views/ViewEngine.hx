@@ -15,34 +15,34 @@ import haxigniter.libraries.Server;
 class ViewEngine
 {
 	// TODO: Caching system for ViewEngine
-	public var TemplatePath : String;
-	public var CompiledPath : String;
+	public var templatePath : String;
+	public var compiledPath : String;
 	
 	private function new(templatePath : String, compiledPath : String)
 	{
-		this.TemplatePath = templatePath;
-		this.CompiledPath = compiledPath;
+		this.templatePath = templatePath;
+		this.compiledPath = compiledPath;
 	}
 	
-	public function Assign(name : String, value : Dynamic) : Void
+	public function assign(name : String, value : Dynamic) : Void
 	{
 		throw 'Assign() must be implemented in an inherited class.';
 	}
 	
-	public function ClearAssign(name : String) : Bool
+	public function clearAssign(name : String) : Bool
 	{
 		throw 'ClearAssign() must be implemented in an inherited class.';
 		return null;
 	}
 	
-	public function Render(fileName : String) : String
+	public function render(fileName : String) : String
 	{
 		throw 'Render() must be implemented in an inherited class.';
 		return null;
 	}
 	
-	public function Display(fileName : String) : Void
+	public function display(fileName : String) : Void
 	{
-		php.Lib.print(this.Render(fileName));
+		php.Lib.print(this.render(fileName));
 	}
 }

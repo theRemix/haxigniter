@@ -15,7 +15,7 @@ class RttiUtil
 		var output = new Hash<List<CArgument>>();		
 
 		// Find class declaration and all functions in it.
-		switch(GetTypeTree(classType))
+		switch(getTypeTree(classType))
 		{
 			case TClassdecl(cl):
 				for(f in cl.fields)
@@ -33,7 +33,7 @@ class RttiUtil
 									// Create the CArgument type and test for 
 									case CClass(name, params):
 										// Set optional to false to avoid Null<T> since it can be deducted from the type itself.
-										var typeName = TypeName(arg.t, false);										
+										var typeName = RttiUtil.typeName(arg.t, false);										
 										argList.add({type: typeName, opt: arg.opt, name: arg.name});
 									
 									default:
@@ -55,7 +55,7 @@ class RttiUtil
 		return output;
 	}	
 
-	public static function TypeName(type : CType, opt : Bool) : String 
+	public static function typeName(type : CType, opt : Bool) : String 
 	{
 		switch(type)
 		{
@@ -75,7 +75,7 @@ class RttiUtil
 				{
 					var types = new List<String>();
 					for(p in params)
-						types.add(TypeName(p, false));
+						types.add(RttiUtil.typeName(p, false));
 					
 					t += '<' + types.join(',') + '>';
 				}
@@ -84,13 +84,13 @@ class RttiUtil
 		}
 	}
 	
-	public static function GetTypeTree(classType : Class<Dynamic>) : TypeTree
+	public static function getTypeTree(classType : Class<Dynamic>) : TypeTree
 	{
-		var root : Xml = Xml.parse(GetRtti(classType)).firstElement();
+		var root : Xml = Xml.parse(getRtti(classType)).firstElement();
 		return new haxe.rtti.XmlParser().processElement(root);
 	}
 	
-	public static function GetRtti(classType : Class<Dynamic>) : String
+	public static function getRtti(classType : Class<Dynamic>) : String
 	{
 		var rtti : String = untyped classType.__rtti;
 		if(rtti == null)

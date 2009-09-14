@@ -6,7 +6,7 @@ extern class PHPMailer
 {
 	public static function __init__() : Void
 	{
-		haxigniter.libraries.Server.RequireExternal('phpmailer/class.phpmailer.php');
+		haxigniter.libraries.Server.requireExternal('phpmailer/class.phpmailer.php');
 	}
 	
 	public function new(mode : Bool) : Void;

@@ -22,18 +22,18 @@ import haxigniter.views.ViewEngine;
 
 class Application
 {
-	public var Config(getConfig, null) : Config;
-	private static var config : Config = new haxigniter.application.config.Config();
-	private function getConfig() : Config { return Application.config; }
+	public var config(getConfig, null) : Config;
+	private static var my_config : Config = new haxigniter.application.config.Config();
+	private function getConfig() : Config { return Application.my_config; }
 
-	public var Controller(getController, null) : Controller;
-	private var controller : Controller;
+	public var controller(getController, null) : Controller;
+	private var my_controller : Controller;
 	private function getController() : Controller
 	{
-		if(controller == null)
+		if(this.my_controller == null)
 			throw new haxigniter.exceptions.Exception('Controller has not been executed yet.');
 		
-		return this.controller;
+		return this.my_controller;
 	}
 
 	public var DB(getDB, null) : DatabaseConnection;
@@ -43,43 +43,43 @@ class Application
 		// Database is a resource-intensive object, so it's created on demand.
 		if(Application.db == null)
 		{
-			if(this.Config.Development)
+			if(this.config.development)
 				Application.db = new DevelopmentConnection();
 			else
 				Application.db = new OnlineConnection();
 			
-			Application.db.Open();
+			Application.db.open();
 		}
 		
 		return Application.db;
 	}
 	
-	public var View(getView, null) : ViewEngine;
-	private function getView() : ViewEngine { return this.Config.View; }
+	public var view(getView, null) : ViewEngine;
+	private function getView() : ViewEngine { return this.config.view; }
 	
-	public var Session(getSession, null) : Session;
-	private static var session : Session;
+	public var session(getSession, null) : Session;
+	private static var my_session : Session;
 	private function getSession() : Session
 	{
-		if(Application.session == null)
+		if(Application.my_session == null)
 		{
 			if(php.Session.exists(sessionName))
 			{
-				Application.session = php.Session.get(sessionName);
+				Application.my_session = php.Session.get(sessionName);
 			}
 			else
 			{
-				Application.session = new haxigniter.application.config.Session();
-				php.Session.set(sessionName, Application.session);
+				Application.my_session = new haxigniter.application.config.Session();
+				php.Session.set(sessionName, Application.my_session);
 			}
 		}
 		
-		return Application.session;
+		return Application.my_session;
 	}
 	
 	///// Static vars ///////////////////////////////////////////////
 
-	public static var Instance = new Application();
+	public static var instance = new Application();
 
 	private static var defaultController : String = 'start';
 	private static var defaultMethod : String = 'index';
@@ -91,37 +91,37 @@ class Application
 
 	public static function main()
 	{
-		if(Application.Instance.Config.Development)
+		if(Application.instance.config.development)
 		{
 			// Run the haXigniter unit tests.
-			Application.RunTests();
+			Application.runTests();
 		}
 		
-		Application.Instance.Run(Url.Segments);
+		Application.instance.run(Url.segments);
 	}
 	
-	public static function RunTests()
+	public static function runTests()
 	{
-		new haxigniter.application.tests.TestRunner().RunAndDisplayOnError();
+		new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
 	}
 	
 	///// Convenience methods for debug and logging /////////////////
 	
-	public static function Trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
+	public static function trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
 	{
-		Debug.Trace(data, debugLevel, pos);
+		Debug.trace(data, debugLevel, pos);
 	}
 	
-	public static function Log(message : Dynamic, ?debugLevel : DebugLevel) : Void
+	public static function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
 	{
-		Debug.Log(message, debugLevel);
+		Debug.log(message, debugLevel);
 	}
 	
 	/////////////////////////////////////////////////////////////////
 	
 	public function new() {}
 	
-	public function Run(uriSegments : Array<String>) : Void
+	public function run(uriSegments : Array<String>) : Void
 	{
 		var controllerClass : String = (uriSegments[0] == null) ? Application.defaultController : uriSegments[0];
 		var controllerMethod : String = (uriSegments[1] == null) ? Application.defaultMethod : uriSegments[1];
@@ -134,7 +134,7 @@ class Application
 			throw new ControllerException(controllerClass + ' not found. (Is it defined in config/Controllers.hx?)');
 		
 		// TODO: Controller arguments?
-		this.controller = cast Type.createInstance(classType, []);
+		this.my_controller = cast Type.createInstance(classType, []);
 		
 		var method : Dynamic = Reflect.field(this.controller, controllerMethod);
 		if(method == null)
@@ -145,7 +145,7 @@ class Application
 		var exception : Dynamic;
 
 		// TODO: When rethrow is fixed, factorize this code so errors will be logged in development too.
-		if(this.Config.Development)
+		if(this.config.development)
 		{
 			// Execute the controller with no exception handling in development mode.
 			Reflect.callMethod(this.controller, method, arguments);		
@@ -159,7 +159,7 @@ class Application
 			}
 			catch(e : Dynamic)
 			{
-				Debug.Log(e, DebugLevel.Error);
+				Debug.log(e, DebugLevel.error);
 				// TODO: User-friendly display of errors
 			}			
 		}	
@@ -172,7 +172,7 @@ class Application
 	{
 		// Close database connection
 		if(this.controller.DB != null)
-			this.controller.DB.Close();
+			this.controller.DB.close();
 			
 		// TODO: Save session? (Hopefully not)
 	}
@@ -198,7 +198,7 @@ class Application
 			else
 			{
 				// The methods come in the same order as the arguments, so match each argument with a method type.
-				output.push(TypeFactory.CreateType(method.type, arguments[c++]));
+				output.push(TypeFactory.createType(method.type, arguments[c++]));
 			}
 		}
 
