@@ -3,10 +3,14 @@ import haxe.Firebug;
 import php.db.ResultSet;
 import php.Web;
 
+import haxigniter.application.external.PHPMailer;
+
 class Start extends haxigniter.libraries.Controller
 {
 	public function index(?id : Int)
 	{
+		var mail = new PHPMailer(true);
+		
 		if(id != null)
 		{
 			this.Session.Age = id;
