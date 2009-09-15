@@ -14,6 +14,7 @@ class Server
 	 */
 	public static inline function param(parameter : String) : String
 	{
+		#if php
 		try
 		{
 			return untyped __var__('_SERVER', parameter);
@@ -22,6 +23,9 @@ class Server
 		{
 			return null;
 		}
+		#elseif neko
+		return Server.Params.get(parameter);
+		#end
 	}
 	
 	/**
@@ -48,8 +52,43 @@ class Server
 	 * Convenience method for external libraries.
 	 * @param	path
 	 */
+	#if php
 	public static inline function requireExternal(path : String) : Void
 	{
 		untyped __call__('require_once', haxigniter.Application.instance.config.applicationPath + 'external/' + path);		
 	}
+	#end
+
+	#if neko
+	private static var Params = new Hash<String>();
+	
+	private static function __init__()
+	{
+		Server.Params['DOCUMENT_ROOT'] = Server.parseDocumentRoot();
+		Server.Params['REQUEST_URI'] = neko.Web.getURI();
+		Server.Params['REMOTE_ADDR'] = neko.Web.getClientIP();
+		Server.Params['SERVER_NAME'] = neko.Web.getHostName();
+	}
+	
+    private static function parseDocumentRoot() : String
+    {
+    	var cwd : Array<String> = neko.Web.getCwd().split('/');
+    	var uri : Array<String> = neko.Web.getURI().split('/');
+    	
+    	if(cwd[cwd.length-1] == '')
+    		cwd.pop();
+
+    	if(uri[0] == '')
+    		uri.shift();
+
+    	var i = cwd.length - 1;
+    	while(i >= 0)
+    	{
+    		if(cwd[i--] == uri[0])
+    			return cwd.slice(0, i+1).join('/');
+    	}
+    	
+    	return cwd.join('/');
+    }
+	#end
 }

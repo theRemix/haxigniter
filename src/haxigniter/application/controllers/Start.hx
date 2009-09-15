@@ -1,29 +1,20 @@
 package haxigniter.application.controllers;
-import haxe.Firebug;
-import php.db.ResultSet;
-import php.Web;
-
-import haxigniter.application.external.PHPMailer;
 
 class Start extends haxigniter.libraries.Controller
 {
 	public function index(?id : Int)
 	{
-		var mail = new PHPMailer(true);
-		
 		if(id != null)
 		{
 			this.session.age = id;
 			this.session.anything = 'nice';
 		}
-
+		
 		var users = new List<Dynamic>();
 		users.add( { name: 'Boris', age: this.session.age } );
 		users.add( { name: 'Doris', age: 15 } );
 
-		Firebug.trace(users);
-
-		this.view.assign('name', 'Örnsköldsvik');
+		this.view.assign('name', 'Hällnäs');
 		this.view.assign('users', users);
 
 		this.view.display('start/index.mtt');
@@ -41,7 +32,6 @@ class Start extends haxigniter.libraries.Controller
 
 		//this.View.display('start/index.htt');
 		
-		//Debug.trace(php.Web.getHostName());
 		//Debug.trace(this.Config.baseUrl);
 		//Debug.trace(this.Config.development);		
 		//Debug.trace(id);
@@ -61,8 +51,6 @@ class Start extends haxigniter.libraries.Controller
 		
 		Debug.trace(result);
 		Debug.trace(this.DB.lastQuery);
-		
-		//php.Lib.print(result.name + ' ' + result.letter + '<br>');
 		
 		return;
 		*/

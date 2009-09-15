@@ -1,14 +1,21 @@
 ﻿package haxigniter.libraries;
 
-import php.db.Mysql;
-import php.db.Sqlite;
+#if php
 import php.db.Connection;
 import php.db.ResultSet;
+import php.db.Mysql;
+import php.db.Sqlite;
+#elseif neko
+import neko.db.Connection;
+import neko.db.ResultSet;
+import neko.db.Mysql;
+import neko.db.Sqlite;
+#end
 
 enum DatabaseDriver
 {
-	Mysql;
-	Sqlite;
+	mysql;
+	sqlite;
 }
 
 class DatabaseException extends haxigniter.exceptions.Exception
@@ -36,7 +43,7 @@ class DatabaseConnection
 	public var driver : DatabaseDriver;
 	public var debug : Bool;
 	
-	public var connection : Connection;
+	public var connection : Connection;	
 	
 	/**
 	 * Set this value to change the string which is replaced by a parameter when executing a query.
@@ -55,10 +62,12 @@ class DatabaseConnection
 		if(this.connection != null)
 			throw new DatabaseException('Connection is already open.', this);
 		
-		if(this.driver == DatabaseDriver.Mysql)
-			this.connection = php.db.Mysql.connect(this);
-		else // if(this.driver == DatabaseDriver.Sqlite)
-			this.connection = php.db.Sqlite.open(this.database);
+		if(this.driver == DatabaseDriver.mysql)
+			this.connection = Mysql.connect(this);
+		else if(this.driver == DatabaseDriver.sqlite)
+			this.connection = Sqlite.open(this.database);
+		else
+			throw new DatabaseException('No valid DatabaseDriver found.', this);
 	}
 	
 	public function close() : Void

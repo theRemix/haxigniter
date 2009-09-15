@@ -29,7 +29,12 @@ class Config
 	private function getSessionPath() : String { return this.my_sessionPath; }
 	private function setSessionPath(path : String)
 	{
+		#if php
 		php.Session.setSavePath(path);
+		#elseif neko
+		neko.Session.setSavePath(path);
+		#end
+		
 		this.my_sessionPath = path;
 		
 		return this.my_sessionPath;

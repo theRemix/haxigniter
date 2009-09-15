@@ -21,7 +21,7 @@ class DevelopmentConnection extends DatabaseConnection
 		this.user = 'root';
 		this.pass = '';
 		this.database = 'selfimprove';
-		this.driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
+		this.driver = DatabaseDriver.mysql; // Can also be sqlite, then Database will be used as filename.
 		this.debug = true; // Displays debug information on database/query errors
 		this.port = 3306;
 		this.socket = null;
@@ -44,7 +44,7 @@ class OnlineConnection extends DatabaseConnection
 		this.user = '';
 		this.pass = '';
 		this.database = '';
-		this.driver = DatabaseDriver.Mysql; // Can also be Sqlite, then Database will be used as filename.
+		this.driver = DatabaseDriver.mysql; // Can also be sqlite, then Database will be used as filename.
 		this.debug = false; // Displays debug information on database/query errors
 		this.port = 3306;
 		this.socket = null;

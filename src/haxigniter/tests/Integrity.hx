@@ -52,7 +52,12 @@ class Integrity
 
 	private function isWritable(path : String) : Bool
 	{
+		#if php
 		return untyped __call__('is_writable', path);
+		#elseif neko
+		// TODO: Implement is_writable() for neko.
+		return true;
+		#end
 	}
 	
 	/////////////////////////////////////////////////////////////////

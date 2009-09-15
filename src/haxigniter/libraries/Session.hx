@@ -1,5 +1,12 @@
 package haxigniter.libraries; 
 
+#if php
+typedef InternalSession = php.Session;
+#elseif neko
+typedef InternalSession = neko.Session;
+#end
+
+// TODO: Start session before controller executes to avoid header sent errors.
 class Session implements Dynamic 
 {
 	// Internal flag for when flash is retrieved
@@ -42,23 +49,23 @@ class Session implements Dynamic
 
 	public function get(name : String) : Dynamic
 	{
-		return php.Session.get(namespace + name);
+		return InternalSession.get(namespace + name);
 	}
 
 	public function set(name : String, value : Dynamic) : Void
 	{
-		php.Session.set(namespace + name, value);
+		InternalSession.set(namespace + name, value);
 	}
 
 	public function exists(name : String) : Bool
 	{
-		return php.Session.exists(namespace + name);
+		return InternalSession.exists(namespace + name);
 	}
 
 	public function remove(name : String) : Bool
 	{
 		var output = this.exists(name);
-		php.Session.remove(namespace + name);
+		InternalSession.remove(namespace + name);
 		
 		return output;
 	}

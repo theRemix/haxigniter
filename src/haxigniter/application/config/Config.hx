@@ -3,6 +3,14 @@ package haxigniter.application.config;
 import haxigniter.libraries.Debug; 
 import haxigniter.libraries.Server;
 
+#if php
+import php.Sys;
+import php.Web;
+#elseif neko
+import neko.Sys;
+import neko.Web;
+#end
+
 class Config extends haxigniter.libraries.Config 
 {
 	/**
@@ -19,17 +27,17 @@ class Config extends haxigniter.libraries.Config
 		| Here are a few examples for auto-detecting:
 		|
 		| If you're on a Windows machine when developing and Linux when live:
-		|    this.development = php.Sys.getEnv('OS') == 'Windows_NT';
+		|    this.development = Sys.getEnv('OS') == 'Windows_NT';
 		|
 		| To test depending on host name: 
-		|    this.development = php.Web.getHostName() == 'localhost';
+		|    this.development = Web.getHostName() == 'localhost';
 		|
 		| Or IP address: 
 		|    this.development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 		|
 		*/
 		// TODO: Description for Development mode, usefulness
-		this.development = php.Sys.getEnv('OS') == 'Windows_NT';
+		this.development = Sys.getEnv('OS') == 'Windows_NT';
 
 		/*
 		|--------------------------------------------------------------------------

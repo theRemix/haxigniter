@@ -1,8 +1,16 @@
 package haxigniter.libraries;
 
+#if php
 import php.Lib;
 import php.io.File;
 import php.io.FileOutput;
+import php.FileSystem;
+#elseif neko
+import neko.Lib;
+import neko.io.File;
+import neko.io.FileOutput;
+import neko.FileSystem;
+#end
 
 enum DebugLevel
 {
@@ -29,12 +37,12 @@ class Debug
 		var logFile = config.logPath + 'log-' + DateTools.format(Date.now(), "%Y-%m-%d") + ".php";
 		var output = '';
 		
-		if(!php.FileSystem.exists(logFile))
+		if(!FileSystem.exists(logFile))
 			output += "<?php exit; ?>\n\n";
 		
 		output += Std.string(debugLevel).toUpperCase() + ' - ' + DateTools.format(Date.now(), config.logDateFormat) + ' --> ' + message + "\n";
 		
-		var file : FileOutput = php.io.File.append(logFile, false);
+		var file : FileOutput = File.append(logFile, false);
 		file.writeString(output);
 		file.close();
 	}
@@ -46,15 +54,20 @@ class Debug
 		if(Debug.toInt(traceLevel) > Debug.toInt(Debug.traceLevel))
 			return;
 		
-		php.Lib.print('<pre style="border:1px dashed green; padding:2px; background-color:#F9F8F6;">');
+		Lib.print('<pre style="border:1px dashed green; padding:2px; background-color:#F9F8F6;">');
+		
+		#if php
 		Debug.startBuffer();
-		
 		haxe.Log.trace(data, pos);
-		
 		var output = StringTools.htmlEscape(Debug.endBuffer());
-
-		php.Lib.print(Debug.colorize(output));
-		php.Lib.print('</pre>');
+		
+		Lib.print(Debug.colorize(output));
+		
+		#elseif neko
+		haxe.Log.trace(data, pos);
+		#end
+		
+		Lib.print('</pre>');
 	}
 	
 	public static function toInt(level : DebugLevel) : Int
@@ -69,6 +82,7 @@ class Debug
 		}
 	}
 	
+	#if php
 	public static function startBuffer() : Void
 	{
 		untyped __call__('ob_start');
@@ -78,6 +92,7 @@ class Debug
 	{
 		return untyped __call__('ob_get_clean');
 	}
+	#end
 	
 	/////////////////////////////////////////////////////////////////
 	

@@ -1,9 +1,5 @@
 ﻿package haxigniter.application.tests;
 
-import php.FileSystem;
-import php.Lib;
-import php.Web;
-
 /**
  * This is a template for your own integrity tests.
  * Browse to /start/integrity to run the tests.

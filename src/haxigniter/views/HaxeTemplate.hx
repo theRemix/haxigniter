@@ -1,5 +1,11 @@
 ﻿package haxigniter.views;
 
+#if php
+import php.io.File;
+#elseif neko
+import neko.io.File;
+#end
+
 class HaxeTemplateVars
 {
 	public function new() {}
@@ -29,7 +35,7 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 	{
 		fileName = this.templatePath + fileName;
 		
-		var content = php.io.file.getContent(fileName);
+		var content = File.getContent(fileName);
         var t = new haxe.Template(content);
 		
 		return t.execute(this.templateVars);

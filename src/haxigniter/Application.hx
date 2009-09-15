@@ -1,5 +1,11 @@
 package haxigniter;
 
+#if php
+typedef InternalSession = php.Session;
+#elseif neko
+typedef InternalSession = neko.Session;
+#end
+
 // This important package imports all application controllers so they will be referenced by the compiler.
 // See application/config/Config.hx for more info.
 import haxigniter.application.config.Controllers;
@@ -63,14 +69,14 @@ class Application
 	{
 		if(Application.my_session == null)
 		{
-			if(php.Session.exists(sessionName))
+			if(InternalSession.exists(sessionName))
 			{
-				Application.my_session = php.Session.get(sessionName);
+				Application.my_session = InternalSession.get(sessionName);
 			}
 			else
 			{
 				Application.my_session = new haxigniter.application.config.Session();
-				php.Session.set(sessionName, Application.my_session);
+				InternalSession.set(sessionName, Application.my_session);
 			}
 		}
 		
@@ -148,7 +154,13 @@ class Application
 		if(this.config.development)
 		{
 			// Execute the controller with no exception handling in development mode.
-			Reflect.callMethod(this.controller, method, arguments);		
+			Reflect.callMethod(this.controller, method, arguments);
+
+			// Decided to close session here, not in cleanup, because of session integrity.
+			// It may be in a bad state if exception is thrown.
+			#if neko
+			InternalSession.close();
+			#end
 		}
 		else
 		{
@@ -156,6 +168,12 @@ class Application
 			{
 				// Execute the controller class with the method specified, and the arguments.
 				Reflect.callMethod(this.controller, method, arguments);
+
+				// Decided to close session here, not in cleanup, because of session integrity.
+				// It may be in a bad state if exception is thrown.
+				#if neko
+				InternalSession.close();
+				#end
 			}
 			catch(e : Dynamic)
 			{

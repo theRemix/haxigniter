@@ -3,7 +3,12 @@ package haxigniter.libraries;
 import haxigniter.Application;
 
 import haxigniter.EReg2;
+
+#if php
 import php.Web;
+#elseif neko
+import neko.Web;
+#end
 
 class Url
 {
@@ -89,7 +94,7 @@ class Url
 			Application.instance.session.flashVar = flashMessage;
 
 		if(responseCode != null)
-			php.Web.setReturnCode(responseCode);
+			Web.setReturnCode(responseCode);
 
 		if(url == null)
 			url = Url.siteUrl(Url.uriString());
@@ -103,7 +108,7 @@ class Url
         if(config.development)
             url = StringTools.replace(url, 'https://', 'http://');
 		
-		php.Web.redirect(url);
+		Web.redirect(url);
 	}
 	
 	public static function forceSsl(ssl = true)

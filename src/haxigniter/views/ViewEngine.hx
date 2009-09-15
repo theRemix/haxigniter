@@ -1,5 +1,11 @@
 ﻿package haxigniter.views;
 
+#if php
+import php.Lib;
+#elseif neko
+import neko.Lib;
+#end
+
 import haxigniter.Application;
 import haxigniter.libraries.Server;
 
@@ -43,6 +49,6 @@ class ViewEngine
 	
 	public function display(fileName : String) : Void
 	{
-		php.Lib.print(this.render(fileName));
+		Lib.print(this.render(fileName));
 	}
 }

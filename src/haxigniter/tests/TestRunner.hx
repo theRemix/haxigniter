@@ -4,6 +4,12 @@ import haxigniter.libraries.Debug;
 import haxigniter.tests.unit.When_UnitTesting_With_TestCase;
 import haxigniter.tests.unit.When_using_a_TypeFactory;
 
+#if php
+import php.Lib;
+#elseif neko
+import neko.Lib;
+#end
+
 class TestRunner extends haxe.unit.TestRunner
 {
 	/**
@@ -35,7 +41,7 @@ class TestRunner extends haxe.unit.TestRunner
 	public function runAndDisplay() : Void
 	{
 		var output : String = this.runTests();
-		php.Lib.print('<pre style="border:1px dashed blue; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
+		Lib.print('<pre style="border:1px dashed blue; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
 	}
 	
 	public function runAndDisplayOnError() : Void
@@ -44,6 +50,6 @@ class TestRunner extends haxe.unit.TestRunner
 		var errorTest : EReg = ~/\b[1-9]\d* failed\b/;
 		
 		if(errorTest.match(output))
-			php.Lib.print('<pre style="border:1px dashed red; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
+			Lib.print('<pre style="border:1px dashed red; padding:5px; background-color:#F2F0EE;">' + output + '</pre>');
 	}
 }
