@@ -1,8 +1,9 @@
 package haxigniter.libraries; 
 
-import haxigniter.libraries.Server;
 import haxigniter.libraries.Debug;
 import haxigniter.views.ViewEngine;
+
+import haxigniter.libraries.Server;
 
 class Config
 {
@@ -20,6 +21,7 @@ class Config
 	public var encryptionKey : String;
 	public var view : ViewEngine;	
 	public var applicationPath : String;
+	public var sessionEnabled : Bool;
 
 	private var runtimePath : String;
 	private var viewPath : String;
@@ -35,8 +37,7 @@ class Config
 		neko.Session.setSavePath(path);
 		#end
 		
-		this.my_sessionPath = path;
-		
+		this.my_sessionPath = path;		
 		return this.my_sessionPath;
 	}
 	
@@ -55,21 +56,47 @@ class Config
 		if(this.applicationPath == null)
 		{
 			this.applicationPath = Server.documentRoot;
+
+			#if php
 			this.applicationPath += StringTools.replace(Server.param('SCRIPT_NAME'), this.indexPage, '');
+			#elseif neko
+			this.applicationPath += Server.param('SCRIPT_PATH');
+			#end
+			
 			this.applicationPath += 'lib/haxigniter/application/';
 		}
-		
+
 		if(this.baseUrl == null)
 		{
+			#if php
 			this.baseUrl = Server.param('SERVER_PORT') == '443' ? 'https' : 'http';
+			#elseif neko
+			/*
+				<IfModule setenvif_module>
+				<IfModule headers_module>
+					SetEnvIf HTTPS "on" nekohttps=on
+					RequestHeader add NekoHTTPS "on" env=nekohttps
+				</IfModule>
+				</IfModule>
+			*/
+			
+			// TODO: Need a better solution than adding headers using apache.
+			this.baseUrl = neko.Web.getClientHeader('NekoHTTPS') == 'on' ? 'https' : 'http';
+			#end
+			
 			this.baseUrl += '://' + Server.param('HTTP_HOST');
+			
+			#if php
 			this.baseUrl += StringTools.replace(Server.param('SCRIPT_NAME'), this.indexPage, '');
+			#elseif neko
+			this.baseUrl += Server.param('SCRIPT_PATH');
+			#end
 		}
 
 		// Set runtime and view path based on application path.
 		this.runtimePath = this.applicationPath + 'runtime/';
 		this.viewPath = this.applicationPath + 'views/';
-		
+			
 		// Other paths that can be specified in config.
 		if(this.cachePath == null)
 		{

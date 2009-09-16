@@ -8,16 +8,16 @@ class TemploVars
 class Templo extends haxigniter.views.ViewEngine
 {
 	private var templateVars : TemploVars;
+	private var macros : String;
+	private var optimized : Bool;
 	
 	public function new(templatePath : String, compiledPath : String, ?macros : String = null, ?optimized : Bool = false)
 	{
 		// super() will set correct variables for TemplatePath and CompiledPath
 		super(templatePath, compiledPath);
 		
-		templo.Loader.BASE_DIR = this.templatePath;
-		templo.Loader.TMP_DIR = this.compiledPath;
-		templo.Loader.MACROS = macros;
-		templo.Loader.OPTIMIZED = optimized;
+		this.macros = macros;
+		this.optimized = optimized;
 
 		this.templateVars = new TemploVars();
 	}
@@ -34,6 +34,11 @@ class Templo extends haxigniter.views.ViewEngine
 
 	public override function render(fileName : String) : String
 	{
+		templo.Loader.BASE_DIR = this.templatePath;
+		templo.Loader.TMP_DIR = this.compiledPath;
+		templo.Loader.MACROS = this.macros;
+		templo.Loader.OPTIMIZED = this.optimized;
+
 		var t = new templo.Loader(fileName);
 		return t.execute(this.templateVars);
 	}

@@ -217,13 +217,15 @@ class DatabaseConnection
 	
 	private function queryParams(query : String, params : Iterable<Dynamic>)
 	{
+		var parameter = this.parameterString == null ? '?' : this.parameterString;
+		
 		for(param in params)
 		{
-			var pos = query.indexOf(this.parameterString == null ? '?' : this.parameterString);
+			var pos = query.indexOf(parameter);
 			if(pos == -1)
 				throw new DatabaseException('Not enough parameters in query.', this);
 			
-			query = query.substr(0, pos) + this.connection.quote(param) + query.substr(pos+1);
+			query = query.substr(0, pos) + this.connection.quote(Std.string(param)) + query.substr(pos+1);
 		}
 		
 		return query;

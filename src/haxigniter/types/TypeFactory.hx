@@ -1,7 +1,5 @@
 package haxigniter.types;
 
-import haxigniter.libraries.Debug;
-
 /**
 * This file contains all special classes that transforms input data from the user to
 * well-formed, typecased types and classes. The work is done in the class WebTypes.
@@ -9,9 +7,8 @@ import haxigniter.libraries.Debug;
 
 class DbID
 {
-	public var toInt(getIntValue, null) : Int;
+	public function toInt() { return intValue; }
 	private var intValue : Int;
-	private function getIntValue() { return intValue; }
 	
 	public function new(input : String)
 	{
@@ -115,11 +112,14 @@ class TypeException extends haxigniter.exceptions.Exception
 	private var my_value : String;
 	private function getValue() { return this.my_value; }
 	
-	public function new(className : String, value : String)
+	public function new(className : String, value : String, ?stack : haxe.PosInfos)
 	{
 		this.my_className = className;
 		this.my_value = value;
 		
-		super('Invalid value for ' + className + ': "' + value + '"');
+		var output = 'Invalid value for ' + className + ': ';
+		output += value != null ? '"' + value + '"' : 'null';
+		
+		super(output, 0, stack);
 	}
 }

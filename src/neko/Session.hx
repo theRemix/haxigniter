@@ -4,6 +4,8 @@
 */
 class Session
 {
+	private static var SID : String = 'NEKOSESSIONID';
+	
 	public static var started(default, null) : Bool;
 	public static var id(default, setId) : String;
 	public static var savePath(default, setSavePath) : String;
@@ -131,20 +133,20 @@ class Session
 	{
 		if(started) return;
 		needCommit = false;
-		if( sessionName == null ) sessionName = "HXSESSIONID";
+		if( sessionName == null ) sessionName = Session.SID;
 		if( savePath == null ) savePath = neko.Sys.getCwd();
 
 		if( id==null )
 		{
 			var params = Web.getParams();
 			id = params.get(sessionName);
-			// trace("getting id from req");
+			//trace("getting id from req: " + id);
 		}
 		if( id==null )
 		{
 			var cookies = Web.getCookies();
 			id = cookies.get(sessionName);
-			// trace("getting id from cookie");
+			//trace("getting id from cookie: " + id);
 		}
 		if( id==null )
 		{
@@ -152,14 +154,13 @@ class Session
 			for( a in args )
 			{
 				var s = a.split("=");
-				trace(s);
 				if( s[0] == sessionName )
 				{
 					id=s[1];
 					break;
 				}
 			}
-			// trace("getting id from command line");
+			//trace("getting id from command line");
 		}
 		var file : String;
 		var fileData : String;
@@ -184,7 +185,7 @@ class Session
 		}
 		if( id==null )
 		{
-			trace("no id found, creating a new session.");
+			//trace("no id found, creating a new session.");
 			sessionData = new Hash<Dynamic>();
 			
 			do
@@ -192,6 +193,9 @@ class Session
 				id = haxe.Md5.encode(Std.string(Math.random() + Math.random()));
 				file = savePath + id + ".sess";
 			} while( neko.FileSystem.exists(file) );
+			
+			// TODO: Set cookie path to application path, right now it's global.
+			Web.setCookie(Session.SID, id, null, null, '/');
 			
 			started = true;
 			commit();
@@ -212,9 +216,9 @@ class Session
 		w.close();
 	}
 	
-	public static function close()
+	public static function close(?forceCommit = false)
 	{
-		if( needCommit ) commit();
+		if( needCommit || forceCommit ) commit();
 		started = false;
 	}
 }

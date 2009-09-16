@@ -1,15 +1,23 @@
 package haxigniter.application.controllers;
 
+import haxigniter.types.TypeFactory;
+import haxigniter.application.models.ItemsModel;
+
 class Start extends haxigniter.libraries.Controller
 {
-	public function index(?id : Int)
+	public function new() {}
+	
+	public function index(?id : DbID)
 	{
 		if(id != null)
 		{
-			this.session.age = id;
+			this.session.age = id.toInt();
 			this.session.anything = 'nice';
 		}
 		
+		var item : Dynamic = ItemsModel.item(id);
+		this.trace(item);
+
 		var users = new List<Dynamic>();
 		users.add( { name: 'Boris', age: this.session.age } );
 		users.add( { name: 'Doris', age: 15 } );
@@ -70,5 +78,5 @@ class Start extends haxigniter.libraries.Controller
 	{
 		if(config.development)
 			untyped __php__("phpinfo();");
-	}	
+	}
 }

@@ -14,8 +14,8 @@ class When_doing_math extends TestCase
 		this.assertEqual(1+1, 2);
 	}
 
-	public function test_Then_tan_90_degrees_is_infinite()
+	public function test_Then_sin_90_degrees_is_one()
 	{
-		this.assertEqual(Math.tan(90 * Math.PI/180), Math.NaN);
+		this.assertTrue(Math.sin(90 * Math.PI / 180) == 1);
 	}
 }

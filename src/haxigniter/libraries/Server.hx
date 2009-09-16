@@ -5,7 +5,7 @@ class Server
 	/**
 	 * Shortcut to the DocumentRoot variable.
 	 */
-	public static var documentRoot : String = Server.param('DOCUMENT_ROOT');
+	public static var documentRoot : String;
 	
 	/**
 	 * Gives access to any php $_SERVER variable.
@@ -24,7 +24,7 @@ class Server
 			return null;
 		}
 		#elseif neko
-		return Server.Params.get(parameter);
+		return Server.params.get(parameter);
 		#end
 	}
 	
@@ -47,7 +47,7 @@ class Server
 		
 		return '.';
 	}
-	
+
 	/**
 	 * Convenience method for external libraries.
 	 * @param	path
@@ -58,23 +58,43 @@ class Server
 		untyped __call__('require_once', haxigniter.Application.instance.config.applicationPath + 'external/' + path);		
 	}
 	#end
-
-	#if neko
-	private static var Params = new Hash<String>();
 	
+	/////////////////////////////////////////////////////////////////
+
 	private static function __init__()
 	{
-		Server.Params['DOCUMENT_ROOT'] = Server.parseDocumentRoot();
-		Server.Params['REQUEST_URI'] = neko.Web.getURI();
-		Server.Params['REMOTE_ADDR'] = neko.Web.getClientIP();
-		Server.Params['SERVER_NAME'] = neko.Web.getHostName();
+		#if neko
+		Server.params = new Hash<String>();
+		
+		var root = Server.parseDocumentRoot();
+		
+		Server.params.set('DOCUMENT_ROOT', root[0]);		
+		Server.params.set('REQUEST_URI', neko.Web.getURI());
+		Server.params.set('REMOTE_ADDR', neko.Web.getClientIP());
+		Server.params.set('HTTP_HOST', neko.Web.getHostName());
+
+		// Neko only parameter: Web path to script, with trailing slash.
+		Server.params.set('SCRIPT_PATH', root[1]);
+		#end
+		
+		// Need to specify the document root here because of neko init.
+		Server.documentRoot = Server.param('DOCUMENT_ROOT');
 	}
 	
-    private static function parseDocumentRoot() : String
+	#if neko
+	private static var params : Hash<String>;
+
+	/**
+	 * Returns An array with two elements:
+	 * 0 - Equivalent to DOCUMENT_ROOT
+	 * 1 - Web path to executing script, with trailing slash.
+	 */
+    private static function parseDocumentRoot() : Array<String>
     {
+		// TODO: If directories have the same name, this can fail.
     	var cwd : Array<String> = neko.Web.getCwd().split('/');
     	var uri : Array<String> = neko.Web.getURI().split('/');
-    	
+		
     	if(cwd[cwd.length-1] == '')
     		cwd.pop();
 
@@ -84,11 +104,16 @@ class Server
     	var i = cwd.length - 1;
     	while(i >= 0)
     	{
-    		if(cwd[i--] == uri[0])
-    			return cwd.slice(0, i+1).join('/');
+    		if(cwd[i] == uri[0])
+			{
+    			return [cwd.slice(0, i).join('/'), 
+						'/' + cwd.slice(i, cwd.length).join('/') + '/'];
+			}
+			
+			--i;
     	}
-    	
-    	return cwd.join('/');
+		
+    	return [cwd.join('/'), '/'];
     }
 	#end
 }

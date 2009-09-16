@@ -1,36 +1,38 @@
 package haxigniter;
 
+import haxigniter.libraries.Config;
+
+// This important package imports all application controllers so they will be referenced by the compiler.
+// See application/config/Config.hx for more info.
+import haxigniter.application.config.Controllers;
+
+import haxigniter.rtti.RttiUtil;
+import haxigniter.libraries.Controller;
+
+import haxigniter.types.TypeFactory;
+
+import haxigniter.libraries.Url;
+
 #if php
 typedef InternalSession = php.Session;
 #elseif neko
 typedef InternalSession = neko.Session;
 #end
 
-// This important package imports all application controllers so they will be referenced by the compiler.
-// See application/config/Config.hx for more info.
-import haxigniter.application.config.Controllers;
-
-import haxigniter.libraries.Url;
-
-import haxigniter.rtti.RttiUtil;
-import haxigniter.types.TypeFactory;
-import haxigniter.libraries.Debug;
-
-import haxigniter.libraries.Config;
 import haxigniter.application.config.Session;
 
-import haxigniter.libraries.Controller;
+import haxigniter.libraries.Debug;
+
+import haxigniter.views.ViewEngine;
 
 import haxigniter.libraries.Database;
 import haxigniter.application.config.Database;
 
-import haxigniter.views.ViewEngine;
-
 class Application
 {
-	public var config(getConfig, null) : Config;
-	private static var my_config : Config = new haxigniter.application.config.Config();
-	private function getConfig() : Config { return Application.my_config; }
+	public var config(getConfig, null) : haxigniter.application.config.Config;
+	private static var my_config : haxigniter.application.config.Config = new haxigniter.application.config.Config();
+	private function getConfig() : haxigniter.application.config.Config { return Application.my_config; }
 
 	public var controller(getController, null) : Controller;
 	private var my_controller : Controller;
@@ -103,24 +105,13 @@ class Application
 			Application.runTests();
 		}
 		
+		//Application.instance.run(['start', 'index']);
 		Application.instance.run(Url.segments);
 	}
 	
 	public static function runTests()
 	{
 		new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
-	}
-	
-	///// Convenience methods for debug and logging /////////////////
-	
-	public static function trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
-	{
-		Debug.trace(data, debugLevel, pos);
-	}
-	
-	public static function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
-	{
-		Debug.log(message, debugLevel);
 	}
 	
 	/////////////////////////////////////////////////////////////////
@@ -141,15 +132,18 @@ class Application
 		
 		// TODO: Controller arguments?
 		this.my_controller = cast Type.createInstance(classType, []);
-		
+
 		var method : Dynamic = Reflect.field(this.controller, controllerMethod);
 		if(method == null)
 			throw new ControllerException(controllerClass + ' method "' + controllerMethod + '" not found.');
 
 		// Typecast the arguments.
 		var arguments : Array<Dynamic> = this.typecastArguments(classType, controllerMethod, uriSegments.slice(2));
-		var exception : Dynamic;
-
+		
+		// Before calling the controller, start session so no premature output will mess with it.
+		if(config.sessionEnabled)
+			InternalSession.start();
+		
 		// TODO: When rethrow is fixed, factorize this code so errors will be logged in development too.
 		if(this.config.development)
 		{
@@ -159,7 +153,7 @@ class Application
 			// Decided to close session here, not in cleanup, because of session integrity.
 			// It may be in a bad state if exception is thrown.
 			#if neko
-			InternalSession.close();
+			this.closeNekoSession();
 			#end
 		}
 		else
@@ -172,7 +166,7 @@ class Application
 				// Decided to close session here, not in cleanup, because of session integrity.
 				// It may be in a bad state if exception is thrown.
 				#if neko
-				InternalSession.close();
+				this.closeNekoSession();
 				#end
 			}
 			catch(e : Dynamic)
@@ -180,19 +174,28 @@ class Application
 				Debug.log(e, DebugLevel.error);
 				// TODO: User-friendly display of errors
 			}			
-		}	
+		}
 
 		// Clean up controller after it's done.
 		this.cleanup();
 	}
+	
+	#if neko
+	private function closeNekoSession()
+	{
+		if(Application.my_session != null)
+		{
+			InternalSession.set(sessionName, Application.my_session);
+			InternalSession.close();
+		}
+	}
+	#end
 	
 	private function cleanup()
 	{
 		// Close database connection
 		if(this.controller.DB != null)
 			this.controller.DB.close();
-			
-		// TODO: Save session? (Hopefully not)
 	}
 	
 	/**
@@ -208,7 +211,7 @@ class Application
 		for(method in methods.get(classMethod))
 		{
 			// Test if value is optional, then push a null argument.
-			if(method.opt && arguments[c] == '')
+			if(method.opt && (arguments[c] == '' || arguments[c] == null))
 			{
 				++c;
 				output.push(null);

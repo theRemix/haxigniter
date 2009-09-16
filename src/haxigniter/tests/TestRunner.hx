@@ -17,8 +17,17 @@ class TestRunner extends haxe.unit.TestRunner
 	 */
 	private function addTestClasses() {}
 	
+	private var output : String;
+
 	public function new(runHaxigniterTests : Bool = true)
 	{
+		// Rebind the print method to capture output.
+		var self = this;
+		haxe.unit.TestRunner.print = function(v : Dynamic)
+		{
+			self.output += v;
+		}
+
 		super();
 
 		if(runHaxigniterTests)
@@ -32,10 +41,10 @@ class TestRunner extends haxe.unit.TestRunner
 	
 	public function runTests() : String
 	{
-		Debug.startBuffer();
+		this.output = '';
 		this.run();
 
-		return Debug.endBuffer();
+		return this.output;
 	}
 
 	public function runAndDisplay() : Void

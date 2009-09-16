@@ -1,7 +1,6 @@
 package haxigniter.libraries;
 
 import haxigniter.Application;
-
 import haxigniter.EReg2;
 
 #if php
@@ -28,9 +27,16 @@ class Url
 			// Segments will be accessed in the controller, so it's safe to do the URI test here.
 			if(Url.permittedUriChars.length > 0)
 				Url.testValidUri(currentUri);
-			
+				
 			// TODO: SCRIPT_NAME may cause problems on other systems, watch for it.
-			var scriptName : String = haxigniter.libraries.Server.param('SCRIPT_NAME');
+			var scriptName : String;
+
+			#if php
+			scriptName = haxigniter.libraries.Server.param('SCRIPT_NAME');
+			#elseif neko
+			scriptName = Server.param('SCRIPT_PATH') + config.indexPage;
+			#end
+			
 			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash
 
 			// Strip empty segment at the end of the string.

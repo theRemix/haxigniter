@@ -45,11 +45,17 @@ class Config extends haxigniter.libraries.Config
 		|--------------------------------------------------------------------------
 		|
 		| Typically this will be your index.php file, unless you've renamed it to
-		| something else. If you are using mod_rewrite to remove the page set this
-		| variable so that it is blank.
+		| something else. For neko, this will be "index.n".
+		|
+		| If you are using mod_rewrite to remove the page set this variable so that 
+		| it is blank.
 		|
 		*/
+		#if php
 		this.indexPage = 'index.php';
+		#elseif neko
+		this.indexPage = 'index.n';
+		#end
 
 		/*
 		|--------------------------------------------------------------------------
@@ -205,10 +211,20 @@ class Config extends haxigniter.libraries.Config
 		| A tip is to use Server.documentRoot to specify a folder one step above
 		| the http folder. For example:
 		|
-		| this.privatePath = Server.Dirname(Server.DocumentRoot) + '/www_private/';
+		| this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
+		|
+		*/		
+		this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
+
+		/*
+		|--------------------------------------------------------------------------
+		| Session enabled
+		|--------------------------------------------------------------------------
+		|
+		| If you don't need to use session handling, set this variable to false.
 		|
 		*/
-		this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
+		this.sessionEnabled = true;
 	}
 	
 	/**

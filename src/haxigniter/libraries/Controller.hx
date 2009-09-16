@@ -24,4 +24,16 @@ class Controller implements haxe.rtti.Infos
 
 	public var session(getSession, null) : Session;
 	private function getSession() : Session { return application.session; }	
+
+	///// Convenience methods for debug and logging /////////////////
+	
+	private function trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
+	{
+		Debug.trace(data, debugLevel, pos);
+	}
+	
+	private function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
+	{
+		Debug.log(message, debugLevel);
+	}
 }

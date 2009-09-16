@@ -34,11 +34,20 @@ class Debug
 		if(Debug.toInt(debugLevel) > Debug.toInt(config.logLevel))
 			return;
 		
-		var logFile = config.logPath + 'log-' + DateTools.format(Date.now(), "%Y-%m-%d") + ".php";
+		var logFile = config.logPath + 'log-' + DateTools.format(Date.now(), "%Y-%m-%d");
+		
+		#if php
+		logFile += '.php';
+		#elseif neko
+		logFile += '.n';
+		#end
+		
 		var output = '';
 		
+		#if php
 		if(!FileSystem.exists(logFile))
 			output += "<?php exit; ?>\n\n";
+		#end
 		
 		output += Std.string(debugLevel).toUpperCase() + ' - ' + DateTools.format(Date.now(), config.logDateFormat) + ' --> ' + message + "\n";
 		

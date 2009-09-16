@@ -1,8 +1,14 @@
 ﻿package haxigniter.tests;
 
+#if php
 import php.FileSystem;
 import php.Lib;
 import php.Web;
+#elseif neko
+import neko.FileSystem;
+import neko.Lib;
+import neko.Web;
+#end
 
 class Integrity
 {
@@ -55,6 +61,7 @@ class Integrity
 		#if php
 		return untyped __call__('is_writable', path);
 		#elseif neko
+		neko.Lib.print('is_writable() mock<br>');
 		// TODO: Implement is_writable() for neko.
 		return true;
 		#end
