@@ -11,20 +11,21 @@ import neko.Sys;
 import neko.Web;
 #end
 
-class Config extends haxigniter.libraries.Config 
+class Config extends haxigniter.libraries.Config
 {
-	/**
-	 * Variables not dependent on default values.
-	 */
-	private override function initConstants()
+	private function new()
 	{
 		/*
 		|--------------------------------------------------------------------------
-		| Development setting
+		| Development mode
 		|--------------------------------------------------------------------------
 		|
-		| Determine here when the system is in development mode, or set to false.
-		| Here are a few examples for auto-detecting:
+		| Development mode is used to auto-detect many things in the system, like
+		| database connection, paths, etc. This setting should also be 
+		| auto-detected, so you can just upload the application to a live server
+		| and it should just work.
+		|
+		| Here are a few examples for auto-detecting development mode:
 		|
 		| If you're on a Windows machine when developing and Linux when live:
 		|    this.development = Sys.getEnv('OS') == 'Windows_NT';
@@ -32,62 +33,113 @@ class Config extends haxigniter.libraries.Config
 		| To test depending on host name: 
 		|    this.development = Web.getHostName() == 'localhost';
 		|
-		| Or IP address: 
+		| Or IP address (PHP only):
 		|    this.development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 		|
 		*/
-		// TODO: Description for Development mode, usefulness
-		this.development = Sys.getEnv('OS') == 'Windows_NT';
+		development = Sys.getEnv('OS') == 'Windows_NT';
 
+		/* ===================================================================== */
+		/* === Paths ============================================================*/
+		/* ===================================================================== */
+		
 		/*
 		|--------------------------------------------------------------------------
-		| Index File
+		| Index file web Path
 		|--------------------------------------------------------------------------
 		|
-		| Typically this will be your index.php file, unless you've renamed it to
-		| something else. For neko, this will be "index.n".
+		| This should be the web path to your index file. For example, if you're
+		| using PHP and haXigniter is located in the folder "haxigniter" below the
+		| document root, this should be set to "haxigniter/index.php". 
 		|
-		| If you are using mod_rewrite to remove the page set this variable so that 
-		| it is blank.
+		| For neko, this will be "haxigniter/index.n". If your application is in
+		| the root of the web server, it will be just "index.php".
+		|
+		| If you are using mod_rewrite to remove the index page, set this variable 
+		| to the path only, or blank of in the root.
+		| 
+		| NOTE: This is the only path that should be without a trailing and 
+		|       prepending slash!
 		|
 		*/
 		#if php
-		this.indexPage = 'index.php';
+		indexPath = 'index.php';
 		#elseif neko
-		this.indexPage = 'index.n';
+		indexPath = 'index.n';
 		#end
 
 		/*
 		|--------------------------------------------------------------------------
-		| Base Site URL
+		| Site URL
 		|--------------------------------------------------------------------------
 		|
-		| URL to your haxIgniter root. Set to null to auto-detect, which should
-		| work most of the time. Typically this will be your base URL, WITH a 
-		| trailing slash:
+		| URL to your haXigniter root. If null it will be autodetected. If you want 
+		| to specify it, it's a normal URL:
 		|
-		|	http://www.your-site.com/
+		|	http://www.your-site.com/path/to/index.php
 		|
 		*/
-		this.baseUrl = null;
+		siteUrl = null;
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Application Path
+		|--------------------------------------------------------------------------
+		|
+		| Full server path to the application. Set automatically based on indexPath.
+		|
+		*/
+		applicationPath = null;
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Views Directory Path
+		|--------------------------------------------------------------------------
+		|
+		| Set to null unless you would like to set something other than the default
+		| application/views/ folder. Use a full server path with trailing slash.
+		|
+		*/
+		viewPath = null;
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Error Logging Directory Path
+		|--------------------------------------------------------------------------
+		|
+		| Set to null unless you would like to set something other than the default
+		| application/runtime/logs/ folder. Use a full server path with trailing slash.
+		|
+		*/
+		logPath = null;
 
 		/*
 		|--------------------------------------------------------------------------
-		| URI PROTOCOL
+		| Cache Directory Path
 		|--------------------------------------------------------------------------
 		|
-		| This item determines which server global should be used to retrieve the
-		| URI string.  The default setting of "AUTO" works for most servers.
-		| If your links do not seem to work, try one of the other delicious flavors:
-		|
-		| 'AUTO'			Default - auto detects
-		| 'PATH_INFO'		Uses the PATH_INFO
-		| 'QUERY_STRING'	Uses the QUERY_STRING
-		| 'REQUEST_URI'		Uses the REQUEST_URI
-		| 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
+		| Set to null unless you would like to set something other than the default
+		| application/runtime/cache/ folder. Use a full server path with trailing slash.
 		|
 		*/
-		// TODO: Is Uri protocol detection needed?
+		cachePath = null;
+
+		/*
+		|--------------------------------------------------------------------------
+		| Session Path
+		|--------------------------------------------------------------------------
+		|
+		| Set to null unless you would like to set something other than the default
+		| application/runtime/session/ folder. Use a full server path with trailing slash.
+		|
+		| If you want to disable session, set this value to an empty string.
+		|
+		*/
+		sessionPath = null;
+
+		/* ===================================================================== */
+		/* === Other =========================================================== */
+		/* ===================================================================== */
 
 		/*
 		|--------------------------------------------------------------------------
@@ -100,7 +152,7 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		// TODO: Multiple languages
-		//this.language = 'english';
+		//language = 'english';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -112,7 +164,7 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		// TODO: Charset handling
-		//this.charset = 'UTF-8';
+		//charset = 'UTF-8';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -133,7 +185,7 @@ class Config extends haxigniter.libraries.Config
 		| NOTE: When adding swedish charaters, the dash must be placed after them
 		| and the equal sign before... Must be some regexp problem.
 		*/
-		this.permittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
+		permittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -153,18 +205,7 @@ class Config extends haxigniter.libraries.Config
 		| your log files will fill up very fast.
 		|
 		*/
-		this.logLevel = this.development ? DebugLevel.info : DebugLevel.warning;
-
-		/*
-		|--------------------------------------------------------------------------
-		| Error Logging Directory Path
-		|--------------------------------------------------------------------------
-		|
-		| Leave this BLANK unless you would like to set something other than the default
-		| system/logs/ folder.  Use a full server path with trailing slash.
-		|
-		*/
-		this.logPath = null;
+		logLevel = this.development ? DebugLevel.info : DebugLevel.warning;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -175,18 +216,7 @@ class Config extends haxigniter.libraries.Config
 		| codes to set your own date formatting.
 		|
 		*/
-		this.logDateFormat = '%Y-%m-%d %H:%M:%S';
-
-		/*
-		|--------------------------------------------------------------------------
-		| Cache Directory Path
-		|--------------------------------------------------------------------------
-		|
-		| Leave this BLANK unless you would like to set something other than the default
-		| system/cache/ folder.  Use a full server path with trailing slash.
-		|
-		*/
-		this.cachePath = null;
+		logDateFormat = '%Y-%m-%d %H:%M:%S';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -197,41 +227,14 @@ class Config extends haxigniter.libraries.Config
 		| enabled you MUST set an encryption key.  See the user guide for info.
 		|
 		*/
-		this.encryptionKey = null;
-
-		/*
-		|--------------------------------------------------------------------------
-		| Private Directory Path
-		|--------------------------------------------------------------------------
-		|
-		| Set this to a folder outside the http document root where the web server
-		| has access. Can be used for session, sensitive data, etc.
-		| Use a full server path with trailing slash.
-		|
-		| A tip is to use Server.documentRoot to specify a folder one step above
-		| the http folder. For example:
-		|
-		| this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
-		|
-		*/		
-		this.privatePath = Server.dirname(Server.documentRoot) + '/www_private/';
-
-		/*
-		|--------------------------------------------------------------------------
-		| Session enabled
-		|--------------------------------------------------------------------------
-		|
-		| If you don't need to use session handling, set this variable to false.
-		|
-		*/
-		this.sessionEnabled = true;
-	}
+		encryptionKey = '';
 	
-	/**
-	* Variables dependent on default values.
-	*/
-	private override function initDependencies()
-	{
+		/* ================================================================= */
+		/* After calling the superclass, default (null) values can be used.  */
+		/* ================================================================= */
+		super();
+		/* ================================================================= */
+		
 		/*
 		|--------------------------------------------------------------------------
 		| View Engine
@@ -251,8 +254,8 @@ class Config extends haxigniter.libraries.Config
 		| haxigniter.views.viewEngine and specify it here.
 		|
 		*/
-		this.view = new haxigniter.views.Templo(this.viewPath, this.cachePath);
+		view = new haxigniter.views.Templo(this.viewPath, this.cachePath);
 	}
 
-	public function new() {	super(); }
+	public static var instance : Config = new Config();
 }

@@ -2,16 +2,21 @@ package haxigniter;
 
 import haxigniter.libraries.Config;
 
+import haxigniter.libraries.Controller;
+import haxigniter.libraries.Url;
+import haxigniter.libraries.Debug;
+import haxigniter.libraries.Database;
+
 // This important package imports all application controllers so they will be referenced by the compiler.
 // See application/config/Config.hx for more info.
 import haxigniter.application.config.Controllers;
+import haxigniter.application.config.Session;
+import haxigniter.application.config.Database;
 
 import haxigniter.rtti.RttiUtil;
-import haxigniter.libraries.Controller;
-
 import haxigniter.types.TypeFactory;
 
-import haxigniter.libraries.Url;
+import haxigniter.views.ViewEngine;
 
 #if php
 typedef InternalSession = php.Session;
@@ -19,20 +24,10 @@ typedef InternalSession = php.Session;
 typedef InternalSession = neko.Session;
 #end
 
-import haxigniter.application.config.Session;
-
-import haxigniter.libraries.Debug;
-
-import haxigniter.views.ViewEngine;
-
-import haxigniter.libraries.Database;
-import haxigniter.application.config.Database;
-
 class Application
 {
-	public var config(getConfig, null) : haxigniter.application.config.Config;
-	private static var my_config : haxigniter.application.config.Config = new haxigniter.application.config.Config();
-	private function getConfig() : haxigniter.application.config.Config { return Application.my_config; }
+	public var config(getConfig, never) : haxigniter.application.config.Config;
+	private function getConfig() : haxigniter.application.config.Config { return haxigniter.application.config.Config.instance; }
 
 	public var controller(getController, null) : Controller;
 	private var my_controller : Controller;
@@ -141,8 +136,8 @@ class Application
 		var arguments : Array<Dynamic> = this.typecastArguments(classType, controllerMethod, uriSegments.slice(2));
 		
 		// Before calling the controller, start session so no premature output will mess with it.
-		if(config.sessionEnabled)
-			InternalSession.start();
+		if(config.sessionPath != '')
+			this.startSession();
 		
 		// TODO: When rethrow is fixed, factorize this code so errors will be logged in development too.
 		if(this.config.development)
@@ -178,6 +173,12 @@ class Application
 
 		// Clean up controller after it's done.
 		this.cleanup();
+	}
+	
+	private function startSession()
+	{
+		InternalSession.setSavePath(config.sessionPath);
+		InternalSession.start();
 	}
 	
 	#if neko

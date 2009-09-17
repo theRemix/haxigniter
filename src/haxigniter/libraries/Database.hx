@@ -1,5 +1,7 @@
 ﻿package haxigniter.libraries;
 
+import Type;
+
 #if php
 import php.db.Connection;
 import php.db.ResultSet;
@@ -22,10 +24,10 @@ class DatabaseException extends haxigniter.exceptions.Exception
 {
 	public var connection : DatabaseConnection;
 	
-	public function new(message : String, connection : DatabaseConnection)
+	public function new(message : String, connection : DatabaseConnection, ?stack : haxe.PosInfos)
 	{
 		this.connection = connection;
-		super(message);
+		super(message, 0, stack);
 	}
 }
 
@@ -50,10 +52,11 @@ class DatabaseConnection
 	 * Default is '?'
 	 */
 	public var parameterString : String;
-
-	public var lastQuery(getLastQuery, null) : String;
-	private var my_lastQuery : String;
-	private function getLastQuery() : String { return this.my_lastQuery; }
+	
+	/**
+	 * Last executed query, useful when debugging.
+	 */
+	public var lastQuery(default, null) : String;
 
 	private static var alphaRegexp : EReg = ~/^\w+$/;
 
@@ -86,7 +89,7 @@ class DatabaseConnection
 		if(params != null)
 			query = this.queryParams(query, params);
 		
-		this.my_lastQuery = query;
+		this.lastQuery = query;
 		return this.connection.request(query);
 	}
 
@@ -133,7 +136,7 @@ class DatabaseConnection
 		var query = (replace ? 'REPLACE' : 'INSERT') + ' INTO ' + table + ' (' + keys.substr(2) + ') VALUES (' + values.substr(2) + ')';
 		var result : ResultSet = this.connection.request(query);
 		
-		this.my_lastQuery = query;		
+		this.lastQuery = query;		
 		return result.length;
 	}
 
@@ -174,7 +177,7 @@ class DatabaseConnection
 
 		var result : ResultSet = this.connection.request(query);
 		
-		this.my_lastQuery = query;
+		this.lastQuery = query;
 		return result.length;
 	}
 	
@@ -203,7 +206,7 @@ class DatabaseConnection
 
 		var result : ResultSet = this.connection.request(query);
 		
-		this.my_lastQuery = query;
+		this.lastQuery = query;
 		return result.length;
 	}	
 
@@ -225,7 +228,20 @@ class DatabaseConnection
 			if(pos == -1)
 				throw new DatabaseException('Not enough parameters in query.', this);
 			
-			query = query.substr(0, pos) + this.connection.quote(Std.string(param)) + query.substr(pos+1);
+			if(param != null)
+			{
+				param = switch(Type.typeof(param))
+				{
+					case ValueType.TInt: param;
+					case ValueType.TFloat: param;
+					case ValueType.TBool: Std.string(param);
+					default: this.connection.quote(Std.string(param));
+				}
+			}
+			else
+				param = 'NULL';
+			
+			query = query.substr(0, pos) + param + query.substr(pos+1);
 		}
 		
 		return query;

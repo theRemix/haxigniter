@@ -12,10 +12,8 @@ import neko.Web;
 class Url
 {
 	// Must be above other vars using this variable.
-	private static var config = Application.instance.config;
+	private static var config = haxigniter.application.config.Config.instance;
 
-	public static var permittedUriChars : String = config.permittedUriChars;
-	
 	public static var segments(getSegments, null) : Array<String>;
 	private static var my_segments : Array<String>;
 	private static function getSegments()
@@ -25,18 +23,12 @@ class Url
 			var currentUri : String = Web.getURI();
 			
 			// Segments will be accessed in the controller, so it's safe to do the URI test here.
-			if(Url.permittedUriChars.length > 0)
+			if(config.permittedUriChars.length > 0)
 				Url.testValidUri(currentUri);
 				
 			// TODO: SCRIPT_NAME may cause problems on other systems, watch for it.
-			var scriptName : String;
+			var scriptName : String = '/' + config.indexPath;
 
-			#if php
-			scriptName = haxigniter.libraries.Server.param('SCRIPT_NAME');
-			#elseif neko
-			scriptName = Server.param('SCRIPT_PATH') + config.indexPage;
-			#end
-			
 			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash
 
 			// Strip empty segment at the end of the string.
@@ -75,9 +67,9 @@ class Url
 		return output.join('/');
 	}
 	
-	public static function siteUrl(segments : String) : String
+	public static function siteUrl(segments = '') : String
 	{
-		return joinUrl([config.baseUrl, config.indexPage, segments]);
+		return Url.joinUrl([config.siteUrl, segments]);
 	}
 	
 	public static function uriString() : String
@@ -122,10 +114,13 @@ class Url
 		// No SSL redirect in development mode.
 		if(config.development) return;
 		
+		#if php
+		// Only PHP can detect SSL
 		var sslActive : Bool = haxigniter.libraries.Server.param('HTTPS') == 'on';
 		
 		if((sslActive && ssl) || !(sslActive || ssl))
 			return;
+		#end
 		
 		Url.redirect(null, Application.instance.session.flashVar, ssl);
 	}
@@ -136,7 +131,7 @@ class Url
 	{
 		// Build a regexp from the permitted chars and test it.
 		// Adding slash at the beginning since it's a part of any valid URI.
-		var regexp = '^[/' + EReg2.quoteMeta(Url.permittedUriChars) + ']*$';
+		var regexp = '^[/' + EReg2.quoteMeta(config.permittedUriChars) + ']*$';
 		var validUrl = new EReg(regexp, 'i');
 		
 		if(!validUrl.match(uri))
