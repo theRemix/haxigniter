@@ -12,7 +12,7 @@ import neko.Web;
 class Url
 {
 	// Must be above other vars using this variable.
-	private static var config = haxigniter.application.config.Config.instance;
+	private static var config = haxigniter.application.config.Config.instance();
 
 	public static var segments(getSegments, null) : Array<String>;
 	private static var my_segments : Array<String>;

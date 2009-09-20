@@ -27,7 +27,7 @@ typedef InternalSession = neko.Session;
 class Application
 {
 	public var config(getConfig, never) : haxigniter.application.config.Config;
-	private function getConfig() : haxigniter.application.config.Config { return haxigniter.application.config.Config.instance; }
+	private function getConfig() : haxigniter.application.config.Config { return haxigniter.application.config.Config.instance(); }
 
 	public var controller(getController, null) : Controller;
 	private var my_controller : Controller;
@@ -100,7 +100,6 @@ class Application
 			Application.runTests();
 		}
 		
-		//Application.instance.run(['start', 'index']);
 		Application.instance.run(Url.segments);
 	}
 	

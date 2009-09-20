@@ -25,7 +25,7 @@ class Debug
 {
 	public static var traceLevel : DebugLevel = DebugLevel.info;
 	
-	private static var config = haxigniter.Application.instance.config;
+	private static var config = haxigniter.application.config.Config.instance();
 	
 	public static function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
 	{

@@ -9,7 +9,8 @@ class Server
 	 */
 	public static inline function requireExternal(path : String) : Void
 	{
-		untyped __call__('require_once', haxigniter.Application.instance.config.applicationPath + 'external/' + path);		
+		// TODO: Config class must be completed before this can be called! How to solve?
+		untyped __call__('require_once', haxigniter.application.config.Config.instance().applicationPath + 'external/' + path);
 	}
 
 	/**

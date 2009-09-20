@@ -230,11 +230,17 @@ class Config extends haxigniter.libraries.Config
 		encryptionKey = '';
 	
 		/* ================================================================= */
-		/* After calling the superclass, default (null) values can be used.  */
+		/* Superclass must be called at the end to populate default values.  */
 		/* ================================================================= */
 		super();
 		/* ================================================================= */
-		
+	}
+
+	/*
+	 * Initialize objects here that depends on configuration settings.
+	 */
+	private function newObjects()
+	{
 		/*
 		|--------------------------------------------------------------------------
 		| View Engine
@@ -252,10 +258,20 @@ class Config extends haxigniter.libraries.Config
 		|
 		| If you want to use another template system, make a class extending
 		| haxigniter.views.viewEngine and specify it here.
-		|
+		|		
 		*/
-		view = new haxigniter.views.Templo(this.viewPath, this.cachePath);
+		view = new haxigniter.views.Smarty(this.viewPath, this.cachePath);
 	}
 
-	public static var instance : Config = new Config();
+	private static var my_instance : Config;
+	public static function instance() : Config
+	{
+		if(my_instance == null)
+		{
+			my_instance = new Config();
+			my_instance.newObjects();
+		}
+		
+		return my_instance;
+	}
 }
