@@ -1,4 +1,5 @@
-﻿package haxigniter.application.external;
+﻿#if php
+package haxigniter.application.external;
 
 extern class Smarty 
 {
@@ -44,3 +45,4 @@ extern class Smarty
 	public var caching : Int;
 	public var cache_lifetime : Int;
 }
+#end

@@ -1,4 +1,5 @@
-﻿package haxigniter.views;
+﻿#if php
+package haxigniter.views;
 
 import php.Lib;
 import php.NativeArray;
@@ -75,3 +76,4 @@ class Smarty extends haxigniter.views.ViewEngine
 		return this.smartyEngine.fetch(fileName, this.cacheId);
 	}
 }
+#end

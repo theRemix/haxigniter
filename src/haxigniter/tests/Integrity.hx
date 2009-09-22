@@ -105,6 +105,7 @@ class Integrity
 		return FileSystem.exists(htaccess);
 	}
 
+	#if php
 	public function testSmartyPatch(title : { value : String }) : Bool
 	{
 		var smarty = FileSystem.fullPath(config.applicationPath + 'external/smarty/libs/internals/core.write_file.php');
@@ -118,4 +119,5 @@ class Integrity
 		
 		return patch.match(File.getContent(smarty));
 	}
+	#end
 }
