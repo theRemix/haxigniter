@@ -260,7 +260,7 @@ class Config extends haxigniter.libraries.Config
 		| haxigniter.views.viewEngine and specify it here.
 		|		
 		*/
-		view = new haxigniter.views.Smarty(this.viewPath, this.cachePath);
+		view = new haxigniter.views.Smarty();
 	}
 
 	private static var my_instance : Config;

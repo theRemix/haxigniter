@@ -25,9 +25,12 @@ class Smarty extends haxigniter.views.ViewEngine
 	private var cacheId : String;
 	private var cachePath : String;
 	
-	public function new(?cachePath : String, ?cacheId : String, templatePath : String = null, compiledPath : String = null)
+	public function new(?cachePath : String, ?cacheId : String, smartyClassFile : String = null, templatePath : String = null, compiledPath : String = null)
 	{
-		haxigniter.libraries.Server.requireExternal('smarty/libs/Smarty.class.php');
+		if(smartyClassFile == null)
+			haxigniter.libraries.Server.requireExternal('smarty/libs/Smarty.class.php');
+		else
+			untyped __call__('require_once', smartyClassFile);
 		
 		this.smartyEngine = new haxigniter.application.external.Smarty();
 

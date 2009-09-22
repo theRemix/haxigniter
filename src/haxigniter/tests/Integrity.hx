@@ -2,10 +2,12 @@
 
 #if php
 import php.FileSystem;
+import php.io.File;
 import php.Lib;
 import php.Web;
 #elseif neko
 import neko.FileSystem;
+import neko.io.File;
 import neko.Lib;
 import neko.Web;
 #end
@@ -34,19 +36,23 @@ class Integrity
 	{
 		var title = {value: methodName};
 		var result : Bool = Reflect.callMethod(this, Reflect.field(this, methodName), [title]);
-
-		Lib.print('<div style="font-family: Verdana; font-size:12px; float:left; display:inline; padding:4px; margin:1px; border:1px solid gray; width:99%;">');
-		Lib.print('<div style="float:left; padding:0 3px 0 3px;">' + title.value + '</div>');
-
-		if(result == true)
-			Lib.print('<div style="width:70px; float:right; background-color:#2D1; padding:1px 3px 1px 3px; text-align:center;">OK</div>');
-		else if(result == null)
-			Lib.print('<div style="width:70px; float:right; padding:1px 3px 1px 3px; text-align:center;"><strong>?</strong></div>');
-		else
-			Lib.print('<div style="width:70px; float:right; background-color:#C12; padding:1px 3px 1px 3px; text-align:center;">FAILED</div>');
 		
-		Lib.print('</div>');			
-		Web.flush();
+		if(result != null)
+		{
+			Lib.print('<div style="font-family: Verdana; font-size:12px; float:left; display:inline; padding:4px; margin:1px; border:1px solid gray; width:99%;">');
+			Lib.print('<div style="float:left; padding:0 3px 0 3px;">' + title.value + '</div>');
+
+			if(result == true)
+				Lib.print('<div style="width:70px; float:right; background-color:#2D1; padding:1px 3px 1px 3px; text-align:center;">OK</div>');
+			else
+				Lib.print('<div style="width:70px; float:right; background-color:#C12; padding:1px 3px 1px 3px; text-align:center;">FAILED</div>');
+
+			//else if(result == null)
+				//Lib.print('<div style="width:70px; float:right; padding:1px 3px 1px 3px; text-align:center;"><strong>?</strong></div>');
+		
+			Lib.print('</div>');
+			Web.flush();
+		}
 	}
 	
 	private function printHeader(text : String)
@@ -68,7 +74,7 @@ class Integrity
 	
 	/////////////////////////////////////////////////////////////////
 	
-	public function testHX1(title : { value : String }) : Bool
+	public function testCachePath(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] Directory access');
 		
@@ -76,19 +82,19 @@ class Integrity
 		return this.isWritable(config.cachePath);
 	}
 
-	public function testHX2(title : { value : String }) : Bool
+	public function testLogPath(title : { value : String }) : Bool
 	{
 		title.value = 'Log path <b>"' + config.logPath + '"</b> exists and is writable';
 		return this.isWritable(config.logPath);
 	}
 
-	public function testHX3(title : { value : String }) : Bool
+	public function testSessionPath(title : { value : String }) : Bool
 	{
 		title.value = 'Session path <b>"' + config.sessionPath + '"</b> exists and is writable';
 		return this.isWritable(config.sessionPath);
 	}
 
-	public function testHX4(title : { value : String }) : Bool
+	public function testHtaccess(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] File integrity');
 
@@ -97,5 +103,19 @@ class Integrity
 		title.value = '<b>"' + htaccess + '"</b> exists to prevent access to haXigniter files';
 		
 		return FileSystem.exists(htaccess);
+	}
+
+	public function testSmartyPatch(title : { value : String }) : Bool
+	{
+		title.value = 'Smarty file <b>"internals/core.write_file.php"</b> is patched according to haxigniter/views/Smarty.hx';
+		
+		var smarty = FileSystem.fullPath(config.applicationPath + 'external/smarty/libs/internals/core.write_file.php');
+
+		if(!FileSystem.exists(smarty))
+			return null;
+			
+		var patch : EReg = ~/file_exists\s*\([^\)]*\$params\[['"]filename['"]\]/;
+		
+		return patch.match(File.getContent(smarty));
 	}
 }
