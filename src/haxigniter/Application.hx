@@ -96,16 +96,38 @@ class Application
 	{
 		if(Application.instance.config.development)
 		{
-			// Run the haXigniter unit tests.
+			// Run the haXigniter unit tests and the application.
 			Application.runTests();
+			Application.instance.run(Url.segments);
 		}
-		
-		Application.instance.run(Url.segments);
+		else
+		{
+			// TODO: When rethrow is fixed, factorize this code to Application.instance.run()
+			try
+			{
+				Application.instance.run(Url.segments);
+			}
+			catch(controller : ControllerException)
+			{
+				haxigniter.libraries.Server.error404();
+			}
+			catch(e : Dynamic)
+			{
+				Debug.log(e, DebugLevel.error);
+				Application.genericError();
+			}
+		}
 	}
 	
 	public static function runTests()
 	{
 		new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
+	}
+	
+	public static function genericError()
+	{
+		// TODO: Multiple languages
+		haxigniter.libraries.Server.error('Page error', 'Page error', 'Something went wrong during the server processing.');		
 	}
 	
 	/////////////////////////////////////////////////////////////////
@@ -166,7 +188,7 @@ class Application
 			catch(e : Dynamic)
 			{
 				Debug.log(e, DebugLevel.error);
-				// TODO: User-friendly display of errors
+				Application.genericError();				
 			}			
 		}
 

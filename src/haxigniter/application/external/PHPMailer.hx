@@ -1,4 +1,5 @@
-﻿package haxigniter.application.external;
+﻿#if php
+package haxigniter.application.external;
 
 import haxigniter.Application;
 
@@ -71,3 +72,4 @@ extern class PHPMailer
 	
 	public var SingleTo : Bool;
 }
+#end

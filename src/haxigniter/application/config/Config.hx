@@ -228,7 +228,41 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		encryptionKey = '';
-	
+
+		/*
+		|--------------------------------------------------------------------------
+		| Error page
+		|--------------------------------------------------------------------------
+		|
+		| haxigniter.libraries.Server.error() can be used to display an error page
+		| when things go wrong.
+		|
+		| If you want to use a view page as an error page, set it here. For example
+		| "errors/error.mtt"
+		|
+		| If it's set to null, the template in application/views/error.html will
+		| be used for display, with a generic error message.
+		|
+		*/
+		errorPage = null;
+
+		/*
+		|--------------------------------------------------------------------------
+		| Error 404 page
+		|--------------------------------------------------------------------------
+		|
+		| haxigniter.libraries.Server.error404() can be used to display the 404
+		| error page (not found error). Correct headers are sent automatically.
+		|
+		| If you want to use a view page as this error page, set it here. For 
+		| example "errors/error404.mtt"
+		|
+		| If it's set to null, the template in application/views/error.html will
+		| be used for display, with a generic error 404 message.
+		|
+		*/
+		error404Page = null;
+		
 		/* ================================================================= */
 		/* Superclass must be called at the end to populate default values.  */
 		/* ================================================================= */
@@ -262,6 +296,10 @@ class Config extends haxigniter.libraries.Config
 		*/
 		view = new haxigniter.views.Smarty();
 	}
+	
+	/* ================================================================= */
+	/* ===== End of configuration settings ============================= */
+	/* ================================================================= */
 
 	private static var my_instance : Config;
 	public static function instance() : Config

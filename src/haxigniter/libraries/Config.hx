@@ -13,24 +13,27 @@ import neko.Web;
 
 class Config
 {
-	public var development(default, null) : Bool;
+	public var development : Bool;
 
-	public var indexPath(default, null) : String;
-	public var siteUrl(default, null) : String;
-	public var applicationPath(default, null) : String;
-	public var viewPath(default, null) : String;
-	public var logPath(default, null) : String;
-	public var cachePath(default, null) : String;
-	public var sessionPath(default, null) : String;
+	public var indexPath : String;
+	public var siteUrl : String;
+	public var applicationPath : String;
+	public var viewPath : String;
+	public var logPath : String;
+	public var cachePath : String;
+	public var sessionPath : String;
 	
-	//public var language(default, null) : String;
-	//public var charset(default, null) : String;
-	public var permittedUriChars(default, null) : String;
-	public var logLevel(default, null) : DebugLevel;
-	public var logDateFormat(default, null) : String;
-	public var encryptionKey(default, null) : String;
+	//public var language : String;
+	//public var charset : String;
+	public var permittedUriChars : String;
+	public var logLevel : DebugLevel;
+	public var logDateFormat : String;
+	public var encryptionKey : String;
 	
-	public var view(default, null) : ViewEngine;
+	public var errorPage : String;
+	public var error404Page : String;
+	
+	public var view : ViewEngine;
 	
 	private var runtimePath : String;
 

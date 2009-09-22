@@ -21,6 +21,7 @@ import haxigniter.libraries.Server;
 class ViewEngine
 {
 	// TODO: Caching system for ViewEngine
+	// TODO: Auto-assigning of variables for each request
 	public var templatePath : String;
 	public var compiledPath : String;
 	

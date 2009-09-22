@@ -59,7 +59,7 @@ class Smarty extends haxigniter.views.ViewEngine
 
 	public override function assign(name : String, value : Dynamic) : Void
 	{
-		// TODO: This is >2.05 compatible only.
+		// TODO: This is only compatible with 2.05 or better.
 		this.smartyEngine.assign(name, this.toPhpValue(value));
 	}
 	
