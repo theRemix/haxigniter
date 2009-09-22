@@ -1,8 +1,23 @@
 ﻿package haxigniter.views;
 
+import php.Lib;
 import php.NativeArray;
 import Type;
 
+/**
+ * IMPORTANT NOTE: For smarty to work in haXe, you need to make a small adjustment to the file "internals/core.write_file.php".
+ * You need to change this line:
+ * 
+ *      @unlink($params['filename']);
+ * 
+ * Into the following:
+ * 
+ *      if(file_exists($params['filename'])) 
+ *            @unlink($params['filename']);
+ * 
+ * For more information: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/
+ * 
+ */
 class Smarty extends haxigniter.views.ViewEngine
 {
 	private var smartyEngine : haxigniter.application.external.Smarty;
@@ -10,7 +25,7 @@ class Smarty extends haxigniter.views.ViewEngine
 	private var cacheId : String;
 	private var cachePath : String;
 	
-	public function new(templatePath : String, compiledPath : String, ?cachePath : String, ?cacheId : String)
+	public function new(?cachePath : String, ?cacheId : String, templatePath : String = null, compiledPath : String = null)
 	{
 		haxigniter.libraries.Server.requireExternal('smarty/libs/Smarty.class.php');
 		
@@ -26,70 +41,22 @@ class Smarty extends haxigniter.views.ViewEngine
 		this.cacheId = cacheId;
 	}
 
-	private function isIterable(d : Dynamic) : Bool
+	private function toPhpValue(value : Dynamic) : Dynamic
 	{
-		return (d != null && (Reflect.hasField(d, 'iterator')));
-	}
-
-	private function phpArray(array : Array<Dynamic>) : String
-	{
-		return 'array(' + Lambda.map(array, this.toPhpValue).join(', ') + ')';
-	}
-
-	private function phpAssociativeArray(hash : Hash<Dynamic>) : String
-	{
-		var output = '';
-		for(key in hash.keys())
-		{
-			output += "'" + key + "'" + ' => ' + toPhpValue(hash.get(key)) + ', ';
-		}
-		
-		if(output.length > 0)
-			output = output.substr(0, output.length - 2);
-		
-		return 'array(' + output + ')';
-	}
-
-	private function phpObject(o : Dynamic) : String
-	{
-		trace(Reflect.fields(o));
-		var output = '';
-		for(key in Reflect.fields(o))
-		{
-			trace(key + '<br>');
-			output += "'" + key + "'" + ' => ' + toPhpValue(Reflect.field(o, key)) + ', ';
-		}
-		
-		if(output.length > 0)
-			output = output.substr(0, output.length - 2);
-		
-		return 'array(' + output + ')';
-	}
-	
-	private function toPhpValue(value : Dynamic) : String
-	{
-		if(value == null)
-			return 'null';
-		else if(Std.is(value, String))
-			return "'" + StringTools.replace(value, "'", "\\'") + "'";
-		else if(Std.is(value, Int) || Std.is(value, Float) || (Std.is(value, Bool)))
-			return Std.string(value);
-		else if(Std.is(value, Hash))
-			return this.phpAssociativeArray(value);
-		else if(Std.is(value, Array) || Std.is(value, List))
-			return this.phpArray(value);
+		if(Std.is(value, Hash))
+			return Lib.associativeArrayOfHash(value);
+		else if(Std.is(value, Array))
+			return Lib.toPhpArray(value);
+		else if(Std.is(value, List))
+			return Lib.toPhpArray(Lambda.array(value));
 		else
-			return this.phpObject(value);
+			return value;
 	}
 
 	public override function assign(name : String, value : Dynamic) : Void
 	{
-		//haxigniter.libraries.Debug.trace(this.toPhpValue(value));
-
-		var __smarty : Dynamic = value;
-		//untyped __call__('eval', '$__smarty = ' + this.toPhpValue(value) + ';');
-		
-		this.smartyEngine.assign(name, __smarty);
+		// TODO: This is >2.05 compatible only.
+		this.smartyEngine.assign(name, this.toPhpValue(value));
 	}
 	
 	public override function clearAssign(name : String) : Bool
@@ -102,7 +69,6 @@ class Smarty extends haxigniter.views.ViewEngine
 
 	public override function render(fileName : String) : String
 	{
-		untyped __call__('error_reporting', 0);
 		return this.smartyEngine.fetch(fileName, this.cacheId);
 	}
 }

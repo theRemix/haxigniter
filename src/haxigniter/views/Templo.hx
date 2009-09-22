@@ -11,7 +11,7 @@ class Templo extends haxigniter.views.ViewEngine
 	private var macros : String;
 	private var optimized : Bool;
 	
-	public function new(templatePath : String, compiledPath : String, ?macros : String = null, ?optimized : Bool = false)
+	public function new(?macros : String = null, ?optimized : Bool = false, templatePath : String = null, compiledPath : String = null)
 	{
 		// super() will set correct variables for TemplatePath and CompiledPath
 		super(templatePath, compiledPath);

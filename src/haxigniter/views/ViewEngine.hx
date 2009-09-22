@@ -24,10 +24,17 @@ class ViewEngine
 	public var templatePath : String;
 	public var compiledPath : String;
 	
-	private function new(templatePath : String, compiledPath : String)
+	private function new(templatePath : String = null, compiledPath : String = null)
 	{
-		this.templatePath = templatePath;
-		this.compiledPath = compiledPath;
+		if(templatePath == null)
+			this.templatePath = haxigniter.application.config.Config.instance().viewPath;
+		else
+			this.templatePath = templatePath;
+			
+		if(compiledPath == null)
+			this.compiledPath = haxigniter.application.config.Config.instance().cachePath;
+		else
+			this.compiledPath = compiledPath;
 	}
 	
 	public function assign(name : String, value : Dynamic) : Void
