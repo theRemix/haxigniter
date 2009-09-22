@@ -107,13 +107,13 @@ class Integrity
 
 	public function testSmartyPatch(title : { value : String }) : Bool
 	{
-		title.value = 'Smarty file <b>"internals/core.write_file.php"</b> is patched according to haxigniter/views/Smarty.hx';
-		
 		var smarty = FileSystem.fullPath(config.applicationPath + 'external/smarty/libs/internals/core.write_file.php');
 
 		if(!FileSystem.exists(smarty))
 			return null;
-			
+
+		title.value = 'Smarty file <b>"' + smarty + '"</b> is patched according to haxigniter/views/Smarty.hx';
+		
 		var patch : EReg = ~/file_exists\s*\([^\)]*\$params\[['"]filename['"]\]/;
 		
 		return patch.match(File.getContent(smarty));
