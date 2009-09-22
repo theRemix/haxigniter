@@ -38,9 +38,6 @@ class Smarty extends haxigniter.views.ViewEngine
 		// super() will set correct variables for templatePath and compiledPath
 		super(templatePath, compiledPath);
 
-		this.smartyEngine.template_dir = this.templatePath;
-		this.smartyEngine.compile_dir = this.compiledPath;
-		
 		this.cachePath = cachePath;
 		this.cacheId = cacheId;
 	}
@@ -73,6 +70,9 @@ class Smarty extends haxigniter.views.ViewEngine
 
 	public override function render(fileName : String) : String
 	{
+		this.smartyEngine.template_dir = this.templatePath;
+		this.smartyEngine.compile_dir = this.compiledPath;
+
 		return this.smartyEngine.fetch(fileName, this.cacheId);
 	}
 }

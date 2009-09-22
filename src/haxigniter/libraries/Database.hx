@@ -45,7 +45,7 @@ class DatabaseConnection
 	public var driver : DatabaseDriver;
 	public var debug : Bool;
 	
-	public var connection : Connection;	
+	public var connection(default, null) : Connection;	
 	
 	/**
 	 * Set this value to change the string which is replaced by a parameter when executing a query.
