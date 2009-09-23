@@ -42,21 +42,19 @@ class Smarty extends haxigniter.views.ViewEngine
 		this.cacheId = cacheId;
 	}
 
-	private function toPhpValue(value : Dynamic) : Dynamic
+	private inline function toPhpValue(value : Dynamic) : Dynamic
 	{
+		// TODO: This is only compatible with 2.05 or better.
+		/*
 		if(Std.is(value, Hash))
 			return Lib.associativeArrayOfHash(value);
-		else if(Std.is(value, Array))
-			return Lib.toPhpArray(value);
-		else if(Std.is(value, List))
-			return Lib.toPhpArray(Lambda.array(value));
 		else
+		*/
 			return value;
 	}
 
 	public override function assign(name : String, value : Dynamic) : Void
 	{
-		// TODO: This is only compatible with 2.05 or better.
 		this.smartyEngine.assign(name, this.toPhpValue(value));
 	}
 	
