@@ -19,8 +19,8 @@ class Controller implements haxe.rtti.Infos
 	public var view(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return application.view; }
 
-	public var DB(getDB, null) : DatabaseConnection;
-	private function getDB() : DatabaseConnection { return application.DB; }
+	public var db(getDb, null) : DatabaseConnection;
+	private function getDb() : DatabaseConnection { return application.db; }
 
 	public var session(getSession, null) : Session;
 	private function getSession() : Session { return application.session; }	

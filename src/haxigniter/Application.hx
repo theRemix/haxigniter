@@ -39,22 +39,22 @@ class Application
 		return this.my_controller;
 	}
 
-	public var DB(getDB, null) : DatabaseConnection;
-	private static var db : DatabaseConnection;
-	private function getDB() : DatabaseConnection
+	public var db(getDb, null) : DatabaseConnection;
+	private static var my_db : DatabaseConnection;
+	private function getDb() : DatabaseConnection
 	{
 		// Database is a resource-intensive object, so it's created on demand.
-		if(Application.db == null)
+		if(Application.my_db == null)
 		{
 			if(this.config.development)
-				Application.db = new DevelopmentConnection();
+				Application.my_db = new DevelopmentConnection();
 			else
-				Application.db = new OnlineConnection();
+				Application.my_db = new OnlineConnection();
 			
-			Application.db.open();
+			Application.my_db.open();
 		}
 		
-		return Application.db;
+		return Application.my_db;
 	}
 	
 	public var view(getView, null) : ViewEngine;
@@ -217,8 +217,8 @@ class Application
 	private function cleanup()
 	{
 		// Close database connection
-		if(this.controller.DB != null)
-			this.controller.DB.close();
+		if(this.controller.db != null)
+			this.controller.db.close();
 	}
 	
 	/**

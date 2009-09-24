@@ -22,8 +22,8 @@ class Model
 	public var config(getConfig, null) : Config;
 	private function getConfig() : Config { return application.config; }
 
-	public var DB(getDB, null) : DatabaseConnection;
-	private function getDB() : DatabaseConnection { return application.DB; }
+	public var db(getDb, null) : DatabaseConnection;
+	private function getDb() : DatabaseConnection { return application.db; }
 
 	//public var session(getSession, null) : Session;
 	//private function getSession() : Session { return application.session; }	

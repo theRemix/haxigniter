@@ -8,11 +8,11 @@ import php.db.ResultSet;
 import neko.db.ResultSet;
 #end
 
-class DBTools
+class DbTools
 {
 	public static function paginate(query : String, offset : Int, limit : Int, ?meta : { total: Int }, ?params : Iterable<Dynamic>, ?noCalcRows = false) : ResultSet
 	{
-		var db : DatabaseConnection = haxigniter.Application.instance().DB;
+		var db : DatabaseConnection = haxigniter.Application.instance().db;
 		var result : ResultSet;
 		
 		if(db.driver == DatabaseDriver.mysql && !noCalcRows && meta != null)
