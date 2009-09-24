@@ -11,7 +11,7 @@ class ControllerException extends haxigniter.exceptions.Exception {}
 class Controller implements haxe.rtti.Infos
 {
 	public var application(getApplication, null) : haxigniter.Application;
-	private function getApplication() : haxigniter.Application { return haxigniter.Application.instance; }
+	private function getApplication() : haxigniter.Application { return haxigniter.Application.instance(); }
 
 	public var config(getConfig, null) : Config;
 	private function getConfig() : Config { return application.config; }

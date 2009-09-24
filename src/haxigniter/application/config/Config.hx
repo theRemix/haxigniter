@@ -13,6 +13,11 @@ import neko.Web;
 
 class Config extends haxigniter.libraries.Config
 {
+	/* ================================================================= */
+	/* ===== Start of configuration settings =========================== */
+	/* ===== Do not edit anything above here =========================== */
+	/* ================================================================= */
+
 	private function new()
 	{
 		/*
@@ -20,21 +25,21 @@ class Config extends haxigniter.libraries.Config
 		| Development mode
 		|--------------------------------------------------------------------------
 		|
-		| Development mode is used to auto-detect many things in the system, like
-		| database connection, paths, etc. This setting should also be 
-		| auto-detected, so you can just upload the application to a live server
-		| and it should just work.
+		| Development mode is used to choose automatically between different 
+		| database connections, paths, etc. You should make this setting 
+		| auto-detecting, so you can upload the application to a live server 
+		| and it should work without changing anything.
 		|
-		| Here are a few examples for auto-detecting development mode:
+		| Here are a few examples how to auto-detect development mode:
 		|
 		| If you're on a Windows machine when developing and Linux when live:
-		|    this.development = Sys.getEnv('OS') == 'Windows_NT';
+		|    development = Sys.getEnv('OS') == 'Windows_NT';
 		|
 		| To test depending on host name: 
-		|    this.development = Web.getHostName() == 'localhost';
+		|    development = Web.getHostName() == 'localhost';
 		|
 		| Or IP address (PHP only):
-		|    this.development = Server.Param('SERVER_ADDR') == '127.0.0.1';
+		|    development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 		|
 		*/
 		development = Sys.getEnv('OS') == 'Windows_NT';
@@ -56,10 +61,10 @@ class Config extends haxigniter.libraries.Config
 		| the root of the web server, it will be just "index.php".
 		|
 		| If you are using mod_rewrite to remove the index page, set this variable 
-		| to the path only, or blank of in the root.
+		| to the path only, or blank if in the root.
 		| 
-		| NOTE: This is the only path that should be without a trailing and 
-		|       prepending slash!
+		| NOTE: This is the only path that should be without a prepending and 
+		|       trailing slash!
 		|
 		*/
 		#if php
@@ -283,22 +288,22 @@ class Config extends haxigniter.libraries.Config
 		| The Views are displayed by a ViewEngine, which is any class extending 
 		| the haxigniter.views.viewEngine class.
 		|
-		| Because the ViewEngine requires access to Config variables, the ViewEngine
-		| class cannot be instantiated here. A class name must be specified here.
-		| The two engines supplied by haXigniter are:
+		| The three engines supplied by haXigniter are:
 		|
-		| 	haxigniter.views.templo - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
-		|   haxigniter.views.haxeTemplate - haxe.Template (http://haxe.org/doc/cross/template)
+		| 	haxigniter.views.Templo - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
+		|   haxigniter.views.HaxeTemplate - haxe.Template (http://haxe.org/doc/cross/template)
+		|   haxigniter.views.Smarty - Smarty for PHP (http://smarty.net)
 		|
 		| If you want to use another template system, make a class extending
-		| haxigniter.views.viewEngine and specify it here.
+		| haxigniter.views.viewEngine and instantiate it here.
 		|		
 		*/
 		view = new haxigniter.views.Smarty();
 	}
 	
 	/* ================================================================= */
-	/* ===== End of configuration settings ============================= */
+	/* ===== End of configuration settings   =========================== */
+	/* ===== Do not edit anything below here =========================== */
 	/* ================================================================= */
 
 	private static var my_instance : Config;

@@ -8,6 +8,6 @@ class ItemsModel extends haxigniter.libraries.Model
 	{
 		var sql = 'SELECT * FROM items WHERE id=?';
 		
-		return haxigniter.Application.instance.DB.queryRow(sql, [id.toInt()]);
+		return haxigniter.Application.instance().DB.queryRow(sql, [id.toInt()]);
 	}	
 }

@@ -89,7 +89,7 @@ class Url
 	public static function redirect(?url : String = null, ?flashMessage : String = null, ?https : Bool = null, ?responseCode : Int = null)
 	{
 		if(flashMessage != null)
-			Application.instance.session.flashVar = flashMessage;
+			Application.instance().session.flashVar = flashMessage;
 
 		if(responseCode != null)
 			Web.setReturnCode(responseCode);
@@ -122,7 +122,7 @@ class Url
 			return;
 		#end
 		
-		Url.redirect(null, Application.instance.session.flashVar, ssl);
+		Url.redirect(null, Application.instance().session.flashVar, ssl);
 	}
 	
 	/////////////////////////////////////////////////////////////////

@@ -82,7 +82,8 @@ class Application
 	
 	///// Static vars ///////////////////////////////////////////////
 
-	public static var instance = new Application();
+	private static var my_instance : Application = new Application();
+	public static function instance() : Application { return my_instance; }
 
 	private static var defaultController : String = 'start';
 	private static var defaultMethod : String = 'index';
@@ -94,18 +95,18 @@ class Application
 
 	public static function main()
 	{
-		if(Application.instance.config.development)
+		if(Application.instance().config.development)
 		{
 			// Run the haXigniter unit tests and the application.
 			Application.runTests();
-			Application.instance.run(Url.segments);
+			Application.instance().run(Url.segments);
 		}
 		else
 		{
 			// TODO: When rethrow is fixed, factorize this code to Application.instance.run()
 			try
 			{
-				Application.instance.run(Url.segments);
+				Application.instance().run(Url.segments);
 			}
 			catch(controller : ControllerException)
 			{

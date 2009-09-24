@@ -19,7 +19,7 @@ class Integrity
 	
 	public function new()
 	{
-		this.config = haxigniter.Application.instance.config;
+		this.config = haxigniter.Application.instance().config;
 		this.testMethodPrefix = 'test';
 	}
 	
