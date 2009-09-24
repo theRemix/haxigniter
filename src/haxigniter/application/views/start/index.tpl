@@ -13,4 +13,8 @@ The habitants are:
 			{/if}
 		</li>
 	{/foreach}
+	<hr>
+	{foreach from=$who item=me}
+		{$me}<br>
+	{/foreach}
 </ul>

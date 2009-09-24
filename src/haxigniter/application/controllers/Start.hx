@@ -2,6 +2,9 @@ package haxigniter.application.controllers;
 
 import haxigniter.types.TypeFactory;
 import haxigniter.application.models.ItemsModel;
+import php.Lib;
+
+class Smart implements Dynamic { public function new() { } }
 
 class Start extends haxigniter.libraries.Controller
 {
@@ -13,19 +16,38 @@ class Start extends haxigniter.libraries.Controller
 		{
 			this.session.age = id.toInt();
 			this.session.anything = 'nice';
+
+			var item : Dynamic = ItemsModel.item(id);
+			this.trace(item);
 		}
 		
-		var item : Dynamic = ItemsModel.item(id);
-		this.trace(item);
-
 		var users = new List<Dynamic>();
-		users.add( { name: 'Boris', age: this.session.age } );
-		users.add( { name: 'Doris', age: 15 } );
+		var u1 = new Smart();
+		var u2 = new Smart();
+		
+		var me = ['very', 'nice', 1, 2, 3];
+		
+		u1.name = 'Boris';
+		u1.age = 20;
 
+		/*
+		for(field in Reflect.fields(u1))
+		{
+			trace(Reflect.field(u1, field));
+		}
+		*/
+
+		u2.name = 'Doris';
+		u2.age = 15;
+
+		users.add(u1);
+		users.add(u2);
+		
 		this.view.assign('name', 'Hällnäs');
 		this.view.assign('users', users);
+		this.view.assign('who', me);
 
-		this.view.display('start/index.mtt');
+		this.view.display('start/index.tpl');
 		
 		return;
 		
