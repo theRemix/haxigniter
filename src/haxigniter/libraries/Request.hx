@@ -4,7 +4,15 @@ import Type;
 import haxigniter.types.TypeFactory;
 import haxigniter.rtti.RttiUtil;
 import haxigniter.libraries.Controller;
+import haxigniter.libraries.RestController;
 
+#if php
+import php.Web;
+#elseif neko
+import neko.Web;
+#end
+
+class RequestException extends haxigniter.exceptions.Exception {}
 class NotFoundException extends haxigniter.exceptions.Exception {}
 
 class Request
@@ -27,11 +35,102 @@ class Request
 	
 	public static function fromArray(uriSegments : Array<String>) : Dynamic
 	{
-		var controllerClass : String = (uriSegments[0] == null || uriSegments[0] == '') ? defaultController : uriSegments[0];
-		var controllerMethod : String = (uriSegments[1] == null) ? defaultMethod : uriSegments[1];
+		var controller : Controller = createController(uriSegments);
 		
-		var controller : Controller;
+		if(Std.is(controller, RestController))
+			return restfulController(controller, uriSegments);
+		else
+			return standardController(controller, uriSegments);
+	}
+		
+	/////////////////////////////////////////////////////////////////
 
+	private static function standardController(controller : Controller, uriSegments : Array<String>)
+	{
+		var controllerType = Type.getClass(controller);
+		var controllerMethod : String = (uriSegments[1] == null) ? defaultMethod : uriSegments[1];
+
+		var method : Dynamic = Reflect.field(controller, controllerMethod);
+		if(method == null)
+			throw new NotFoundException(controllerType + ' method "' + controllerMethod + '" not found.');
+
+		// Typecast the arguments.
+		var arguments : Array<Dynamic> = typecastArguments(controllerType, controllerMethod, uriSegments.slice(2));
+		
+		return Reflect.callMethod(controller, method, arguments);
+	}
+
+	private static function restfulController(controller : Controller, uriSegments : Array<String>)
+	{
+		var action : String = null;
+		var args : Array<Dynamic> = [];
+		var typecastId = false;
+		
+		// TODO: Multiple languages for reserved keywords
+		if(Web.getMethod() == 'GET')
+		{
+			if(uriSegments.length <= 1)
+				action = 'index';
+			else if(uriSegments[1] == 'new')
+				action = 'make'; // Sorry, cannot use new.
+			else
+			{
+				if(uriSegments[2] == 'edit')
+					action = 'edit';
+				else if(uriSegments[2] == 'delete')
+					action = 'destroy';
+				else
+				{
+					// TODO: Is this catch-all good?
+					action = 'show';
+				}
+
+				// Id is the only argument.
+				args.push(uriSegments[1]);
+				
+				typecastId = true;
+			}
+		}
+		else if(Web.getMethod() == 'POST')
+		{
+			if(uriSegments.length <= 1)
+			{
+				action = 'create';
+				args.push(Web.getParams());
+			}
+			else
+			{
+				action = 'update';
+				args.push(uriSegments[1]);
+				args.push(Web.getParams());
+				
+				typecastId = true;
+			}
+		}
+		else
+		{
+			throw new RequestException('Unsupported HTTP method: ' + Web.getMethod());
+		}
+		
+		var controllerType = Type.getClass(controller);
+		
+		var method : Dynamic = Reflect.field(controller, action);
+		if(method == null)
+			throw new NotFoundException(controllerType + ' RESTful action "' + action + '" not found.');
+
+		if(typecastId)
+		{
+			// Typecast the first argument.
+			var methodArgs = RttiUtil.getMethod(action, controllerType);
+			args[0] = TypeFactory.createType(methodArgs.first().type, args[0]);
+		}
+		
+		return Reflect.callMethod(controller, method, args);
+	}
+	
+	private static function createController(uriSegments : Array<String>) : Controller
+	{
+		var controllerClass : String = (uriSegments[0] == null || uriSegments[0] == '') ? defaultController : uriSegments[0];
 		controllerClass = defaultNamespace + '.' + controllerClass.substr(0, 1).toUpperCase() + controllerClass.substr(1);
 		
 		// Instantiate a controller with this class name.
@@ -40,19 +139,8 @@ class Request
 			throw new NotFoundException(controllerClass + ' not found. (Is it defined in application/config/Controllers.hx?)');
 		
 		// TODO: Controller arguments?
-		controller = cast Type.createInstance(classType, []);
-
-		var method : Dynamic = Reflect.field(controller, controllerMethod);
-		if(method == null)
-			throw new NotFoundException(controllerClass + ' method "' + controllerMethod + '" not found.');
-
-		// Typecast the arguments.
-		var arguments : Array<Dynamic> = typecastArguments(classType, controllerMethod, uriSegments.slice(2));
-		
-		return Reflect.callMethod(controller, method, arguments);
+		return cast Type.createInstance(classType, []);
 	}
-		
-	/////////////////////////////////////////////////////////////////
 	
 	/**
 	* Cast arguments to controller (from Uri) to correct type, throwing TypeException if typecast fails.

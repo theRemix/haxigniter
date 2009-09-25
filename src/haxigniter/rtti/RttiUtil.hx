@@ -10,9 +10,19 @@ typedef CArgument = {
 
 class RttiUtil
 {
-	public static function getMethods(classType : Class<Dynamic>) : Hash<List<CArgument>>
+	public static function getMethod(name : String, classType : Class<Dynamic>) : List<CArgument>
 	{
-		var output = new Hash<List<CArgument>>();		
+		var methods = getMethods(classType, name);
+		
+		if(!methods.keys().hasNext())
+			return null;
+		
+		return methods.get(name);
+	}
+
+	public static function getMethods(classType : Class<Dynamic>, ?methodName : String) : Hash<List<CArgument>>
+	{
+		var output = new Hash<List<CArgument>>();
 
 		// Find class declaration and all functions in it.
 		switch(getTypeTree(classType))
@@ -20,6 +30,9 @@ class RttiUtil
 			case TClassdecl(cl):
 				for(f in cl.fields)
 				{
+					if(methodName != null && f.name != methodName)
+						continue;
+					
 					switch(f.type)
 					{
 						// Test if field is a function
