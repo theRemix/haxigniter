@@ -20,7 +20,7 @@ class DevelopmentConnection extends DatabaseConnection
 		this.host = 'localhost';
 		this.user = 'root';
 		this.pass = '';
-		this.database = 'selfimprove';
+		this.database = '';
 		this.driver = DatabaseDriver.mysql; // Can also be sqlite, then Database will be used as filename.
 		this.debug = true; // Displays debug information on database/query errors
 		this.port = 3306;
