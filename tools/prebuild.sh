@@ -11,8 +11,7 @@ mkdir -p $OUTPUT
 # ----- .htaccess --------------------------------------------------
 
 # Copy .htaccess to lib folder
-rsync -a ../src/.htaccess ../bin/www/lib/
-#robocopy /NJH /NJS ../src ../bin/www/lib .htaccess
+rsync -a $BASEPATH/../src/.htaccess $BASEPATH/../bin/www/lib/
 
 # ----- Runtime ----------------------------------------------------
 
