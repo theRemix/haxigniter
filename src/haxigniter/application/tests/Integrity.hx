@@ -2,7 +2,7 @@
 
 /**
  * This is a template for your own integrity tests.
- * Browse to /start/integrity to run the tests.
+ * For the default application, browse to dev/integrity/password to run the tests.
  */
 class Integrity extends haxigniter.tests.Integrity
 {
@@ -11,8 +11,8 @@ class Integrity extends haxigniter.tests.Integrity
 	{
 		printHeader('Logic tests');
 		
-		title.value = 'Test if not false is true';
-		return !false == true;
+		title.value = 'true != false';
+		return true != false;
 	}
 
 	public function new() {	super(); }

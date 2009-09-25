@@ -6,7 +6,14 @@ import haxigniter.libraries.Database;
 import haxigniter.application.config.Session;
 import haxigniter.libraries.Debug;
 
-class ControllerException extends haxigniter.exceptions.Exception {}
+/**
+ * If you want your controller to handle its request processing by itself, 
+ * implement this interface and you will have full control.
+ */
+interface CustomRequest
+{
+	function customRequest(uriSegments : Array<String>) : Dynamic;
+}
 
 class Controller implements haxe.rtti.Infos
 {

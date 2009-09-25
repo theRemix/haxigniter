@@ -1,14 +1,31 @@
-<h2>Welcome to ::application::</h2>
+<html>
+<head>
+<style type="text/css">
+body {
+	font-family: Verdana, Arial, Sans-serif;
+	font-size: 12px;
+}
+</style>	
+</head>
+<body>
+	<h2>Welcome to ::application::</h2>
 
-::if (id != null)::
-	<p>Looks like the id was "::id::".</p>
-::else::
-	<p>You didn't enter any id. Here's a <a href="::link::start/index/123">free one</a>!</p>
-::end::
+	<p>
+	::if (id != null)::
+		Looks like the id was "::id::".
+	::else::
+		You didn't enter an id. Here's a <a href="::link::start/123">good one</a>!
+	::end::
+	</p>
 
-<form method="POST" action="::link::start/234">
-	<input type="text" name="name" value=""/><br/>
-	<input type="hidden" name="email" value="toughguy@energyhouse.se"/>
-	<input type="hidden" name="status" value="OK"/>
-	<input type="submit"/>
-</form>
+	<form method="POST" action="::link::start">
+		<span style="padding:10px; border:1px solid gray; background-color:#ddd;">
+			Name: <input type="text" name="name" value=""/>
+			<input type="hidden" name="hiddenValue" value="OK"/>
+			<input type="submit" value="Post some data" />
+		</span>
+	</form>
+
+	<p><a href="::link::dev/integrity/password">Run integrity tests</a> for the application.</p>
+</body>
+</html>

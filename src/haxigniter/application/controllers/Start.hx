@@ -1,67 +1,30 @@
 package haxigniter.application.controllers;
 
-import haxigniter.types.TypeFactory;
-import haxigniter.application.models.ItemsModel;
-import php.Lib;
-
 class Start extends haxigniter.libraries.RestController
 {
-	public function update(id : DbID, posted : Hash<String>)
+	public function new()
 	{
-		trace('Update '+id+'<br>');
-		this.trace(posted);
-	}
-
-	public function create(posted : Hash<String>)
-	{
-		trace('Create<br>');
-		this.trace(posted);
-	}
-
-	public function destroy(id : DbID)
-	{
-		trace('Destroy ' + id.toInt());
-	}
-
-	public function edit(id : DbID)
-	{
-		trace('Edit ' + id.toInt());
-	}
-
-	public function show(id : DbID)
-	{
-		trace('SHOW ME ' + id.toInt());
-	}
-	
-	public function make()
-	{
-		Lib.print('make a new one.');
+		// Some default view assignments for every page
+		this.view.assign('application', 'haXigniter');
+		this.view.assign('link', haxigniter.libraries.Url.siteUrl());
 	}
 	
 	public function index()
 	{
-		this.view.assign('id', 12345);
-		this.view.assign('application', 'haXigniter');
-		this.view.assign('link', haxigniter.libraries.Url.siteUrl());
-		
-		this.view.display('start/index.mtt');
-	}
-		
-	/**
-	 * Run integrity tests, good when rolling out application for the first time.
-	 * @param	password default password is 'dev'. Change when deployed.
-	 */
-	public function integrity(password = '')
-	{
-		if(config.development || password == 'dev')
-			new haxigniter.application.tests.Integrity().run();
+		// Displays 'start/index.mtt' (className/method, extension is from the ViewEngine.)
+		this.view.displayDefault(); 
 	}
 
-	#if php
-	public function phpinfo()
+	public function show(id : Int)
 	{
-		if(config.development)
-			untyped __php__("phpinfo();");
+		this.view.assign('id', id);
+		this.view.display('start/index.mtt');
 	}
-	#end
+	
+	public function create(posted : Hash<String>)
+	{
+		// this.trace() gives a nicer trace output.
+		this.trace(posted);
+		this.view.display('start/index.mtt');
+	}
 }

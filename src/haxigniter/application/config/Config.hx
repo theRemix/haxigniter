@@ -42,7 +42,7 @@ class Config extends haxigniter.libraries.Config
 		|    development = Server.Param('SERVER_ADDR') == '127.0.0.1';
 		|
 		*/
-		development = Sys.getEnv('OS') == 'Windows_NT';
+		development = Web.getHostName() == 'localhost';
 
 		/* ===================================================================== */
 		/* === Paths ============================================================*/
@@ -148,31 +148,6 @@ class Config extends haxigniter.libraries.Config
 
 		/*
 		|--------------------------------------------------------------------------
-		| Default Language
-		|--------------------------------------------------------------------------
-		|
-		| This determines which set of language files should be used. Make sure
-		| there is an available translation if you intend to use something other
-		| than english.
-		|
-		*/
-		// TODO: Multiple languages
-		//language = 'english';
-
-		/*
-		|--------------------------------------------------------------------------
-		| Default Character Set
-		|--------------------------------------------------------------------------
-		|
-		| This determines which character set is used by default in various methods
-		| that require a character set to be provided.
-		|
-		*/
-		// TODO: Charset handling
-		//charset = 'UTF-8';
-
-		/*
-		|--------------------------------------------------------------------------
 		| Allowed URL Characters
 		|--------------------------------------------------------------------------
 		|
@@ -190,7 +165,7 @@ class Config extends haxigniter.libraries.Config
 		| DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 		|
 		*/
-		permittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
+		permittedUriChars = 'a-z 0-9~%.:_-';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -217,22 +192,11 @@ class Config extends haxigniter.libraries.Config
 		| Date Format for Logs
 		|--------------------------------------------------------------------------
 		|
-		| Each item that is logged has an associated date. You can use PHP strftime
+		| Each item that is logged has an associated date. You can use strftime
 		| codes to set your own date formatting.
 		|
 		*/
 		logDateFormat = '%Y-%m-%d %H:%M:%S';
-
-		/*
-		|--------------------------------------------------------------------------
-		| Encryption Key
-		|--------------------------------------------------------------------------
-		|
-		| If you use the Encryption class or the Sessions class with encryption
-		| enabled you MUST set an encryption key.  See the user guide for info.
-		|
-		*/
-		encryptionKey = '';
 
 		/*
 		|--------------------------------------------------------------------------
@@ -320,3 +284,42 @@ class Config extends haxigniter.libraries.Config
 		return my_instance;
 	}
 }
+
+// Things to do:
+
+/*
+|--------------------------------------------------------------------------
+| Default Language
+|--------------------------------------------------------------------------
+|
+| This determines which set of language files should be used. Make sure
+| there is an available translation if you intend to use something other
+| than english.
+|
+*/
+// TODO: Multiple languages
+//language = 'english';
+
+/*
+|--------------------------------------------------------------------------
+| Default Character Set
+|--------------------------------------------------------------------------
+|
+| This determines which character set is used by default in various methods
+| that require a character set to be provided.
+|
+*/
+// TODO: Charset handling
+//charset = 'UTF-8';
+
+/*
+|--------------------------------------------------------------------------
+| Encryption Key
+|--------------------------------------------------------------------------
+|
+| If you use the Encryption class or the Sessions class with encryption
+| enabled you MUST set an encryption key.  See the user guide for info.
+|
+*/
+// TODO: Encryption support (+encrypted cookies)
+//encryptionKey = '';

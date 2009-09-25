@@ -17,6 +17,8 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 	
 	public function new(templatePath : String = null)
 	{
+		this.templateExtension = 'mtt';
+		
 		super(templatePath, null);
 		this.templateVars = new HaxeTemplateVars();
 	}

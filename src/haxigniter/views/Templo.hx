@@ -13,6 +13,8 @@ class Templo extends haxigniter.views.ViewEngine
 	
 	public function new(?macros : String = null, ?optimized : Bool = false, templatePath : String = null, compiledPath : String = null)
 	{
+		this.templateExtension = 'mtt';
+		
 		// super() will set correct variables for TemplatePath and CompiledPath
 		super(templatePath, compiledPath);
 		

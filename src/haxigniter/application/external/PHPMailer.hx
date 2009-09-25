@@ -3,6 +3,10 @@ package haxigniter.application.external;
 
 import haxigniter.Application;
 
+/**
+ * How to use: Put the PHPMailer files in an application/external/phpmailer folder.
+ * Then haxigniter.application.external.PHPMailer works just like any other haXe class.
+ */
 extern class PHPMailer 
 {
 	public static function __init__() : Void

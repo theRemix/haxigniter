@@ -1,6 +1,7 @@
 ﻿package haxigniter.views;
 
 #if php
+import haxe.PosInfos;
 import php.Lib;
 #elseif neko
 import neko.Lib;
@@ -13,9 +14,13 @@ import haxigniter.libraries.Server;
  * This is an abstract class which is the base of the views of haXigniter.
  * The following methods needs to be implemented:
  * 
- * Assign(name : String, value : Dynamic)
- * ClearAssign(name : String)
- * Render(content : String)
+ * assign(name : String, value : Dynamic)
+ * clearAssign(name : String)
+ * render(content : String)
+ * 
+ * And this var must be set:
+ * 
+ * templateExtension : String
  * 
  */
 class ViewEngine
@@ -24,6 +29,11 @@ class ViewEngine
 	// TODO: Auto-assigning of variables for each request
 	public var templatePath : String;
 	public var compiledPath : String;
+	
+	/**
+	 * Template file extension, without dot. Used in displayDefault().
+	 */
+	public var templateExtension : String;
 	
 	private function new(templatePath : String = null, compiledPath : String = null)
 	{
@@ -58,5 +68,16 @@ class ViewEngine
 	public function display(fileName : String) : Void
 	{
 		Lib.print(this.render(fileName));
+	}
+	
+	/**
+	 * Uses information from the last called method to display a view.
+	 * It displays the view "classname/method.EXT" where EXT is templateExtension. All lowercase.
+	 * @param	?pos Information about last called method, usually this should be left blank.
+	 */
+	public function displayDefault(?pos : PosInfos) : Void
+	{
+		var className = pos.className.substr(pos.className.lastIndexOf('.')+1).toLowerCase();
+		this.display(className + '/' + pos.methodName + '.' + this.templateExtension);
 	}
 }

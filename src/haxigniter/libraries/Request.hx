@@ -17,8 +17,8 @@ class NotFoundException extends haxigniter.exceptions.Exception {}
 
 class Request
 {
-	private static var defaultController : String = 'start';
-	private static var defaultMethod : String = 'index';
+	public static var defaultController : String = 'start';
+	public static var defaultMethod: String = 'index';
 	
 	private static var defaultNamespace : String = 'haxigniter.application.controllers';
 
@@ -38,17 +38,19 @@ class Request
 		var controller : Controller = createController(uriSegments);
 		
 		if(Std.is(controller, RestController))
-			return restfulController(controller, uriSegments);
+			return Request.restfulController(controller, uriSegments);
+		else if(Std.is(controller, CustomRequest))
+			return Request.customController(controller, uriSegments);
 		else
-			return standardController(controller, uriSegments);
+			return Request.standardController(controller, uriSegments);
 	}
 		
 	/////////////////////////////////////////////////////////////////
 
-	private static function standardController(controller : Controller, uriSegments : Array<String>)
+	private static function standardController(controller : Controller, uriSegments : Array<String>) : Dynamic
 	{
 		var controllerType = Type.getClass(controller);
-		var controllerMethod : String = (uriSegments[1] == null) ? defaultMethod : uriSegments[1];
+		var controllerMethod : String = (uriSegments[1] == null) ? Request.defaultMethod : uriSegments[1];
 
 		var method : Dynamic = Reflect.field(controller, controllerMethod);
 		if(method == null)
@@ -60,7 +62,7 @@ class Request
 		return Reflect.callMethod(controller, method, arguments);
 	}
 
-	private static function restfulController(controller : Controller, uriSegments : Array<String>)
+	private static function restfulController(controller : Controller, uriSegments : Array<String>) : Dynamic
 	{
 		var action : String = null;
 		var args : Array<Dynamic> = [];
@@ -81,7 +83,7 @@ class Request
 					action = 'destroy';
 				else
 				{
-					// TODO: Is this catch-all good?
+					// TODO: Catch all or throw exception on extra arguments?
 					action = 'show';
 				}
 
@@ -127,6 +129,16 @@ class Request
 		
 		return Reflect.callMethod(controller, method, args);
 	}
+
+	private static function customController(controller : Controller, uriSegments : Array<String>) : Dynamic
+	{
+		// Simple, since the controller handles everything.
+		var custom = cast(controller, CustomRequest);
+		
+		return custom.customRequest(uriSegments);
+	}
+
+	/////////////////////////////////////////////////////////////////
 	
 	private static function createController(uriSegments : Array<String>) : Controller
 	{
