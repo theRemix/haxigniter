@@ -1,10 +1,6 @@
 ﻿#if php
 package haxigniter.views;
 
-import php.Lib;
-import php.NativeArray;
-import Type;
-
 /**
  * IMPORTANT NOTE: For smarty to work in haXe, you need to make a small adjustment to the file "internals/core.write_file.php".
  * You need to change this line:
@@ -44,7 +40,7 @@ class Smarty extends haxigniter.views.ViewEngine
 		// TODO: This is only compatible with 2.05 or better.
 		/*
 		if(Std.is(value, Hash))
-			return Lib.associativeArrayOfHash(value);
+			return php.Lib.associativeArrayOfHash(value);
 		else
 		*/
 			return value;

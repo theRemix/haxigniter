@@ -1,7 +1,5 @@
 package haxigniter.libraries;
 
-import haxigniter.libraries.Controller;
-
 /**
  * Use this class instead of Controller to get a Ruby on Rails-inspired RESTful approach.
  * "classname" is your controller class, "ID" is any identifier that will be casted to the type T of your choice.
@@ -26,4 +24,4 @@ import haxigniter.libraries.Controller;
  * http://www.softiesonrails.com/search?q=Rest+101%3A+Part
  * 
  */
-class RestController extends Controller {}
+class RestController extends haxigniter.libraries.Controller {}

@@ -1,15 +1,11 @@
 package haxigniter.libraries;
 
-import haxigniter.Application;
-
 import haxigniter.libraries.Debug;
-
-import haxigniter.application.config.Config;
 import haxigniter.libraries.Controller;
 import haxigniter.libraries.Database;
-import haxigniter.application.config.Session;
 
-class ModelException extends haxigniter.exceptions.Exception {}
+import haxigniter.application.config.Config;
+import haxigniter.application.config.Session;
 
 class Model
 {

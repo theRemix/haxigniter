@@ -5,6 +5,9 @@ package haxigniter.types;
 * well-formed, typecased types and classes. The work is done in the class WebTypes.
 */
 
+/**
+ * Example class that only accepts integers > 0. Useful for database ids.
+ */
 class DbID
 {
 	public function toInt() { return intValue; }

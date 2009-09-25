@@ -8,8 +8,6 @@ import haxigniter.libraries.Debug;
 import haxigniter.libraries.Database;
 import haxigniter.libraries.Request;
 
-// This important package imports all application controllers so they will be referenced by the compiler.
-// See application/config/Config.hx for more info.
 import haxigniter.application.config.Controllers;
 import haxigniter.application.config.Session;
 import haxigniter.application.config.Database;
@@ -37,9 +35,7 @@ class Application
 			if(this.config.development)
 				Application.my_db = new DevelopmentConnection();
 			else
-				Application.my_db = new OnlineConnection();
-			
-			Application.my_db.open();
+				Application.my_db = new OnlineConnection();			
 		}
 		
 		return Application.my_db;

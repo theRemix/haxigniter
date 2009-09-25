@@ -2,6 +2,7 @@
 
 class Input 
 {
+	#if php
 	public static inline function post(param : String) : String
 	{
 		try
@@ -25,9 +26,5 @@ class Input
 			return null;
 		}		
 	}
-	
-	public static inline function ipAddress() : String
-	{
-		return haxigniter.libraries.Server.param('REMOTE_ADDR');
-	}
+	#end
 }

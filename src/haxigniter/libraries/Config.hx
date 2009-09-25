@@ -1,9 +1,8 @@
 package haxigniter.libraries; 
 
 import haxigniter.libraries.Debug;
-import haxigniter.views.ViewEngine;
-
 import haxigniter.libraries.Server;
+import haxigniter.views.ViewEngine;
 
 #if php
 import php.Web;

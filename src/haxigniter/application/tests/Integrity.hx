@@ -9,9 +9,9 @@ class Integrity extends haxigniter.tests.Integrity
 	// Integrity test template method
 	public function testLogic(title : { value : String }) : Bool
 	{
-		printHeader('Logic tests');
-		
+		printHeader('Logic tests - Template class (application/tests/Integrity.hx)');
 		title.value = 'true != false';
+		
 		return true != false;
 	}
 

@@ -68,6 +68,7 @@ class RttiUtil
 		return output;
 	}	
 
+	// Borrowed from caffeine-hx
 	public static function typeName(type : CType, opt : Bool) : String 
 	{
 		switch(type)

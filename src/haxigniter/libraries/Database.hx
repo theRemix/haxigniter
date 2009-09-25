@@ -81,11 +81,19 @@ class DatabaseConnection
 			this.connection = null;
 		}
 	}
+	
+	private inline function testOpen() : Void
+	{
+		if(this.connection == null)
+			this.open();
+	}
 
 	///// Query methods /////////////////////////////////////////////
 	
 	public function query(query : String, ?params : Iterable<Dynamic>) : ResultSet
 	{
+		this.testOpen();
+		
 		if(params != null)
 			query = this.queryParams(query, params);
 		
@@ -121,6 +129,7 @@ class DatabaseConnection
 	
 	public function insert(table : String, data : Hash<Dynamic>, ?replace = false) : Int
 	{
+		this.testOpen();
 		this.testAlphaNumeric(table);
 		
 		var keys = '';
@@ -147,6 +156,7 @@ class DatabaseConnection
 	
 	public function update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int) : Int
 	{
+		this.testOpen();
 		this.testAlphaNumeric(table);
 		
 		var set = '';
@@ -183,6 +193,7 @@ class DatabaseConnection
 	
 	public function delete(table : String, ?where : Hash<Dynamic>, ?limit : Int) : Int
 	{
+		this.testOpen();
 		this.testAlphaNumeric(table);
 		
 		var whereStr = '';

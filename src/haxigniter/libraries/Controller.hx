@@ -1,10 +1,11 @@
 package haxigniter.libraries;
 
 import haxigniter.libraries.Config;
-import haxigniter.views.ViewEngine;
 import haxigniter.libraries.Database;
-import haxigniter.application.config.Session;
 import haxigniter.libraries.Debug;
+
+import haxigniter.views.ViewEngine;
+import haxigniter.application.config.Session;
 
 /**
  * If you want your controller to handle its request processing by itself, 

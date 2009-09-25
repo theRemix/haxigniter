@@ -12,7 +12,7 @@ class Start extends haxigniter.libraries.RestController
 	public function index()
 	{
 		// Displays 'start/index.mtt' (className/method, extension is from the ViewEngine.)
-		this.view.displayDefault(); 
+		this.view.displayDefault();		
 	}
 
 	public function show(id : Int)

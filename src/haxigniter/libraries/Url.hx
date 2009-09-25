@@ -136,7 +136,7 @@ class Url
 		
 		if(!validUrl.match(uri))
 		{
-			// TODO: Localize?
+			// TODO: Multiple languages
 			throw new haxigniter.exceptions.Exception('The URI you submitted has disallowed characters.');
 		}
 	}

@@ -67,7 +67,8 @@ class Integrity
 		#if php
 		return untyped __call__('is_writable', path);
 		#elseif neko
-		trace('isWritable() mock<br>');
+		// TODO: Implement neko version of is_writable()
+		trace("isWritable() mock - do not trust this value<br>");
 		return true;
 		#end
 	}

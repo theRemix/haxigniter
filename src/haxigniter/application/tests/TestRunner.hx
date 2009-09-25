@@ -1,7 +1,5 @@
 package haxigniter.application.tests;
 
-import haxigniter.libraries.Debug;
-
 class TestRunner extends haxigniter.tests.TestRunner
 {
 	/**

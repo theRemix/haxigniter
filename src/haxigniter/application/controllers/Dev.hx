@@ -5,7 +5,7 @@ import haxigniter.libraries.Server;
 class Dev extends haxigniter.libraries.Controller
 {
 	/**
-	 * Run integrity tests, good when rolling out application for the first time.
+	 * Run integrity tests, useful when rolling out application for the first time.
 	 * @param	password default password is 'password'. Please change it.
 	 */
 	public function integrity(password = '')

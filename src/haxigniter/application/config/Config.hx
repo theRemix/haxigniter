@@ -1,7 +1,6 @@
 package haxigniter.application.config;
 
-import haxigniter.libraries.Debug; 
-import haxigniter.libraries.Server;
+import haxigniter.libraries.Debug;
 
 #if php
 import php.Sys;
@@ -207,7 +206,7 @@ class Config extends haxigniter.libraries.Config
 		| when things go wrong.
 		|
 		| If you want to call a controller as an error page, set it here. For 
-		| example "site/error". No redirection will be made.
+		| example "site/error".
 		|
 		| If it's set to null, the template in application/views/error.html will
 		| be used for display, with a generic error message.
@@ -224,8 +223,7 @@ class Config extends haxigniter.libraries.Config
 		| error page (not found error). Correct headers are sent automatically.
 		|
 		| If you want to call a controller as an error page, set it here. For 
-		| example "site/error404". No redirection will be made to keep the header
-		| intact.
+		| example "site/error404".
 		|
 		| If it's set to null, the template in application/views/error.html will
 		| be used for display, with a generic error 404 message.
@@ -241,6 +239,7 @@ class Config extends haxigniter.libraries.Config
 
 	/*
 	 * Instantiate objects here that depends on the configuration settings above.
+	 * (To avoid circular dependencies in the constructor.)
 	 */
 	private function newObjects()
 	{
