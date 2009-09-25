@@ -1,5 +1,6 @@
 ﻿package haxigniter.libraries;
 
+// TODO: Fix this class and make it neko-compatible.
 class Input 
 {
 	#if php

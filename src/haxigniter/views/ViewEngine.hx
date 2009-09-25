@@ -1,7 +1,8 @@
 ﻿package haxigniter.views;
 
-#if php
 import haxe.PosInfos;
+
+#if php
 import php.Lib;
 #elseif neko
 import neko.Lib;

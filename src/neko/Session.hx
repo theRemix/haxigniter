@@ -211,9 +211,16 @@ class Session
 	private static function commit()
 	{
 		if( !started ) return;
-		var w = neko.io.File.write(savePath + id + ".sess", true);
-		w.writeString( haxe.Serializer.run( sessionData ) );
-		w.close();
+		try
+		{
+			var w = neko.io.File.write(savePath + id + ".sess", true);
+			w.writeString( haxe.Serializer.run( sessionData ) );
+			w.close();
+		}
+		catch(e : Dynamic)
+		{
+			// Session is gone, ignore it.
+		}
 	}
 	
 	public static function close(?forceCommit = false)

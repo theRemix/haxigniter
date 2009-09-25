@@ -22,5 +22,9 @@ page where you can experiment further.
 5. If you're using FlashDevelop, there is a project file for your convenience: 
 "src/haxigniter.hxproj".
 
+6. The next thing to do is to look at the files in 
+"src/haxigniter/application/controllers" for an explanation how to call the 
+controllers.
+
 Good luck! Questions, comments, ideas, contributions, anything, mail to 
 haxigniter [AT] gmail [DOT] com.

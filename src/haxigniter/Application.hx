@@ -170,8 +170,8 @@ class Application
 	{
 		if(Application.my_session != null)
 		{
-			sessionLib.set(sessionName, Application.my_session);
-			sessionLib.close();
+			SessionLib.set(sessionName, Application.my_session);
+			SessionLib.close();
 		}
 	}
 	#end

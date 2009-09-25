@@ -67,15 +67,48 @@ class Integrity
 		#if php
 		return untyped __call__('is_writable', path);
 		#elseif neko
-		// TODO: Implement neko version of is_writable()
-		trace("isWritable() mock - do not trust this value<br>");
-		return true;
+		if(StringTools.endsWith(path, '/'))
+			path = path.substr(0, path.length-1);
+
+		if(!FileSystem.exists(path)) return false;
+		
+		switch(FileSystem.kind(path))
+		{
+			case FileKind.kfile:
+				try
+				{
+					File.append(path, true).close();
+					return true;
+				}
+				catch(e : Dynamic)
+				{
+					return false;
+				}
+			
+			case FileKind.kdir:	
+				try
+				{
+					var test = File.write(path + '/__isWritableNekoTest.tmp', true);
+					test.writeString('');
+					test.close();
+					
+					FileSystem.deleteFile(path + '/__isWritableNekoTest.tmp');
+					return true;
+				}
+				catch(e : Dynamic)
+				{
+					return false;
+				}
+			
+			default:
+				throw 'isWritable(): Only files and directories are supported.';
+		}
 		#end
 	}
 	
 	/////////////////////////////////////////////////////////////////
 	
-	public function testCachePath(title : { value : String }) : Bool
+	public function test1(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] Directory access');
 		
@@ -83,19 +116,19 @@ class Integrity
 		return this.isWritable(config.cachePath);
 	}
 
-	public function testLogPath(title : { value : String }) : Bool
+	public function test2(title : { value : String }) : Bool
 	{
 		title.value = 'Log path <b>"' + config.logPath + '"</b> exists and is writable';
 		return this.isWritable(config.logPath);
 	}
 
-	public function testSessionPath(title : { value : String }) : Bool
+	public function test3(title : { value : String }) : Bool
 	{
 		title.value = 'Session path <b>"' + config.sessionPath + '"</b> exists and is writable';
 		return this.isWritable(config.sessionPath);
 	}
 
-	public function testHtaccess(title : { value : String }) : Bool
+	public function test4(title : { value : String }) : Bool
 	{
 		printHeader('[haXigniter] File integrity');
 
@@ -107,7 +140,7 @@ class Integrity
 	}
 
 	#if php
-	public function testSmartyPatch(title : { value : String }) : Bool
+	public function test5(title : { value : String }) : Bool
 	{
 		var smarty = FileSystem.fullPath(config.applicationPath + 'external/smarty/libs/internals/core.write_file.php');
 

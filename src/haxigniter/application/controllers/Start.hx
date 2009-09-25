@@ -1,5 +1,15 @@
 package haxigniter.application.controllers;
 
+/**
+ * The Start controller
+ * Start is the default controller name, so http://yourhostname/ will go here.
+ * 
+ * This controller is a RestController, which follows the RESTful approach used in Ruby on Rails.
+ * A request like http://yourhostname/start/123 will map to the show() method.
+ * 
+ * Please look at haxigniter/libraries/RestController.hx for a full reference of the mappings.
+ * 
+ */
 class Start extends haxigniter.libraries.RestController
 {
 	public function new()
