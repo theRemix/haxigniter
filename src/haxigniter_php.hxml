@@ -1,0 +1,2 @@
+-php ..\bin\www
+-main haxigniter.Application

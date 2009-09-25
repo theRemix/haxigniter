@@ -6,5 +6,14 @@ CURDIR=`pwd`
 cd $BASEPATH
 ./prebuild.sh
 cd ../src
-haxe haxigniter.hxml
+
+if [ "$1" = "neko" ]
+then
+  echo Building haXigniter for neko...
+  haxe haxigniter_neko.hxml
+else
+  echo Building haXigniter for php...
+  haxe haxigniter_php.hxml
+fi
+
 cd $CURDIR
