@@ -1,28 +1,34 @@
-- Multi-language support (from CI)
-- Form validation (check out CI docs for ideas)
-- Caching of templates (ViewEngine)
-- UTF-8 support
-- XSS filtering
-- Pagination
-- OpenID (RPXnow)
-- DB convenience functions (DBTools)
-- Encryption (Encrypted cookies)
-- Error pages/messages
-- Routes (CI)
+Should be done
+==============
+Multi-language support
+Form validation
+Caching of templates (through ViewEngine)
 
--- Email class (Wrapper around PHPMailer)
--- Unit tests with autorun
--- Views: Integration of template system 
--- Database config
--- Database methods
--- Session handling (hibernator?)
--- Redirection helpers (flash messages)
--- Libraries/plugins (merge them?)
--- Models
--- Useful stuff from MY_libs
--- Error handling and logging
--- CURL support (haxe.Http)
--- FirePHP (haxe.Firebug)
--- Integrity tester
--- Json (lib.haxe.org)
--- jquery (lib.haxe.org)
+Could be useful
+===============
+UTF-8 support
+XSS filtering
+Pagination library
+OpenID (RPXnow)
+Encryption (Encrypted cookies)
+Routes
+
+Done
+====
+DB convenience functions (DBTools)
+Email class (Wrapper around PHPMailer)
+Unit tests with autorun
+Views: Integration of template system 
+Database config
+Database methods
+Session handling
+Redirection helpers (flash messages)
+Libraries/plugins (merge them?)
+Models
+Useful stuff from MY_libs
+Error handling and logging
+CURL support (using haxe.Http instead)
+FirePHP (haxe.Firebug for now)
+Integrity tester
+Json (lib.haxe.org)
+jquery (lib.haxe.org)
