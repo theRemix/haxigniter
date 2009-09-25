@@ -210,13 +210,13 @@ class DatabaseConnection
 		return result.length;
 	}	
 
-	/////////////////////////////////////////////////////////////////
-	
-	private inline function testAlphaNumeric(value : String) : Void
+	public inline function testAlphaNumeric(value : String) : Void
 	{	
 		if(value == null || !DatabaseConnection.alphaRegexp.match(value))
 			throw new DatabaseException('Invalid parameter: ' + value, this);
 	}
+
+	/////////////////////////////////////////////////////////////////
 	
 	private function queryParams(query : String, params : Iterable<Dynamic>)
 	{

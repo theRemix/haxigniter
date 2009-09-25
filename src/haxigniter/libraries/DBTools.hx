@@ -10,6 +10,37 @@ import neko.db.ResultSet;
 
 class DbTools
 {
+	public static function save(data : Hash<Dynamic>, table : String, ?primaryKey = 'id', ?addPrimaryKeyToData = true) : Int
+	{
+		var db : DatabaseConnection = haxigniter.Application.instance().db;
+		var id : Int;
+		
+		db.testAlphaNumeric(table);
+		db.testAlphaNumeric(primaryKey);
+		
+		if(!data.exists(primaryKey) || data.get(primaryKey) == null)
+		{
+			// If empty or no primary key, use insert.
+			db.insert(table, data);
+			id = db.connection.lastInsertId();
+			
+			if(addPrimaryKeyToData)
+				data.set(primaryKey, id);
+			
+			return id;
+		}
+		else
+		{
+			// If primary key exists, use update.
+			var where = new Hash<Dynamic>();
+			where.set(primaryKey, data.get(primaryKey));
+			
+			db.update(table, data, where);
+			
+			return data.get(primaryKey);
+		}
+	}
+	
 	public static function paginate(query : String, offset : Int, limit : Int, ?meta : { total: Int }, ?params : Iterable<Dynamic>, ?noCalcRows = false) : ResultSet
 	{
 		var db : DatabaseConnection = haxigniter.Application.instance().db;
