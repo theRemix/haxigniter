@@ -71,6 +71,17 @@ class Application
 		return Application.my_session;
 	}
 	
+	public static function trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
+	{
+		Debug.trace(data, debugLevel, pos);
+	}
+	
+	public static function log(message : Dynamic, ?debugLevel : DebugLevel) : Void
+	{
+		Debug.log(message, debugLevel);
+	}
+
+	
 	///// Static vars ///////////////////////////////////////////////
 
 	private static var my_instance : Application = new Application();
@@ -112,7 +123,7 @@ class Application
 		if(config.sessionPath != '')
 			this.startSession();
 
-		// TODO: When php rethrow is fixed (2.05), factorize this.
+		// TODO: When php rethrow is fixed (2.05), factorize this and add logging for development mode.
 		if(!config.development)
 		{
 			try
@@ -140,19 +151,12 @@ class Application
 		}
 		else
 		{
-			try
-			{
-				Request.fromArray(Url.segments);
+			Request.fromArray(Url.segments);
 
-				#if neko
-				if(config.sessionPath != '')
-					this.closeNekoSession();
-				#end
-			}
-			catch(e : NotFoundException)
-			{
-				haxigniter.libraries.Server.error404();
-			}
+			#if neko
+			if(config.sessionPath != '')
+				this.closeNekoSession();
+			#end
 		}
 
 		// Clean up controller after it's done.
@@ -181,5 +185,5 @@ class Application
 		// Close database connection
 		if(this.db != null)
 			this.db.close();
-	}	
+	}
 }

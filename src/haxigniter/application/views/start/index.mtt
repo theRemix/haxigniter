@@ -5,3 +5,10 @@
 ::else::
 	<p>You didn't enter any id. Here's a <a href="::link::start/index/123">free one</a>!</p>
 ::end::
+
+<form method="POST" action="::link::start/234">
+	<input type="text" name="name" value=""/><br/>
+	<input type="hidden" name="email" value="toughguy@energyhouse.se"/>
+	<input type="hidden" name="status" value="OK"/>
+	<input type="submit"/>
+</form>

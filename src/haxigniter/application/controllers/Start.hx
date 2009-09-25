@@ -4,24 +4,49 @@ import haxigniter.types.TypeFactory;
 import haxigniter.application.models.ItemsModel;
 import php.Lib;
 
-class Start extends haxigniter.libraries.Controller
+class Start extends haxigniter.libraries.RestController
 {
-	public function new() {}
-	
-	public function index(?id : Int)
+	public function update(id : DbID, posted : Hash<String>)
 	{
-		this.view.assign('id', id);
+		trace('Update '+id+'<br>');
+		this.trace(posted);
+	}
+
+	public function create(posted : Hash<String>)
+	{
+		trace('Create<br>');
+		this.trace(posted);
+	}
+
+	public function destroy(id : DbID)
+	{
+		trace('Destroy ' + id.toInt());
+	}
+
+	public function edit(id : DbID)
+	{
+		trace('Edit ' + id.toInt());
+	}
+
+	public function show(id : DbID)
+	{
+		trace('SHOW ME ' + id.toInt());
+	}
+	
+	public function make()
+	{
+		Lib.print('make a new one.');
+	}
+	
+	public function index()
+	{
+		this.view.assign('id', 12345);
 		this.view.assign('application', 'haXigniter');
 		this.view.assign('link', haxigniter.libraries.Url.siteUrl());
 		
 		this.view.display('start/index.mtt');
 	}
-	
-	public function error()
-	{
-		Lib.print('What is this!');
-	}
-	
+		
 	/**
 	 * Run integrity tests, good when rolling out application for the first time.
 	 * @param	password default password is 'dev'. Change when deployed.
