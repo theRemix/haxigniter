@@ -20,13 +20,13 @@ class Url
 	{
 		if(Url.my_segments == null)
 		{
+			// TODO: Need testing of getURI() on many systems. Is it reliable?
 			var currentUri : String = Web.getURI();
 			
 			// Segments will be accessed in the controller, so it's safe to do the URI test here.
-			if(config.permittedUriChars.length > 0)
+			if(config.permittedUriChars != null)
 				Url.testValidUri(currentUri);
 				
-			// TODO: SCRIPT_NAME may cause problems on other systems, watch for it.
 			var scriptName : String = '/' + config.indexPath;
 
 			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash

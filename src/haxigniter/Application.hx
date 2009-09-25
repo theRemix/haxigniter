@@ -6,6 +6,7 @@ import haxigniter.libraries.Controller;
 import haxigniter.libraries.Url;
 import haxigniter.libraries.Debug;
 import haxigniter.libraries.Database;
+import haxigniter.libraries.Request;
 
 // This important package imports all application controllers so they will be referenced by the compiler.
 // See application/config/Config.hx for more info.
@@ -13,31 +14,18 @@ import haxigniter.application.config.Controllers;
 import haxigniter.application.config.Session;
 import haxigniter.application.config.Database;
 
-import haxigniter.rtti.RttiUtil;
-import haxigniter.types.TypeFactory;
-
 import haxigniter.views.ViewEngine;
 
 #if php
-typedef InternalSession = php.Session;
+typedef SessionLib = php.Session;
 #elseif neko
-typedef InternalSession = neko.Session;
+typedef SessionLib = neko.Session;
 #end
 
 class Application
 {
 	public var config(getConfig, never) : haxigniter.application.config.Config;
 	private function getConfig() : haxigniter.application.config.Config { return haxigniter.application.config.Config.instance(); }
-
-	public var controller(getController, null) : Controller;
-	private var my_controller : Controller;
-	private function getController() : Controller
-	{
-		if(this.my_controller == null)
-			throw new haxigniter.exceptions.Exception('Controller has not been executed yet.');
-		
-		return this.my_controller;
-	}
 
 	public var db(getDb, null) : DatabaseConnection;
 	private static var my_db : DatabaseConnection;
@@ -56,7 +44,10 @@ class Application
 		
 		return Application.my_db;
 	}
-	
+
+	// TODO: Set this to the Application controller, or use a stack that points to the currently executing controller?
+	//private var my_controller : Controller;
+
 	public var view(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return this.config.view; }
 	
@@ -66,14 +57,14 @@ class Application
 	{
 		if(Application.my_session == null)
 		{
-			if(InternalSession.exists(sessionName))
+			if(SessionLib.exists(sessionName))
 			{
-				Application.my_session = InternalSession.get(sessionName);
+				Application.my_session = SessionLib.get(sessionName);
 			}
 			else
 			{
 				Application.my_session = new haxigniter.application.config.Session();
-				InternalSession.set(sessionName, Application.my_session);
+				SessionLib.set(sessionName, Application.my_session);
 			}
 		}
 		
@@ -85,10 +76,6 @@ class Application
 	private static var my_instance : Application = new Application();
 	public static function instance() : Application { return my_instance; }
 
-	private static var defaultController : String = 'start';
-	private static var defaultMethod : String = 'index';
-	
-	private static var defaultNamespace : String = 'haxigniter.application.controllers';
 	private static var sessionName : String = '__haxigniter_session';
 	
 	///// Application entrypoint ////////////////////////////////////
@@ -99,98 +86,73 @@ class Application
 		{
 			// Run the haXigniter unit tests and the application.
 			Application.runTests();
-			Application.instance().run(Url.segments);
 		}
-		else
-		{
-			// TODO: When rethrow is fixed, factorize this code to Application.instance.run()
-			try
-			{
-				Application.instance().run(Url.segments);
-			}
-			catch(controller : ControllerException)
-			{
-				haxigniter.libraries.Server.error404();
-			}
-			catch(e : Dynamic)
-			{
-				Debug.log(e, DebugLevel.error);
-				Application.genericError();
-			}
-		}
+		
+		Application.instance().run();
 	}
 	
 	public static function runTests()
 	{
 		new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
 	}
-	
+
 	public static function genericError()
 	{
 		// TODO: Multiple languages
-		haxigniter.libraries.Server.error('Page error', 'Page error', 'Something went wrong during the server processing.');		
+		haxigniter.libraries.Server.error('Page error', 'Page error', 'Something went wrong during the server processing.');
 	}
 	
 	/////////////////////////////////////////////////////////////////
-	
-	public function new() {}
-	
-	public function run(uriSegments : Array<String>) : Void
+
+	private function new() {}
+
+	public function run() : Void
 	{
-		var controllerClass : String = (uriSegments[0] == null) ? Application.defaultController : uriSegments[0];
-		var controllerMethod : String = (uriSegments[1] == null) ? Application.defaultMethod : uriSegments[1];
-
-		controllerClass = Application.defaultNamespace + '.' + controllerClass.substr(0, 1).toUpperCase() + controllerClass.substr(1);
-		
-		// Instantiate a controller with this class name.
-		var classType : Class<Dynamic> = Type.resolveClass(controllerClass);
-		if(classType == null)
-			throw new ControllerException(controllerClass + ' not found. (Is it defined in config/Controllers.hx?)');
-		
-		// TODO: Controller arguments?
-		this.my_controller = cast Type.createInstance(classType, []);
-
-		var method : Dynamic = Reflect.field(this.controller, controllerMethod);
-		if(method == null)
-			throw new ControllerException(controllerClass + ' method "' + controllerMethod + '" not found.');
-
-		// Typecast the arguments.
-		var arguments : Array<Dynamic> = this.typecastArguments(classType, controllerMethod, uriSegments.slice(2));
-		
 		// Before calling the controller, start session so no premature output will mess with it.
 		if(config.sessionPath != '')
 			this.startSession();
-		
-		// TODO: When rethrow is fixed, factorize this code so errors will be logged in development too.
-		if(this.config.development)
-		{
-			// Execute the controller with no exception handling in development mode.
-			Reflect.callMethod(this.controller, method, arguments);
 
-			// Decided to close session here, not in cleanup, because of session integrity.
-			// It may be in a bad state if exception is thrown.
-			#if neko
-			this.closeNekoSession();
-			#end
+		// TODO: When php rethrow is fixed (2.05), factorize this.
+		if(!config.development)
+		{
+			try
+			{
+				// Make a request with the current url.
+				Request.fromArray(Url.segments);
+
+				// Decided to close session here, not in cleanup, because of session integrity.
+				// It may be in a bad state if exception is thrown.
+				#if neko
+				if(config.sessionPath != '')
+					this.closeNekoSession();
+				#end
+			}
+			catch(e : NotFoundException)
+			{
+				haxigniter.libraries.Server.error404();
+			}
+			catch(e : Dynamic)
+			{
+				// Log the message and display a (relatively) user-friendly error page.
+				Debug.log(e, DebugLevel.error);
+				Application.genericError();
+			}
 		}
 		else
 		{
 			try
 			{
-				// Execute the controller class with the method specified, and the arguments.
-				Reflect.callMethod(this.controller, method, arguments);
+				Request.fromArray(Url.segments);
 
-				// Decided to close session here, not in cleanup, because of session integrity.
-				// It may be in a bad state if exception is thrown.
 				#if neko
-				this.closeNekoSession();
+				if(config.sessionPath != '')
+					this.closeNekoSession();
 				#end
 			}
-			catch(e : Dynamic)
+			catch(e : NotFoundException)
 			{
-				Debug.log(e, DebugLevel.error);
-				Application.genericError();				
-			}			
+				haxigniter.libraries.Server.error404();
+			}
 		}
 
 		// Clean up controller after it's done.
@@ -199,8 +161,8 @@ class Application
 	
 	private function startSession()
 	{
-		InternalSession.setSavePath(config.sessionPath);
-		InternalSession.start();
+		SessionLib.setSavePath(config.sessionPath);
+		SessionLib.start();
 	}
 	
 	#if neko
@@ -208,8 +170,8 @@ class Application
 	{
 		if(Application.my_session != null)
 		{
-			InternalSession.set(sessionName, Application.my_session);
-			InternalSession.close();
+			sessionLib.set(sessionName, Application.my_session);
+			sessionLib.close();
 		}
 	}
 	#end
@@ -217,35 +179,7 @@ class Application
 	private function cleanup()
 	{
 		// Close database connection
-		if(this.controller.db != null)
-			this.controller.db.close();
-	}
-	
-	/**
-	* Cast arguments to controller (from Uri) to correct type, throwing TypeException if typecast fails.
-	*/
-	private function typecastArguments(classType : Class<Dynamic>, classMethod : String, arguments : Array<String>) : Array<Dynamic>
-	{
-		var output : Array<Dynamic> = [];
-		
-		var methods : Hash<List<CArgument>> = RttiUtil.getMethods(classType);
-		var c = 0;
-		
-		for(method in methods.get(classMethod))
-		{
-			// Test if value is optional, then push a null argument.
-			if(method.opt && (arguments[c] == '' || arguments[c] == null))
-			{
-				++c;
-				output.push(null);
-			}
-			else
-			{
-				// The methods come in the same order as the arguments, so match each argument with a method type.
-				output.push(TypeFactory.createType(method.type, arguments[c++]));
-			}
-		}
-
-		return output;		
-	}
+		if(this.db != null)
+			this.db.close();
+	}	
 }

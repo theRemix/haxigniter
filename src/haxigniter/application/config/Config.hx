@@ -181,14 +181,14 @@ class Config extends haxigniter.libraries.Config
 		| get a warning message.
 		|
 		| As a security measure you are STRONGLY encouraged to restrict URLs to
-		| as few characters as possible.  By default only these are allowed: a-z 0-9~%.:_-
+		| as few characters as possible.  By default only these are allowed: 
 		|
-		| Leave blank to allow all characters -- but only if you are insane.
+		| a-z 0-9~%.:_-
+		|
+		| Set to null to allow all characters -- but only if you are insane.
 		|
 		| DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 		|
-		| NOTE: When adding swedish charaters, the dash must be placed after them
-		| and the equal sign before... Must be some regexp problem.
 		*/
 		permittedUriChars = 'a-z 0-9~%.:_-'; //'a-z 0-9~%.:=_Â‰ˆ≈ƒ÷·È¸-';
 
@@ -242,8 +242,8 @@ class Config extends haxigniter.libraries.Config
 		| haxigniter.libraries.Server.error() can be used to display an error page
 		| when things go wrong.
 		|
-		| If you want to use a view page as an error page, set it here. For example
-		| "errors/error.mtt"
+		| If you want to call a controller as an error page, set it here. For 
+		| example "site/error". No redirection will be made.
 		|
 		| If it's set to null, the template in application/views/error.html will
 		| be used for display, with a generic error message.
@@ -259,8 +259,9 @@ class Config extends haxigniter.libraries.Config
 		| haxigniter.libraries.Server.error404() can be used to display the 404
 		| error page (not found error). Correct headers are sent automatically.
 		|
-		| If you want to use a view page as this error page, set it here. For 
-		| example "errors/error404.mtt"
+		| If you want to call a controller as an error page, set it here. For 
+		| example "site/error404". No redirection will be made to keep the header
+		| intact.
 		|
 		| If it's set to null, the template in application/views/error.html will
 		| be used for display, with a generic error 404 message.
@@ -272,11 +273,10 @@ class Config extends haxigniter.libraries.Config
 		/* Superclass must be called at the end to populate default values.  */
 		/* ================================================================= */
 		super();
-		/* ================================================================= */
 	}
 
 	/*
-	 * Initialize objects here that depends on configuration settings.
+	 * Instantiate objects here that depends on the configuration settings above.
 	 */
 	private function newObjects()
 	{
@@ -288,17 +288,19 @@ class Config extends haxigniter.libraries.Config
 		| The Views are displayed by a ViewEngine, which is any class extending 
 		| the haxigniter.views.viewEngine class.
 		|
-		| The three engines supplied by haXigniter are:
+		| The engines currently supplied by haXigniter are:
 		|
-		| 	haxigniter.views.Templo - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
-		|   haxigniter.views.HaxeTemplate - haxe.Template (http://haxe.org/doc/cross/template)
-		|   haxigniter.views.Smarty - Smarty for PHP (http://smarty.net)
+		| 	haxigniter.views.Templo() - The Templo 2 engine. (http://haxe.org/com/libs/mtwin/templo)
+		|   haxigniter.views.HaxeTemplate() - haxe.Template (http://haxe.org/doc/cross/template)
+		|   haxigniter.views.Smarty() - Smarty, PHP only (http://smarty.net)
 		|
 		| If you want to use another template system, make a class extending
-		| haxigniter.views.viewEngine and instantiate it here.
+		| haxigniter.views.viewEngine and instantiate it here. Contributions are
+		| always welcome, contact us at haxigniter@gmail.com so we can include
+		| your class in the distribution.
 		|		
 		*/
-		view = new haxigniter.views.Smarty();
+		view = new haxigniter.views.HaxeTemplate();
 	}
 	
 	/* ================================================================= */

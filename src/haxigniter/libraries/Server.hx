@@ -40,10 +40,21 @@ class Server
 	}
 	#end
 	
-	public static function error404()
+	///// Error handling ////////////////////////////////////////////
+	
+	public static function error404(?title : String, ?header : String, ?message : String)
 	{
 		// TODO: Multiple languages
-		Server.error('404 Not Found', '404 Not Found', 'The page you requested was not found.', 404);
+		if(title == null)
+			title = '404 not found';
+
+		if(header == null) 
+			header = title;
+		
+		if(message == null)
+			message = 'The page you requested was not found.';
+		
+		error(title, header, message, 404);
 	}
 	
 	public static function error(title : String, header : String, message : String, returnCode : Int = null)
@@ -57,6 +68,7 @@ class Server
 		
 		if(errorPage == null)
 		{
+			// Super-simple content-replace of the views/error.html file.
 			var content = File.getContent(config.applicationPath + 'views/error.html');
 			content = StringTools.replace(content, '::TITLE::', title);
 			content = StringTools.replace(content, '::HEADER::', header);
@@ -66,9 +78,10 @@ class Server
 		}
 		else
 		{
-			config.view.display(errorPage);
+			haxigniter.libraries.Request.fromString(errorPage);
 		}
 	}
+
 	
 	/**
 	 * Implementation of the php function dirname(). Return value is without appending slash.

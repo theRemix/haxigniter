@@ -38,11 +38,11 @@ class Config
 	private var runtimePath : String;
 
 	/**
-	 * Not used in child classes, setting non-initialized constants.
+	 * Setting non-initialized constants.
 	 */
 	private function new()
 	{
-		// ApplicationPath and BaseUrl always goes on top, since other vars will probably use them.
+		// applicationPath and siteUrl always goes on top, since other vars will use them.
 		
 		if(this.applicationPath == null)
 		{

@@ -13,20 +13,20 @@ class ModelException extends haxigniter.exceptions.Exception {}
 
 class Model
 {
-	public var application(getApplication, null) : haxigniter.Application;
-	private function getApplication() : haxigniter.Application { return haxigniter.Application.instance(); }
+	//public var application(getApplication, null) : haxigniter.Application;
+	//private function getApplication() : haxigniter.Application { return haxigniter.Application.instance(); }
 
-	public var controller(getController, null) : Controller;
-	private function getController() : Controller { return application.controller; }
+	//public var controller(getController, null) : Controller;
+	//private function getController() : Controller { return haxigniter.Application.instance().controller; }
 
 	public var config(getConfig, null) : Config;
-	private function getConfig() : Config { return application.config; }
+	private function getConfig() : Config { return haxigniter.Application.instance().config; }
 
 	public var db(getDb, null) : DatabaseConnection;
-	private function getDb() : DatabaseConnection { return application.db; }
+	private function getDb() : DatabaseConnection { return haxigniter.Application.instance().db; }
 
-	//public var session(getSession, null) : Session;
-	//private function getSession() : Session { return application.session; }	
+	public var session(getSession, null) : Session;
+	private function getSession() : Session { return haxigniter.Application.instance().session; }
 	
 	///// Convenience methods for debug and logging /////////////////
 	

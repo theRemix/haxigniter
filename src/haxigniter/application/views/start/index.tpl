@@ -1,20 +1,7 @@
-<h2>Welcome to {$name}, my humble lord!</h2> 
-The habitants are: 
-<ul>
-	{foreach from=$users item=user}
-		<li>
-			{$user->name} - 
-			{if $user->age > 18}
-				Grownup
-			{elseif $user->age < 3}
-				Baby
-			{else}
-				Young
-			{/if}
-		</li>
-	{/foreach}
-	<hr>
-	{foreach from=$who item=me}
-		{$me}<br>
-	{/foreach}
-</ul>
+<h2>Welcome to {$application}!</h2> 
+
+{if $id !== null}
+	<p>Looks like the id was "{$id}".</p>
+{else}
+	<p>You didn't enter any id. Here's a <a href="{$link}start/index/123">free one<a>!</p>
+{/if}
