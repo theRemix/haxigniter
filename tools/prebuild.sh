@@ -1,27 +1,35 @@
 #!/bin/bash
-# Set the tools dir as the base.
 BASEPATH=`dirname $0`
+SRCPATH=$BASEPATH/../src
+
+# Set output path
+if [ -z "$1" ]
+then
+	OUTPUT=$BASEPATH/../bin/www
+else
+	OUTPUT=$1
+fi
 
 # Set paths
-OUTPUT=$BASEPATH/../bin/www/lib/haxigniter/application
-APP=$BASEPATH/../src/haxigniter/application
+OUTPUTAPP=$OUTPUT/lib/haxigniter/application
+APPSRC=$SRCPATH/haxigniter/application
 
-mkdir -p $OUTPUT
+mkdir -p $OUTPUTAPP
 
 # ----- .htaccess --------------------------------------------------
 
 # Copy .htaccess to lib folder
-rsync -a $BASEPATH/../src/.htaccess $BASEPATH/../bin/www/lib/
+rsync -a $SRCPATH/.htaccess $OUTPUT/lib/
 
 # ----- Runtime ----------------------------------------------------
 
 # Copy runtime folders to application
-rsync -a --exclude=.gitignore $APP/runtime $OUTPUT
+rsync -a --exclude=.gitignore $APPSRC/runtime $OUTPUTAPP
 
 # ----- Synchronize views ------------------------------------------
 
-rsync -a --delete --exclude=.gitignore $APP/views $OUTPUT
+rsync -a --delete --exclude=.gitignore $APPSRC/views $OUTPUTAPP
 
 # ----- Synchronize external libraries -----------------------------
 
-rsync -a --delete --exclude=.gitignore --exclude=*.hx $APP/external $OUTPUT
+rsync -a --delete --exclude=.gitignore --exclude=*.hx $APPSRC/external $OUTPUTAPP

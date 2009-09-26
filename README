@@ -10,7 +10,7 @@ configure, especially the "development" setting. Everything is set up to just
 work, so hopefully you don't have to change anything.
 
 2. Goto the "tools" dir and if you're on Windows, run "build.bat". Linux users 
-executes "build.sh" of course. If you're targeting neko, use "build.bat neko".
+executes "build.sh" of course. If you're targeting neko, use "build.bat -neko".
 
 3. If no errors, you now have a haXigniter-app in the "bin/www" directory. Copy 
 the contents of "bin/www" to the root of a web server directory. (index.php and 

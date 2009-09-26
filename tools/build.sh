@@ -1,19 +1,22 @@
 #!/bin/bash
 # Set the tools dir as the base.
 BASEPATH=`dirname $0`
-CURDIR=`pwd`
+SRCPATH=$BASEPATH/../src
 
-cd $BASEPATH
-./prebuild.sh
-cd ../src
-
-if [ "$1" = "neko" ]
+if [ -z "$1" ] || [ "$1" == "-neko" ]
 then
-  echo Building haXigniter for neko...
-  haxe haxigniter_neko.hxml
+	OUTPUT=$BASEPATH/../bin/www
 else
-  echo Building haXigniter for php...
-  haxe haxigniter_php.hxml
+	OUTPUT=$1
 fi
 
-cd $CURDIR
+./prebuild.sh $OUTPUT
+
+if [ "$1" = "-neko" ] || [ "$2" = "-neko" ]
+then
+  echo Building haXigniter for neko...
+  haxe -cp $SRCPATH -neko $OUTPUT/index.n -main haxigniter.Application
+else
+  echo Building haXigniter for php...
+  haxe -cp $SRCPATH -php $OUTPUT -main haxigniter.Application
+fi
