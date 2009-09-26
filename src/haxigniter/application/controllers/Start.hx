@@ -9,6 +9,10 @@ package haxigniter.application.controllers;
  * 
  * Please look at haxigniter/libraries/RestController.hx for a full reference of the mappings.
  * 
+ * Important: When creating your own controllers, they must be referenced in the 
+ * file haxigniter/application/config/Controllers.hx, so the compiler is aware of them.
+ * See that file for more information.
+ * 
  */
 class Start extends haxigniter.libraries.RestController
 {
