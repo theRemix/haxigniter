@@ -6,7 +6,7 @@ typedef InternalSession = php.Session;
 typedef InternalSession = neko.Session;
 #end
 
-// TODO: Start session before controller executes to avoid header sent errors.
+// TODO: Test flash vars in neko.
 class Session implements Dynamic 
 {
 	// Internal flag for when flash is retrieved
@@ -32,7 +32,7 @@ class Session implements Dynamic
 		return Session.currentFlash;
 	}
 	private function setFlash(value : Dynamic)
-	{		
+	{
 		// Need to set gotCurrentFlash here so it's not removed by getFlash() in the same request.
 		gotCurrentFlash = true;
 
