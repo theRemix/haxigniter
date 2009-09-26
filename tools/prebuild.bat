@@ -3,27 +3,31 @@
 :: Change to batch file dir
 cd /d %~dp0
 
+:: Set output path
+set OUTPUT=%1
+if "%1" == "" set OUTPUT=..\bin\www
+
 :: Set paths
-set OUTPUT=..\bin\www\lib\haxigniter\application\
-set APP=..\src\haxigniter\application
+set OUTPUTAPP=%OUTPUT%\lib\haxigniter\application\
+set APPSRC=..\src\haxigniter\application
 
 :: ----- .htaccess --------------------------------------------------
 
 :: Copy .htaccess to lib folder
-robocopy /NJH /NJS ..\src ..\bin\www\lib .htaccess
+robocopy /NJH /NJS ..\src %OUTPUT%\lib .htaccess
 
 :: ----- Runtime ----------------------------------------------------
 
 :: Copy runtime folders to application
-robocopy /NJH /NJS /E %APP%\runtime %OUTPUT%\runtime\ /XF .gitignore
+robocopy /NJH /NJS /E %APPSRC%\runtime %OUTPUTAPP%\runtime\ /XF .gitignore
 
 :: ----- Synchronize views ------------------------------------------
 
-robocopy /NJH /NJS /MIR %APP%\views %OUTPUT%\views /XF .gitignore
+robocopy /NJH /NJS /MIR %APPSRC%\views %OUTPUTAPP%\views /XF .gitignore
 
 :: ----- Synchronize external libraries -----------------------------
 
-robocopy /NJH /NJS /MIR %APP%\external %OUTPUT%\external *.php /XF .gitignore
+robocopy /NJH /NJS /MIR %APPSRC%\external %OUTPUTAPP%\external *.php /XF .gitignore
 
 :: Exit code must be explicitly set sometimes.
 :: Thanks for the hint: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/#Implementation
