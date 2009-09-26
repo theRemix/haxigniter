@@ -109,7 +109,7 @@ class RttiUtil
 		var rtti : String = untyped classType.__rtti;
 		if(rtti == null)
 		{
-			throw new haxigniter.exceptions.Exception('No RTTI information found in ' + classType + ' (class must implement haxe.rtti.Infos)');
+			throw 'No RTTI information found in ' + classType + ' (class must implement haxe.rtti.Infos)';
 		}
 		
 		return rtti;
