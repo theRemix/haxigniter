@@ -1,16 +1,29 @@
-Welcome to haXigniter! The easy-to-use web framework for haXe. (http://haxe.org)
+Welcome to haXigniter! The easy-to-use web framework for haXe.
 
-Here's a quick start so you can get into the system. All paths and file 
-references will be relative to this directory (where the README file is).
+Home page
+=========
+http://wiki.github.com/ciscoheat/haxigniter
+
+
+Quick start
+===========
+http://wiki.github.com/ciscoheat/haxigniter/quick-start
+
+
+Really quick start
+==================
+If you're an experienced programmer and know web server configuration, this file 
+gives a really quick start. All paths and file references will be relative to 
+this directory (where the README file is).
 
 1. "src/haxigniter/application" is where your application is, and where you will 
 deploy most of your code. The first thing you should do is to look through the 
 file "src/haxigniter/application/config/Config.hx" to see what you can 
 configure, especially the "development" setting. Everything is set up to just 
-work, so hopefully you don't have to change anything.
+work for most systems, so hopefully you don't have to change anything.
 
 2. Goto the "tools" dir and if you're on Windows, run "build.bat". Linux users 
-executes "build.sh" of course. If you're targeting neko, use "build.bat -neko".
+executes "./build.sh" of course. If you're targeting neko, use "build.bat -neko".
 
 3. If no errors, you now have a haXigniter-app in the "bin/www" directory. Copy 
 the contents of "bin/www" to the root of a web server directory. (index.php and 
@@ -24,7 +37,17 @@ page where you can experiment further.
 
 6. The next thing to do is to look at the files in 
 "src/haxigniter/application/controllers" for an explanation how to call the 
-controllers.
+controllers. Or you can go on a guided tour here: 
+http://wiki.github.com/ciscoheat/haxigniter/guided-tour
 
-Good luck! Questions, comments, ideas, contributions, anything, mail to 
-haxigniter [AT] gmail [DOT] com.
+Good luck, and thanks for your interest! 
+
+
+Contact
+=======
+For help, questions, comments or contributions, the official mailing list for 
+haXigniter is at haxigniter AT googlegroups DOT com. Send a mail there and join 
+the community!
+
+If your query is more private, mail me at haxigniter AT gmail DOT com. Looking 
+forward talking to you!
