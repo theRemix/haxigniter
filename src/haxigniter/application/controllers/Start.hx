@@ -2,7 +2,8 @@ package haxigniter.application.controllers;
 
 /**
  * The Start controller
- * Start is the default controller name, so http://yourhostname/ will go here.
+ * Start is the default controller name, so if your application is in the root folder of the
+ * web server, http://yourhostname/ will go here.
  * 
  * This controller is a RestController, which follows the RESTful approach used in Ruby on Rails.
  * A request like http://yourhostname/start/123 will map to the show() method.

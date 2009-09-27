@@ -17,13 +17,18 @@ class Integrity
 	public var testMethodPrefix : String;
 	private var config : haxigniter.libraries.Config;
 	
+	public static function runTests() : Void
+	{
+		new haxigniter.application.tests.Integrity().run();
+	}
+	
 	public function new()
 	{
 		this.config = haxigniter.Application.instance().config;
 		this.testMethodPrefix = 'test';
 	}
 	
-	public function run()
+	public function run() : Void
 	{
 		for(field in Type.getInstanceFields(Type.getClass(this)))
 		{
@@ -32,7 +37,7 @@ class Integrity
 		}
 	}
 	
-	private function runTest(methodName : String)
+	private function runTest(methodName : String) : Void
 	{
 		var title = {value: methodName};
 		var result : Bool = Reflect.callMethod(this, Reflect.field(this, methodName), [title]);
@@ -55,7 +60,7 @@ class Integrity
 		}
 	}
 	
-	private function printHeader(text : String)
+	private function printHeader(text : String) : Void
     {
         Lib.print('<div style="font-family: Verdana; font-size:13px; font-weight:bold; float:left; display:inline; padding:8px 4px 0 4px; margin:1px; border:0; width:99%;">');
         Lib.print('<div style="float:left; padding:0;">' + text + '</div></div>');

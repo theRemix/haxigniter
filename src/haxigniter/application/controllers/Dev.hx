@@ -25,7 +25,9 @@ class Dev extends haxigniter.libraries.Controller
 	public function integrity(password = '')
 	{
 		if(config.development || password == 'password')
-			new haxigniter.application.tests.Integrity().run();
+		{
+			haxigniter.tests.Integrity.runTests();
+		}
 		else
 		{
 			// Act like there is nothing here.
