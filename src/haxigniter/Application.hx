@@ -15,8 +15,10 @@ import haxigniter.application.config.Database;
 import haxigniter.views.ViewEngine;
 
 #if php
+import php.Web;
 typedef SessionLib = php.Session;
 #elseif neko
+import neko.Web;
 typedef SessionLib = neko.Session;
 #end
 
@@ -76,7 +78,6 @@ class Application
 	{
 		Debug.log(message, debugLevel);
 	}
-
 	
 	///// Static vars ///////////////////////////////////////////////
 
@@ -91,16 +92,17 @@ class Application
 	{
 		if(Application.instance().config.development)
 		{
-			// Run the haXigniter unit tests and the application.
+			// Run the unit tests. 
+			// Pass true to run the whole haXigniter unit test suite.
 			Application.runTests();
 		}
 		
 		Application.instance().run();
 	}
 	
-	public static function runTests()
+	public static function runTests(runHaxigniterTests = false)
 	{
-		new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
+		new haxigniter.application.tests.TestRunner(runHaxigniterTests).runAndDisplayOnError();
 	}
 
 	public static function genericError()
@@ -125,7 +127,7 @@ class Application
 			try
 			{
 				// Make a request with the current url.
-				Request.fromArray(Url.segments);
+				Request.fromArray(Url.segments, Web.getMethod(), Web.getParams());
 
 				// Decided to close session here, not in cleanup, because of session integrity.
 				// It may be in a bad state if exception is thrown.
@@ -147,7 +149,7 @@ class Application
 		}
 		else
 		{
-			Request.fromArray(Url.segments);
+			Request.fromArray(Url.segments, Web.getMethod(), Web.getParams());
 
 			#if neko
 			if(config.sessionPath != '')

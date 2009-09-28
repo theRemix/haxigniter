@@ -35,7 +35,7 @@ class TypeFactory
 		// If output is null at the end, an error will be thrown.
 		var output : Dynamic = null;
 		
-		//Debug.trace('[WebTypeFactory] Creating type: ' + typeString);
+		//trace('[WebTypeFactory] Creating type: ' + typeString + ' (' + value + ')');
 		
 		var typeParam = splitType(typeString);
 		
@@ -69,6 +69,9 @@ class TypeFactory
 						output.add(newType);
 				}
 			
+			case 'Bool':
+				output = (value == '' || value == '0' || value == 'false' || value == 'null') ? false : true;
+			
 			/////////////////////////////////////////////////////////
 			
 			default:
@@ -84,7 +87,7 @@ class TypeFactory
 		if(output == null)
 			throw new TypeException(typeString, value);
 
-		//Debug.trace('Adding output: ' + output + ' (' + Type.typeof(output) + ')');
+		//trace('[WebTypeFactory] Adding output: ' + Type.typeof(output) + ' (' + output + ')');
 
 		return output;
 	}

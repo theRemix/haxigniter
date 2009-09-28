@@ -1,3 +1,6 @@
+haXigniter v0.51
+================
+
 Welcome to haXigniter! The easy-to-use web framework for haXe.
 
 Home page
@@ -12,9 +15,9 @@ http://wiki.github.com/ciscoheat/haxigniter/quick-start
 
 Really quick start
 ==================
-If you're an experienced programmer and know web server configuration, this file 
-gives a really quick start. All paths and file references will be relative to 
-this directory (where the README file is).
+If you're an experienced programmer and know web server configuration, here's 
+a really quick start. All paths and file references will be relative to this
+directory (where the README file is).
 
 1. "src/haxigniter/application" is where your application is, and where you will 
 deploy most of your code. The first thing you should do is to look through the 

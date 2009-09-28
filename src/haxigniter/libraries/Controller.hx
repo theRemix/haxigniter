@@ -13,7 +13,14 @@ import haxigniter.application.config.Session;
  */
 interface CustomRequest
 {
-	function customRequest(uriSegments : Array<String>) : Dynamic;
+	/**
+	 * Handle a page request.
+	 * @param	uriSegments Array of request segments (URL splitted with "/")
+	 * @param	method Request method, "GET" or "POST" most likely.
+	 * @param	params Query parameters
+	 * @return  Any value that the controller returns.
+	 */
+	function customRequest(uriSegments : Array<String>, method : String, params : Hash<String>) : Dynamic;
 }
 
 class Controller implements haxe.rtti.Infos

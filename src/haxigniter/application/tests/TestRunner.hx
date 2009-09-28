@@ -16,7 +16,7 @@ class TestRunner extends haxigniter.tests.TestRunner
 	/**
 	 * @param	runHaxigniterTests If false, haXigniter test suite is not run automatically.
 	 */
-	public function new(runHaxigniterTests : Bool = true)
+	public function new(runHaxigniterTests = false)
 	{
 		super(runHaxigniterTests);
 	}

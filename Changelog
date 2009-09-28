@@ -1,0 +1,19 @@
+Changelog for haXigniter
+
+v0.51 (2009-08-28)
+==================
+Changed
+ - Updated build scripts to handle paths and custom inclusions better.
+ - REST action "destroy" now uses POST, not GET.
+ - REST methods updated to handle extra arguments.
+ - Request library now handles method and query.
+ - Interface haxigniter.libraries.CustomRequest changed to accomodate the new Request structure.
+
+Bug fixes
+ - RttiUtils.getMethods() didn't handle CEnum and CTypedef.
+
+
+v0.5 (2009-08-26)
+=================
+Features
+ - First official release on github (http://github.com/ciscoheat/haxigniter)
