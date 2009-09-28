@@ -34,12 +34,12 @@ class Testrest extends haxigniter.libraries.RestController
 	
 	public function create(formData : Hash<String>) : String
 	{
-		return 'create ' + formData;
+		return 'create ' + formData.get('id') + ' ' + formData.get('name');
 	}
 	
 	public function update(id : Int, formData : Hash<String>) : String
 	{
-		return 'update ' + id + ' ' + formData;
+		return 'update ' + id + ' ' + formData.get('id') + ' ' + formData.get('name');
 	}
 	
 	public function destroy(id : Int) : String
@@ -74,7 +74,7 @@ class Custom extends Controller, implements CustomRequest
 	
 	public function customRequest(uriSegments : Array<String>, method : String, params : Hash<String>) : Dynamic
 	{
-		return 'I am custom: ' + method + ' ' + params;
+		return 'I am custom: ' + method + ' ' + params.get('one') + params.get('two') + params.get('three');
 	}
 }
 
@@ -120,21 +120,21 @@ class When_using_Controllers extends haxigniter.tests.TestCase
 
 		// edit()
 		output = Request.fromString('testrest/456/edit/true', 'GET');
-		this.assertEqual('edit 456 1', output);
+		this.assertPattern(~/^edit 456 (1|true)$/, output);
 
 		// create()
 		data.set('id', '123');
 		data.set('name', 'Test');
 		
 		output = Request.fromString('testrest', 'POST', data);
-		this.assertEqual('create {id => 123, name => Test}', output);
+		this.assertEqual('create 123 Test', output);
 
 		// update()
 		data.set('id', 'N/A');
 		data.set('name', 'Test 2');
 
 		output = Request.fromString('testrest/456', 'POST', data);
-		this.assertEqual('update 456 {id => N/A, name => Test 2}', output);
+		this.assertEqual('update 456 N/A Test 2', output);
 
 		// destroy()
 		output = Request.fromString('testrest/789/delete', 'POST', data);
@@ -151,7 +151,7 @@ class When_using_Controllers extends haxigniter.tests.TestCase
 		this.assertEqual('index', output);
 
 		output = Request.fromString('teststandard/index/true', 'POST');
-		this.assertEqual('index 1', output);
+		this.assertPattern(~/^index (1|true)$/, output);
 
 		output = Request.fromString('teststandard/first/true/123.987', 'GET');
 		this.assertEqual('first true - 123.987', output);
@@ -171,6 +171,6 @@ class When_using_Controllers extends haxigniter.tests.TestCase
 		
 		// index()
 		output = Request.fromString('custom', 'PUT', data);
-		this.assertEqual('I am custom: PUT {one => 1, two => 2, three => 3}', output);
+		this.assertEqual('I am custom: PUT 123', output);
 	}
 }

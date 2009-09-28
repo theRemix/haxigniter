@@ -1,5 +1,15 @@
 Changelog for haXigniter
 
+v0.52 (2009-08-29)
+==================
+Features
+ - Added method for debugging, 
+   haxigniter.libraries.config.Config.dumpEnvironment(). Can be run 
+   automatically from the configuration file, see config/Config.hx.
+
+Bug fixes
+ - Fixed unit tests for Neko.
+
 v0.51 (2009-08-28)
 ==================
 Changed

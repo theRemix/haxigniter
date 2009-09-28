@@ -231,9 +231,17 @@ class Config extends haxigniter.libraries.Config
 		*/
 		error404Page = null;
 		
-		/* ================================================================= */
-		/* Superclass must be called at the end to populate default values.  */
-		/* ================================================================= */
+		/*
+		| Superclass must be called at the end to populate default values.
+		|
+		| If you call this with true as argument, the environment will be
+		| dumped to screen. Useful for debugging.
+		|
+		| If you specify a filename instead, the dump will be written to
+		| that file IF that file doesn't exist! (A safety since it's called
+		| on every page request.)
+		|
+		*/
 		super();
 	}
 
