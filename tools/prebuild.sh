@@ -14,22 +14,22 @@ fi
 OUTPUTAPP=$OUTPUT/lib/haxigniter/application
 APPSRC=$SRCPATH/haxigniter/application
 
-mkdir -p $OUTPUTAPP
+mkdir -p "$OUTPUTAPP"
 
 # ----- .htaccess --------------------------------------------------
 
 # Copy .htaccess to lib folder
-rsync -a $SRCPATH/.htaccess $OUTPUT/lib/
+rsync -a "$SRCPATH/.htaccess" "$OUTPUT/lib/"
 
 # ----- Runtime ----------------------------------------------------
 
 # Copy runtime folders to application
-rsync -a --exclude=.gitignore $APPSRC/runtime $OUTPUTAPP
+rsync -a --exclude=.gitignore "$APPSRC/runtime" "$OUTPUTAPP"
 
 # ----- Synchronize views ------------------------------------------
 
-rsync -a --delete --exclude=.gitignore $APPSRC/views $OUTPUTAPP
+rsync -a --delete --exclude=.gitignore "$APPSRC/views" "$OUTPUTAPP"
 
 # ----- Synchronize external libraries -----------------------------
 
-rsync -a --delete --exclude=.gitignore --exclude=*.hx $APPSRC/external $OUTPUTAPP
+rsync -a --delete --exclude=.gitignore --exclude=*.hx "$APPSRC/external" "$OUTPUTAPP"
