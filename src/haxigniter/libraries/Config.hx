@@ -45,18 +45,7 @@ class Config
 		
 		if(this.applicationPath == null)
 		{
-			applicationPath = Web.getCwd();
-			
-			var indexPos : Int = -1;
-			var indexDir = Server.dirname(this.indexPath);
-			
-			if(indexDir != '.')
-				indexPos = applicationPath.lastIndexOf(indexDir);
-			
-			if(indexPos > -1)
-				applicationPath = applicationPath.substr(0, indexPos);
-
-			this.applicationPath += 'lib/haxigniter/application/';			
+			applicationPath = Web.getCwd() + 'lib/haxigniter/application/';
 		}
 		
 		if(this.siteUrl == null)
