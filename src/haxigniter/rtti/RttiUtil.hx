@@ -41,17 +41,8 @@ class RttiUtil
 							
 							for(arg in args)
 							{
-								switch(arg.t)
-								{
-									// Create the CArgument type and test for 
-									case CEnum(name, params), CClass(name, params), CTypedef(name, params):
-										// Set optional to false to avoid Null<T> since it can be deducted from the type itself.
-										var typeName = RttiUtil.typeName(arg.t, false);										
-										argList.add({type: typeName, opt: arg.opt, name: arg.name});
-									
-									default:
-										// Do nothing if not an argument.
-								}
+								var typeName = RttiUtil.typeName(arg.t, false);
+								argList.add({type: typeName, opt: arg.opt, name: arg.name});
 							}
 							
 							output.set(f.name, argList);
