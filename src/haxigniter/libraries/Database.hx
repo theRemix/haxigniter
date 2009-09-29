@@ -221,6 +221,13 @@ class DatabaseConnection
 		return result.length;
 	}	
 
+	///// Other /////////////////////////////////////////////////////
+	
+	public function lastInsertId() : Int
+	{
+		return this.connection.lastInsertId();
+	}
+	
 	public inline function testAlphaNumeric(value : String) : Void
 	{	
 		if(value == null || !DatabaseConnection.alphaRegexp.match(value))

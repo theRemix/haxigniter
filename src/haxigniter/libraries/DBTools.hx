@@ -22,7 +22,7 @@ class DbTools
 		{
 			// If empty or no primary key, use insert.
 			db.insert(table, data);
-			id = db.connection.lastInsertId();
+			id = db.lastInsertId();
 			
 			if(addPrimaryKeyToData)
 				data.set(primaryKey, id);
