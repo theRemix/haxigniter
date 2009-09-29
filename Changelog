@@ -8,6 +8,7 @@ Features
 
 Bug fixes
  - Fixed a security hole in Neko session handler.
+ - tools/build.sh didn't handle ending slash.
 
 v0.52 (2009-08-29)
 ==================

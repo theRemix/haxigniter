@@ -19,6 +19,12 @@ else
 	OUTPUT=$1
 fi
 
+# Strip end slash if it exists
+if [ `expr match "$OUTPUT" '.*/$'` != 0 ]
+then
+	OUTPUT=${OUTPUT:0:${#OUTPUT}-1}
+fi
+
 # Test if hxml file exists, then include it.
 if [ -e "$BASEPATH/haxiginiter.hxml" ]
 then

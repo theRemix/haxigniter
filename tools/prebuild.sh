@@ -10,6 +10,12 @@ else
 	OUTPUT=$1
 fi
 
+# Strip end slash if it exists
+if [ `expr match "$OUTPUT" '.*/$'` != 0 ]
+then
+	OUTPUT=${OUTPUT:0:${#OUTPUT}-1}
+fi
+
 # Set paths
 OUTPUTAPP=$OUTPUT/lib/haxigniter/application
 APPSRC=$SRCPATH/haxigniter/application
