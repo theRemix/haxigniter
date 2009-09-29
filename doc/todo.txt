@@ -1,5 +1,7 @@
 Should be done
 ==============
+SPOD-support (Model?)
+DB Migration tool
 Multi-language support
 Form validation
 Caching of templates (through ViewEngine)
