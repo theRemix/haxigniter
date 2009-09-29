@@ -1,9 +1,12 @@
 Changelog for haXigniter
 
-Upcoming
-========
+Current
+=======
 Features
  - Added lastInsertId() to haxigniter.libraries.Database.
+
+Bug fixes
+ - Fixed a security hole in Neko session handler.
 
 v0.52 (2009-08-29)
 ==================

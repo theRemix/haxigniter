@@ -1,4 +1,5 @@
-﻿package neko;
+﻿#if neko
+package neko;
 /**
 * TODO: TEST IT!
 */
@@ -15,29 +16,29 @@ class Session
 
 	public static function getCacheLimiter()
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return null;
 	}
 
 	public static function setCacheLimiter(l : CacheLimiter)
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 	}
 
 	public static function getCacheExpire() : Int
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return 0;
 	}
 
 	public static function setCacheExpire(minutes : Int)
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 	}
 
 	public static function setName(name : String)
 	{
-		if( started ) throw "Can't set name after Session start";
+		if( started ) throw "Can't set name after Session start.";
 		sessionName=name;
 		return name;
 	}
@@ -51,7 +52,10 @@ class Session
 
 	public static function setId(_id : String) : String
 	{
-		if( started ) throw "Can't set id after Session.start";
+		if( started ) throw "Can't set id after Session.start.";
+
+		testValidId(_id);
+		
 		id = _id;
 		return id;
 	}
@@ -60,27 +64,27 @@ class Session
 
 	public static function setSavePath(path : String) : String
 	{
-		if(started) throw "You can't set the save path while the session is already in use";
+		if(started) throw "You can't set the save path while the session is already in use.";
 		savePath = path;
 		return path;
 	}
 
 	public static function getModule() : String
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return "";
 	}
 
 	public static function setModule(module : String)
 	{
-		if(started) throw "You can't set the module while the session is already in use";
-		trace("not implemented");
+		if(started) throw "You can't set the module while the session is already in use.";
+		throw "Not implemented.";
 		return "";
 	}
 
 	public static function regenerateId(?deleteold : Bool) : Bool
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return false;
 	}
 
@@ -99,20 +103,20 @@ class Session
 
 	public static function setCookieParams(?lifetime : Int, ?path : String, ?domain : String, ?secure : Bool, ?httponly : Bool)
 	{
-		if(started) throw "You can't set the cookie params while the session is already in use";
-		trace("not implemented");
+		if(started) throw "You can't set the cookie params while the session is already in use.";
+		throw "Not implemented.";
 	}
 
 	public static function getCookieParams() :
 	{ lifetime : Int, path : String, domain : String, secure : Bool, httponly : Bool}
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return null;
 	}
 
 	public static function setSaveHandler(open : String -> String -> Bool, close : Void -> Bool, read : String -> String, write : String -> String -> Bool, destroy, gc) : Bool
 	{
-		trace("not implemented");
+		throw "Not implemented.";
 		return false;
 	}
 
@@ -166,6 +170,8 @@ class Session
 		var fileData : String;
 		if( id!=null )
 		{
+			testValidId(id);
+
 			file = savePath + id + ".sess";
 			if( !neko.FileSystem.exists(file) ) 
 				id = null;
@@ -228,6 +234,18 @@ class Session
 		if( needCommit || forceCommit ) commit();
 		started = false;
 	}
+	
+	/////////////////////////////////////////////////////////////////
+	
+	private static inline function testValidId(id : String) : Void
+	{
+		if(id != null)
+		{
+			var validId : EReg = ~/^[a-zA-Z0-9]+$/;
+			if(!validId.match(id))
+				throw "Invalid session ID.";
+		}
+	}	
 }
 
 enum CacheLimiter
@@ -237,3 +255,4 @@ enum CacheLimiter
 	NoCache;
 	PrivateNoExpire;
 }
+#end
