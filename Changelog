@@ -4,6 +4,7 @@ Current
 =======
 Features
  - Added lastInsertId() to haxigniter.libraries.Database.
+ - Added doc/mod_rewrite.conf, a template for Apache mod_rewrite
 
 Bug fixes
  - Fixed a security hole in Neko session handler.
