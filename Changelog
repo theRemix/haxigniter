@@ -1,5 +1,10 @@
 Changelog for haXigniter
 
+Upcoming
+========
+Features
+ - Added lastInsertId() to haxigniter.libraries.Database.
+
 v0.52 (2009-08-29)
 ==================
 Features
