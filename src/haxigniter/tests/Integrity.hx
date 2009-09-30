@@ -30,6 +30,8 @@ class Integrity
 	
 	public function run() : Void
 	{
+		this.printHeader('Development mode: ' + (this.config.development ? 'True' : 'False') + '<br><br>');
+		
 		for(field in Type.getInstanceFields(Type.getClass(this)))
 		{
 			if(StringTools.startsWith(field, this.testMethodPrefix) && Reflect.isFunction(Reflect.field(this, field)))
