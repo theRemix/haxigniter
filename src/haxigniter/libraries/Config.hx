@@ -56,7 +56,6 @@ class Config
 		
 		if(this.indexPath == 'AUTO' || this.indexPath == 'AUTO_REWRITE')
 		{
-			#if php
 			if(env.exists('SCRIPT_NAME'))
 			{
 				var script = env.get('SCRIPT_NAME');
@@ -78,9 +77,6 @@ class Config
 			{
 				throw 'indexPath cannot be auto-detected. Please set it in "application/config/Config.hx".';
 			}
-			#elseif neko
-			throw 'indexPath cannot be auto-detected. Please set it in "application/config/Config.hx".';
-			#end
 		}
 		
 		if(this.siteUrl == null)
