@@ -26,15 +26,15 @@ class Config
 	public var cachePath : String;
 	public var sessionPath : String;
 	
-	//public var language : String;
-	//public var charset : String;
 	public var permittedUriChars : String;
 	public var logLevel : DebugLevel;
 	public var logDateFormat : String;
-	public var encryptionKey : String;
 	
 	public var errorPage : String;
 	public var error404Page : String;
+	
+	public var language : String;
+	public var encryptionKey : String;
 	
 	public var view : ViewEngine;
 	
