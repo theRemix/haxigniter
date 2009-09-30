@@ -52,24 +52,29 @@ class Config extends haxigniter.libraries.Config
 		| Index file web Path
 		|--------------------------------------------------------------------------
 		|
-		| This should be the web path to your index file. For example, if you're
-		| using PHP and haXigniter is located in the folder "haxigniter" below the
-		| document root, this should be set to "haxigniter/index.php". 
+		| This is the absolute web path to your index file. Usually for PHP it can 
+		| be autodetected, so you can set it to one of these values:
 		|
-		| For neko, this will be "haxigniter/index.n". If your application is in
-		| the root of the web server, it will be just "index.php".
+		| 'AUTO'         - Normal autodetection, works in most cases.
+		| 'AUTO_REWRITE' - If you're using mod_rewrite to remove the index page,
+		|                  this setting will take that into consideration.
 		|
-		| If you are using mod_rewrite to remove the index page, set this variable 
-		| to the path only, or blank if in the root.
-		| 
-		| NOTE: This is the only path that should be without a prepending and 
-		|       trailing slash!
+		| If you're using Neko or autodetection doesn't work, you must specify it
+		| manually. For example, if the index file is located in the folder 
+		| "haxigniter" on the web server, indexPath should be set to 
+		| "/haxigniter/index.php". If your application is in the root of the web 
+		| server, it will be just "/index.php" (or "/index.n" for Neko).
+		|
+		| If you are using mod_rewrite to remove the index page, set it to "" if
+		| in the root, or "/subdir" if in a subdirectory.
+		|
+		| Note that this path should not end with a slash.
 		|
 		*/
 		#if php
-		indexPath = 'index.php';
+		indexPath = 'AUTO';
 		#elseif neko
-		indexPath = 'index.n';
+		indexPath = '/index.n';
 		#end
 
 		/*
@@ -77,7 +82,7 @@ class Config extends haxigniter.libraries.Config
 		| Site URL
 		|--------------------------------------------------------------------------
 		|
-		| URL to your haXigniter root. If null it will be autodetected. If you want 
+		| URL to your haXigniter root. If null it will be autodetected. If you need
 		| to specify it, it's a normal URL:
 		|
 		|	http://www.your-site.com/path/to/index.php
@@ -90,7 +95,7 @@ class Config extends haxigniter.libraries.Config
 		| Application Path
 		|--------------------------------------------------------------------------
 		|
-		| Full server path to the application. Set automatically based on indexPath.
+		| Full server path to the application. Set automatically.
 		|
 		*/
 		applicationPath = null;
@@ -232,7 +237,11 @@ class Config extends haxigniter.libraries.Config
 		error404Page = null;
 		
 		/*
-		| Superclass must be called at the end to populate default values.
+		|--------------------------------------------------------------------------
+		| Superclass and debugging
+		|--------------------------------------------------------------------------
+		|
+		| super() must be called at the end to populate default values.
 		|
 		| If you call this with true as argument, the environment will be
 		| dumped to screen. Useful for debugging.

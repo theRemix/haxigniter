@@ -45,6 +45,8 @@ class Config
 	 */
 	private function new(?debug : Dynamic)
 	{
+		var env = Sys.environment();
+		
 		// applicationPath and siteUrl always goes on top, since other vars will use them.
 		
 		if(this.applicationPath == null)
@@ -52,18 +54,49 @@ class Config
 			applicationPath = Web.getCwd() + 'lib/haxigniter/application/';
 		}
 		
+		if(this.indexPath == 'AUTO' || this.indexPath == 'AUTO_REWRITE')
+		{
+			#if php
+			if(env.exists('SCRIPT_NAME'))
+			{
+				var script = env.get('SCRIPT_NAME');
+				
+				if(indexPath == 'AUTO')
+				{
+					indexPath = script;
+				}
+				else
+				{
+					// Rewrite is used, so strip the script.
+					indexPath = StringTools.replace(Server.dirname(script), '\\', '/');
+					
+					if(StringTools.endsWith(indexPath, '/'))
+						indexPath = indexPath.substr(0, indexPath.length - 1);
+				}
+			}
+			else
+			{
+				throw 'indexPath cannot be auto-detected. Please set it in "application/config/Config.hx".';
+			}
+			#elseif neko
+			throw 'indexPath cannot be auto-detected. Please set it in "application/config/Config.hx".';
+			#end
+		}
+		
 		if(this.siteUrl == null)
 		{
+			var index = this.indexPath.length == 0 ? '/' : this.indexPath;
+			
 			// This works on Apache/PHP
-			if(Sys.environment().exists('SERVER_PORT') && Sys.environment().exists('HTTP_HOST'))
+			if(env.exists('HTTP_HOST'))
 			{
-				siteUrl = Sys.environment().get('SERVER_PORT') == '443' ? 'https' : 'http';
-				siteUrl += '://' + Sys.environment().get('HTTP_HOST') + '/' + this.indexPath;
+				siteUrl = env.exists('HTTPS') && env.get('HTTPS') == 'on' ? 'https' : 'http';
+				siteUrl += '://' + env.get('HTTP_HOST') + index;
 			}
 			else
 			{
 				// If no SSL and host detection, a short form of the URL is returned.
-				siteUrl = '/' + this.indexPath;
+				siteUrl = index;
 			}
 		}
 		
