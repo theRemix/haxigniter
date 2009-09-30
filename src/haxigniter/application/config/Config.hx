@@ -256,7 +256,7 @@ class Config extends haxigniter.libraries.Config
 		| If you use the Encryption class you MUST set an encryption key.
 		|
 		*/
-		encryptionKey = '';
+		encryptionKey = null;
 
 		/*
 		|--------------------------------------------------------------------------
