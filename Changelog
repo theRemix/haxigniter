@@ -5,6 +5,9 @@ Current
 Changed
  - Integrity tests now shows Development mode status.
 
+Bug fixes
+ - Fixed a quoting problem in the build scripts.
+
 v0.53 (2009-08-30)
 ==================
 Features
