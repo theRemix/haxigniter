@@ -4,6 +4,7 @@ import haxigniter.libraries.Debug;
 import haxigniter.tests.unit.When_UnitTesting_With_TestCase;
 import haxigniter.tests.unit.When_using_a_TypeFactory;
 import haxigniter.tests.unit.When_using_Controllers;
+import haxigniter.tests.unit.When_using_library_Url;
 
 #if php
 import php.Lib;
@@ -37,6 +38,7 @@ class TestRunner extends haxe.unit.TestRunner
 			this.add(new When_UnitTesting_With_TestCase());
 			this.add(new When_using_a_TypeFactory());
 			this.add(new When_using_Controllers());
+			this.add(new When_using_library_Url());
 		}
 		
 		this.addTestClasses();		
