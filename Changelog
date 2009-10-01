@@ -3,7 +3,7 @@ Changelog for haXigniter
 Current
 =======
 Features
- - "src/haxigniter/application/resources" directory added, which contents 
+ - If "src/haxigniter/application/resources" directory exists, the contents 
    will we copied to output dir when building. Useful for css, js, images etc.
  - Added comment about resource handling in root .gitignore file.
  - Added Url.linkUrl() for easier link output in templates.
