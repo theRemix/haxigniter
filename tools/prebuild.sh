@@ -22,24 +22,27 @@ APPSRC=$SRCPATH/haxigniter/application
 
 mkdir -p "$OUTPUTAPP"
 
-# ----- .htaccess --------------------------------------------------
+# ----- Synchronize resources if folder exists ----------------------
+
+if [ -e "$APPSRC/resources" ]
+then
+	rsync -a --delete --exclude=.gitignore --exclude=lib/ "$APPSRC/resources/" "$OUTPUT"
+fi
+
+# ----- .htaccess ---------------------------------------------------
 
 # Copy .htaccess to lib folder
 rsync -a "$SRCPATH/.htaccess" "$OUTPUT/lib/"
 
-# ----- Runtime ----------------------------------------------------
+# ----- Runtime -----------------------------------------------------
 
 # Copy runtime folders to application
 rsync -a --exclude=.gitignore "$APPSRC/runtime" "$OUTPUTAPP"
 
-# ----- Synchronize views ------------------------------------------
+# ----- Synchronize views -------------------------------------------
 
 rsync -a --delete --exclude=.gitignore "$APPSRC/views" "$OUTPUTAPP"
 
-# ----- Synchronize external libraries -----------------------------
+# ----- Synchronize external libraries ------------------------------
 
 rsync -a --delete --exclude=.gitignore --exclude=*.hx "$APPSRC/external" "$OUTPUTAPP"
-
-# ----- Synchronize resourcse -----------------------------
-
-rsync -a --delete --exclude=.gitignore "$APPSRC/resources" "$OUTPUT"

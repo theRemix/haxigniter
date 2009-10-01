@@ -8,6 +8,12 @@ if "%1" == "" set PBOUTPUT=%~dp0\..\bin\www
 set PBOUTPUTAPP=%PBOUTPUT%\lib\haxigniter\application
 set PBAPPSRC=%~dp0\..\src\haxigniter\application
 
+:: ----- Synchronize resources --------------------------------------
+
+if not exist "%PBAPPSRC%\resources" goto noresources
+%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\resources" "%PBOUTPUT%" /XF .gitignore /XD lib
+:noresources
+
 :: ----- .htaccess --------------------------------------------------
 
 :: Copy .htaccess to lib folder
@@ -25,10 +31,6 @@ set PBAPPSRC=%~dp0\..\src\haxigniter\application
 :: ----- Synchronize external libraries -----------------------------
 
 %~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" /XF .gitignore *.hx
-
-:: ----- Synchronize resources --------------------------------------
-
-%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\resources" "%PBOUTPUT%" /XF .gitignore
 
 
 :: Exit code must be explicitly set sometimes for robocopy.

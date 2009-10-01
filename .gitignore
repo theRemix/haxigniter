@@ -8,7 +8,7 @@ bin/www/index.php
 bin/www/lib
 
 # An alternative location for resources is the "src/haxigniter/application/resources" directory.
-# The content of that dir will be copied to bin/www when building, so if you're using that instead 
+# If that dir exists, the content will be copied to bin/www when building, so if you're using that instead 
 # you don't need any files in the bin/www folder to be under version-control.
 #
 # To use this alternative, uncomment the following line:
