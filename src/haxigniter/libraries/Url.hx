@@ -64,6 +64,15 @@ class Url
 		
 		return output.join('/');
 	}
+
+	/**
+	 * Returns the site URL without appending slash, so it can be used in template links.
+	 */
+	public static function linkUrl() : String
+	{
+		var output = config.siteUrl;
+		return StringTools.endsWith(output, '/') ? output.substr(0, output.length-1) : output;
+	}
 	
 	public static function siteUrl(segments = '') : String
 	{

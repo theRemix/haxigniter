@@ -26,6 +26,11 @@ set PBAPPSRC=%~dp0\..\src\haxigniter\application
 
 %~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" /XF .gitignore *.hx
 
+:: ----- Synchronize resources --------------------------------------
+
+%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\resources" "%PBOUTPUT%" /XF .gitignore
+
+
 :: Exit code must be explicitly set sometimes for robocopy.
 :: Thanks for the hint: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/#Implementation
 exit /B 0

@@ -39,3 +39,7 @@ rsync -a --delete --exclude=.gitignore "$APPSRC/views" "$OUTPUTAPP"
 # ----- Synchronize external libraries -----------------------------
 
 rsync -a --delete --exclude=.gitignore --exclude=*.hx "$APPSRC/external" "$OUTPUTAPP"
+
+# ----- Synchronize resourcse -----------------------------
+
+rsync -a --delete --exclude=.gitignore "$APPSRC/resources" "$OUTPUT"

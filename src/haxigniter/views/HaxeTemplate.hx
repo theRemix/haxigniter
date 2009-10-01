@@ -35,11 +35,7 @@ class HaxeTemplate extends haxigniter.views.ViewEngine
 	
 	public override function render(fileName : String) : String
 	{
-		fileName = this.templatePath + fileName;
-		
-		var content = File.getContent(fileName);
-        var t = new haxe.Template(content);
-		
-		return t.execute(this.templateVars);
+		var content = File.getContent(this.templatePath + fileName);
+		return new haxe.Template(content).execute(this.templateVars);
 	}
 }
