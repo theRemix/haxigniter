@@ -7,6 +7,7 @@ Changed
 
 Bug fixes
  - Fixed a quoting problem in the build scripts.
+ - Windows build script only included php files in the external folder.
 
 v0.53 (2009-08-30)
 ==================

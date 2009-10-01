@@ -24,7 +24,7 @@ set PBAPPSRC=%~dp0\..\src\haxigniter\application
 
 :: ----- Synchronize external libraries -----------------------------
 
-%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" *.php /XF .gitignore
+%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" /XF .gitignore *.hx
 
 :: Exit code must be explicitly set sometimes for robocopy.
 :: Thanks for the hint: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/#Implementation
