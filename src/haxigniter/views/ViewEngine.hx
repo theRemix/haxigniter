@@ -1,11 +1,14 @@
 ﻿package haxigniter.views;
 
+import haxe.io.Bytes;
 import haxe.PosInfos;
 
 #if php
 import php.Lib;
+import php.Web;
 #elseif neko
 import neko.Lib;
+import neko.Web;
 #end
 
 import haxigniter.Application;
@@ -35,6 +38,8 @@ class ViewEngine
 	 * Template file extension, without dot. Used in displayDefault().
 	 */
 	public var templateExtension : String;
+	
+	/////////////////////////////////////////////////////////////////
 	
 	private function new(templatePath : String = null, compiledPath : String = null)
 	{
@@ -80,5 +85,23 @@ class ViewEngine
 	{
 		var className = pos.className.substr(pos.className.lastIndexOf('.')+1).toLowerCase();
 		this.display(className + '/' + pos.methodName + '.' + this.templateExtension);
+	}
+
+	/**
+	 * Detects if the content of a file is encoded with UTF-8.
+	 * NOTE: It only detects Byte-order mark, so partial content cannot be detected!
+	 * @param	content Usually taken from File.getContent()
+	 * @param	?mimeType = 'text/html' If not null, a header will be set with utf-8 charset if it is detected.
+	 * @return  true or false depending on the file is UTF-8 or not.
+	 */
+	private function detectUtf8(content : String, ?mimeType = 'text/html') : Bool
+	{
+		var bytes = Bytes.ofString(content.substr(0, 3));
+		var isUtf8 = (bytes.get(0) == 239 && bytes.get(1) == 187 && bytes.get(2) == 191);
+		
+		if(isUtf8 && mimeType != null)
+			Web.setHeader('Content-Type', mimeType + '; charset=utf-8');
+		
+		return isUtf8;
 	}
 }
