@@ -50,7 +50,7 @@ class Url
 				
 			var scriptName : String = '/' + config.indexPath;
 
-			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash
+			var segmentString : String = currentUri.substr(scriptName.length); // weird
 
 			// Strip empty segment at the end of the string.
 			if(segmentString.charAt(segmentString.length-1) == '/')
