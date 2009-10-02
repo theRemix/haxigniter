@@ -182,7 +182,9 @@ class Request
 			throw new NotFoundException(controllerClass + ' not found. (Is it defined in application/config/Controllers.hx?)');
 
 		// TODO: Controller arguments?
-		return cast Type.createInstance(classType, []);
+		var controller = cast Type.createInstance(classType, []);
+		haxigniter.Application.instance().controller = controller;
+		return controller;
 	}
 	
 	/**

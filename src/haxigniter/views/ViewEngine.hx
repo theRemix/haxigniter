@@ -1,6 +1,8 @@
 ﻿package haxigniter.views;
 
 import haxe.PosInfos;
+import haxigniter.libraries.Url;
+import haxigniter.views.Formats;
 
 #if php
 import php.Lib;
@@ -66,9 +68,33 @@ class ViewEngine
 		return null;
 	}
 	
+	public function renderFormat( fileName : String ) : String
+	{
+		// Controller action does not set the format variables, format.set('xml', posts);
+		if(!Application.instance().controller.format.exists(Url.format)){
+			Application.log("Uri.format ." + Url.format + " requested with no variables set, fall back to html");
+			Url.format = "html";
+			display(fileName);
+		}
+		else if(Formats.allow(Url.format))
+		{
+			// good, render format
+			return Formats.render(Url.format, Application.instance().controller.format.get(Url.format));
+		}else{
+			// no such format handler, log and fallback to default
+			Application.log("Uri.format ." + Url.format + " requested, handled by html template.");
+			Url.format = "html";
+			display(fileName);
+		}
+		return '';
+	}
+	
 	public function display(fileName : String) : Void
 	{
-		Lib.print(this.render(fileName));
+		if(Url.format == "html")
+			Lib.print(this.render(fileName));
+		else // skip html templating, go to format template
+			Lib.print(this.renderFormat(fileName));
 	}
 	
 	/**

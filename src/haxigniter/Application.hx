@@ -45,9 +45,13 @@ class Application
 
 	// TODO: Set this to the Application controller, or use a stack that points to the currently executing controller?
 	//private var my_controller : Controller;
+	// current controller
+	public var controller : Controller;
 
 	public var view(getView, null) : ViewEngine;
 	private function getView() : ViewEngine { return this.config.view; }
+	
+	public var format : Hash<Dynamic>;
 	
 	public var session(getSession, null) : Session;
 	private static var my_session : Session;

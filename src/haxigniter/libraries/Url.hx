@@ -14,6 +14,25 @@ class Url
 	// Must be above other vars using this variable.
 	private static var config = haxigniter.application.config.Config.instance();
 
+	private static var _format : String;
+	public static var format(getFormat, setFormat) : String;
+	private static function getFormat()
+	{
+		if(Url._format == null)
+		{	
+			var scriptName : String = '/' + config.indexPath;
+			var segmentString : String = Web.getURI().substr(scriptName.length + 1); // +1 for the ending slash
+			var segments : Array<String> = segmentString.length > 0 ? segmentString.split('/') : [];
+			var lastSegment : String = segments[segments.length-1];
+			if(lastSegment.lastIndexOf(".") == -1){ // no extension, default to html format
+				return "html";
+			}
+			Url._format = lastSegment.substr(lastSegment.lastIndexOf(".")+1);
+		}
+		return Url._format;
+	}
+	private static function setFormat(f:String) : String { _format = f; return f; }
+
 	public static var segments(getSegments, null) : Array<String>;
 	private static var my_segments : Array<String>;
 	private static function getSegments()
@@ -27,11 +46,17 @@ class Url
 			if(config.permittedUriChars != null)
 				Url.testValidUri(currentUri);
 				
-			var segmentString : String = currentUri.substr(config.indexPath.length + 1); // +1 for the ending slash
+			var scriptName : String = '/' + config.indexPath;
+
+			var segmentString : String = currentUri.substr(scriptName.length + 1); // +1 for the ending slash
 
 			// Strip empty segment at the end of the string.
 			if(segmentString.charAt(segmentString.length-1) == '/')
 				segmentString = segmentString.substr(0, segmentString.length-1);
+				
+			// Strip the extension
+			if(segmentString.lastIndexOf(".") != -1)
+				segmentString = segmentString.substr(0, segmentString.lastIndexOf("."));
 
 			Url.my_segments = segmentString.length > 0 ? segmentString.split('/') : [];
 		}

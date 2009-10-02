@@ -38,7 +38,16 @@ class Controller implements haxe.rtti.Infos
 	private function getDb() : DatabaseConnection { return application.db; }
 
 	public var session(getSession, null) : Session;
-	private function getSession() : Session { return application.session; }	
+	private function getSession() : Session { return application.session; }
+	
+	public var format(getFormat, null) : Hash<Dynamic>;
+	private function getFormat() : Hash<Dynamic> {
+		(application.format == null) ? return application.format = new Hash<Dynamic>() : return application.format;
+	}
+	
+	// "Post" instead of "haxigniter.application.controllers.Post"
+	public var name(getName, null) : String;
+	private function getName():String{ return Std.string(this).substr(Std.string(this).lastIndexOf(".")+1); }
 	
 	///// Convenience methods for debug and logging /////////////////
 	
@@ -51,4 +60,5 @@ class Controller implements haxe.rtti.Infos
 	{
 		Debug.log(message, debugLevel);
 	}
+	
 }
