@@ -104,7 +104,7 @@ class DatabaseConnection
 	public function queryRow(query : String, ?params : Iterable<Dynamic>) : Dynamic
 	{
 		var result = this.query(query, params);
-		return result.hasNext() ? result.next() : {};
+		return result.hasNext() ? result.next() : null;
 	}
 
 	public function queryInt(query : String, ?params : Iterable<Dynamic>) : Int

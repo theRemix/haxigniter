@@ -4,8 +4,10 @@ import haxigniter.Application;
 import haxigniter.EReg2;
 
 #if php
+import php.Sys;
 import php.Web;
 #elseif neko
+import neko.Sys;
 import neko.Web;
 #end
 
@@ -89,6 +91,17 @@ class Url
 		
 		return output.join('/');
 	}
+
+	/**
+	 * Returns the path to the site URL without appending slash, so it can be used in template links.
+	 */
+	public static function linkUrl() : String
+	{
+		var output = config.siteUrl;
+		var slashPos = output.lastIndexOf('/');
+		
+		return slashPos == 0 ? '' : output.substr(0, slashPos);
+	}
 	
 	public static function siteUrl(segments = '') : String
 	{
@@ -109,7 +122,7 @@ class Url
 	 * @param	?https
 	 * @param	?responseCode
 	 */
-	public static function redirect(?url : String = null, ?flashMessage : String = null, ?https : Bool = null, ?responseCode : Int = null)
+	public static function redirect(?url : String = null, ?flashMessage : String = null, ?https : Bool = null, ?responseCode : Int = null) : Void
 	{
 		if(flashMessage != null)
 			Application.instance().session.flashVar = flashMessage;
@@ -132,18 +145,15 @@ class Url
 		Web.redirect(url);
 	}
 	
-	public static function forceSsl(ssl = true)
+	public static function forceSsl(ssl = true) : Void
 	{
 		// No SSL redirect in development mode.
 		if(config.development) return;
 		
-		#if php
-		// Only PHP can detect SSL
-		var sslActive : Bool = haxigniter.libraries.Server.param('HTTPS') == 'on';
+		var sslActive : Bool = Sys.environment().exists('HTTPS') && Sys.environment().get('HTTPS') == 'on';
 		
 		if((sslActive && ssl) || !(sslActive || ssl))
 			return;
-		#end
 		
 		Url.redirect(null, Application.instance().session.flashVar, ssl);
 	}

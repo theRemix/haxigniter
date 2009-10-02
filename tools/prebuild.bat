@@ -8,6 +8,12 @@ if "%1" == "" set PBOUTPUT=%~dp0\..\bin\www
 set PBOUTPUTAPP=%PBOUTPUT%\lib\haxigniter\application
 set PBAPPSRC=%~dp0\..\src\haxigniter\application
 
+:: ----- Synchronize resources --------------------------------------
+
+if not exist "%PBAPPSRC%\resources" goto noresources
+%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\resources" "%PBOUTPUT%" /XF .gitignore /XD lib
+:noresources
+
 :: ----- .htaccess --------------------------------------------------
 
 :: Copy .htaccess to lib folder
@@ -24,7 +30,8 @@ set PBAPPSRC=%~dp0\..\src\haxigniter\application
 
 :: ----- Synchronize external libraries -----------------------------
 
-%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" *.php /XF .gitignore
+%~dp0\robocopy /NJH /NJS /MIR "%PBAPPSRC%\external" "%PBOUTPUTAPP%\external" /XF .gitignore *.hx
+
 
 :: Exit code must be explicitly set sometimes for robocopy.
 :: Thanks for the hint: http://tylermac.wordpress.com/2009/09/06/haxe-php-smarty-flashdevelop/#Implementation
