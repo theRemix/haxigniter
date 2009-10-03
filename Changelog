@@ -2,8 +2,14 @@ Changelog for haXigniter
 
 Current
 =======
+Features
+ - Added Input.htmlSpecialChars() which translates &'"<> to html entities.
+
 Changed
  - Url.redirect() now treats urls starting with '/' as absolute.
+
+Bug fixes
+ - REST error on missing action wasn't displayed properly.
 
 v0.54 (2009-09-02)
 ==================

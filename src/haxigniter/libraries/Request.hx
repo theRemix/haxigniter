@@ -60,6 +60,9 @@ class Request
 		var action : String = null;
 		var args : Array<Dynamic> = [];
 		var typecastId = false;
+
+		var controllerType = Type.getClass(controller);
+		var callMethod : Dynamic;
 		
 		// TODO: Multiple languages for reserved keywords
 		if(method == 'GET')
@@ -92,13 +95,17 @@ class Request
 					action = 'show';
 					extraArgsPos = 2;
 				}
-
+				
 				// Id is the only argument.
 				args.push(uriSegments[1]);
 				argOffset = 1;
 				typecastId = true;
 			}
-			
+
+			callMethod = Reflect.field(controller, action);
+			if(callMethod == null)
+				throw new NotFoundException(controllerType + ' REST-action "' + action + '" not found.');
+
 			// Add extra arguments if the action allows.
 			if(extraArgsPos != null)
 			{
@@ -139,18 +146,16 @@ class Request
 				args.push(query);
 				typecastId = true;
 			}
+
+			callMethod = Reflect.field(controller, action);
+			if(callMethod == null)
+				throw new NotFoundException(controllerType + ' REST-action "' + action + '" not found.');
 		}
 		else
 		{
 			throw new RequestException('Unsupported HTTP method: ' + method);
 		}
 		
-		var controllerType = Type.getClass(controller);
-		
-		var callMethod : Dynamic = Reflect.field(controller, action);
-		if(callMethod == null)
-			throw new NotFoundException(controllerType + ' REST action "' + action + '" not found.');
-
 		if(typecastId)
 		{
 			// Typecast the first argument.
