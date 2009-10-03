@@ -1,5 +1,10 @@
 Changelog for haXigniter
 
+Current
+=======
+Changed
+ - Url.redirect() now treats urls starting with '/' as absolute.
+
 v0.54 (2009-09-02)
 ==================
 Features
