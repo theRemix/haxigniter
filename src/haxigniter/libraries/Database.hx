@@ -1,12 +1,17 @@
 ﻿package haxigniter.libraries;
 
+import haxe.PosInfos;
 import Type;
+import haxigniter.libraries.Debug;
+
+
 
 #if php
 import php.db.Connection;
 import php.db.ResultSet;
 import php.db.Mysql;
-import php.db.Sqlite;
+import haxigniter.php.db.Sqlite;
+//import php.db.Sqlite;
 #elseif neko
 import neko.db.Connection;
 import neko.db.ResultSet;
@@ -98,7 +103,8 @@ class DatabaseConnection
 			query = this.queryParams(query, params);
 		
 		this.lastQuery = query;
-		return this.connection.request(query);
+		
+		return this.request(query);
 	}
 
 	public function queryRow(query : String, ?params : Iterable<Dynamic>) : Dynamic
@@ -127,7 +133,7 @@ class DatabaseConnection
 
 	///// C(R)UD methods ////////////////////////////////////////////
 	
-	public function insert(table : String, data : Hash<Dynamic>, ?replace = false) : Int
+	public function insert(table : String, data : Hash<Dynamic>, ?replace = false, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
@@ -143,7 +149,7 @@ class DatabaseConnection
 		}
 		
 		var query = (replace ? 'REPLACE' : 'INSERT') + ' INTO ' + table + ' (' + keys.substr(2) + ') VALUES (' + values.substr(2) + ')';
-		var result : ResultSet = this.connection.request(query);
+		var result : ResultSet = this.request(query, pos);
 		
 		this.lastQuery = query;		
 		return result.length;
@@ -154,7 +160,7 @@ class DatabaseConnection
 		return this.insert(table, data, true);
 	}
 	
-	public function update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int) : Int
+	public function update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
@@ -185,13 +191,13 @@ class DatabaseConnection
 		if(limit != null)
 			query += ' LIMIT ' + limit;
 
-		var result : ResultSet = this.connection.request(query);
+		var result : ResultSet = this.request(query, pos);
 		
 		this.lastQuery = query;
 		return result.length;
 	}
 	
-	public function delete(table : String, ?where : Hash<Dynamic>, ?limit : Int) : Int
+	public function delete(table : String, ?where : Hash<Dynamic>, ?limit : Int, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
@@ -215,7 +221,7 @@ class DatabaseConnection
 		if(limit != null)
 			query += ' LIMIT ' + limit;
 
-		var result : ResultSet = this.connection.request(query);
+		var result : ResultSet = this.request(query, pos);
 		
 		this.lastQuery = query;
 		return result.length;
@@ -263,6 +269,21 @@ class DatabaseConnection
 		}
 		
 		return query;
+	}
+
+	private function request(query : String, ?pos : PosInfos) : ResultSet
+	{
+		try
+		{
+			return this.connection.request(query);
+		}
+		catch(e : Dynamic)
+		{
+			if(this.debug)
+				Debug.trace('[SQL Error]\n' + query, DebugLevel.error, pos);
+			
+			throw e;
+		}
 	}
 }
 
