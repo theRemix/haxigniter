@@ -3,6 +3,11 @@
 // TODO: Fix this class and make it neko-compatible.
 class Input 
 {
+	public static inline function htmlSpecialChars(s : String)
+	{
+		return StringTools.htmlEscape(s).split('"').join("&quot;").split("'").join("&#039;");
+	}
+	
 	#if php
 	public static inline function post(param : String) : String
 	{

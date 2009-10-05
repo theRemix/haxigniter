@@ -1,5 +1,20 @@
 Changelog for haXigniter
 
+=======
+Current
+=======
+Features
+ - Support for SQLite v3 added to PHP in the haxigniter.php.db.Sqlite class. 
+ - Added Input.htmlSpecialChars() which translates &'"<> to html entities.
+
+Changed
+ - Database class updated to better handle stack traces.
+ - Database CRUD methods (insert, update, delete) now handles classes and anonymous types.
+ - Url.redirect() now treats urls starting with '/' as absolute.
+
+Bug fixes
+ - REST error on missing action wasn't displayed properly.
+
 v0.54 (2009-09-02)
 ==================
 Features

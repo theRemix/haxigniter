@@ -115,8 +115,8 @@ class Url
 	}
 
 	/**
-	 * Redirect to another page. If url isn't absolute, SiteUrl() is used to create a local redirect.
-	 * Note: In order for this function to work it must be used before anything is outputted to the browser since it utilizes server headers.
+	 * Redirect to another page. If url is absolute or starting with a slash, a normal redirect is made. Otherwise, siteUrl() is used to create a local redirect.
+	 * Note: In order for this function to work it must be used before anything is outputted to the browser, since it utilizes server headers.
 	 * @param	?url
 	 * @param	?flashMessage
 	 * @param	?https
@@ -132,9 +132,9 @@ class Url
 
 		if(url == null)
 			url = Url.siteUrl(Url.uriString());
-		else if(url.indexOf('://') == -1)
+		else if(!StringTools.startsWith(url, '/') && url.indexOf('://') == -1)
 			url = Url.siteUrl(url);
-				
+		
 		if(https != null)
 			url = (https ? 'https' : 'http') + url.substr(url.indexOf(':'));
 
