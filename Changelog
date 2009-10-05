@@ -8,6 +8,7 @@ Features
 
 Changed
  - Database class updated to better handle stack traces.
+ - Database CRUD methods (insert, update, delete) now handles classes and anonymous types.
  - Url.redirect() now treats urls starting with '/' as absolute.
 
 Bug fixes

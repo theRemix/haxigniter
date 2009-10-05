@@ -133,19 +133,34 @@ class DatabaseConnection
 
 	///// C(R)UD methods ////////////////////////////////////////////
 	
-	public function insert(table : String, data : Hash<Dynamic>, ?replace = false, ?pos : PosInfos) : Int
+	private function makeHash(data : Dynamic, ?pos : PosInfos) : Hash<Dynamic>
+	{
+		if(Std.is(data, Hash)) 
+			return data;
+		
+		var output = new Hash<Dynamic>();
+		for(field in Reflect.fields(data))
+		{
+			output.set(field, Reflect.field(data, field));
+		}
+		
+		return output;
+	}
+	
+	public function insert(table : String, data : Dynamic, ?replace = false, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
-		
+
+		var hash = makeHash(data);
 		var keys = '';
 		var values = '';
 		
-		for(key in data.keys())
+		for(key in hash.keys())
 		{
 			this.testAlphaNumeric(key);
 			keys += ', ' + key;
-			values += ', ' + this.connection.quote(Std.string(data.get(key)));
+			values += ', ' + this.connection.quote(Std.string(hash.get(key)));
 		}
 		
 		var query = (replace ? 'REPLACE' : 'INSERT') + ' INTO ' + table + ' (' + keys.substr(2) + ') VALUES (' + values.substr(2) + ')';
@@ -155,31 +170,34 @@ class DatabaseConnection
 		return result.length;
 	}
 
-	public function replace(table : String, data : Hash<Dynamic>) : Int
+	public function replace(table : String, data : Dynamic) : Int
 	{
 		return this.insert(table, data, true);
 	}
 	
-	public function update(table : String, data : Hash<Dynamic>, ?where : Hash<Dynamic>, ?limit : Int, ?pos : PosInfos) : Int
+	public function update(table : String, data : Dynamic, ?where : Dynamic, ?limit : Int, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
 		
+		var hash = makeHash(data);
 		var set = '';
 		var whereStr = '';
 		
-		for(key in data.keys())
+		for(key in hash.keys())
 		{
 			this.testAlphaNumeric(key);
-			set += ', ' + key + '=' + this.connection.quote(Std.string(data.get(key)));
+			set += ', ' + key + '=' + this.connection.quote(Std.string(hash.get(key)));
 		}
 
 		if(where != null)
 		{
-			for(key in where.keys())
+			var whereHash = makeHash(where);
+			
+			for(key in whereHash.keys())
 			{
 				this.testAlphaNumeric(key);
-				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(where.get(key)));
+				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(whereHash.get(key)));
 			}
 		}
 
@@ -197,7 +215,7 @@ class DatabaseConnection
 		return result.length;
 	}
 	
-	public function delete(table : String, ?where : Hash<Dynamic>, ?limit : Int, ?pos : PosInfos) : Int
+	public function delete(table : String, ?where : Dynamic, ?limit : Int, ?pos : PosInfos) : Int
 	{
 		this.testOpen();
 		this.testAlphaNumeric(table);
@@ -206,10 +224,12 @@ class DatabaseConnection
 		
 		if(where != null)
 		{
-			for(key in where.keys())
+			var whereHash = makeHash(where);
+			
+			for(key in whereHash.keys())
 			{
 				this.testAlphaNumeric(key);
-				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(where.get(key)));
+				whereStr += ' AND ' + key + '=' + this.connection.quote(Std.string(whereHash.get(key)));
 			}
 		}
 
