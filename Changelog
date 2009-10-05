@@ -4,7 +4,9 @@ Current
 =======
 Features
  - Support for SQLite v3 added to PHP in the haxigniter.php.db.Sqlite class. 
- - Added Input.htmlSpecialChars() which translates &'"<> to html entities.
+ - Added Input.htmlEscape() which translates &'"<> to html entities. Input.htmlUnescape() does the opposite.
+ - Added Input.escapeData() for easy escaping of incoming data.
+ - Added Input.getParams() to avoid switching between the Neko and PHP version.
 
 Changed
  - Database class updated to better handle stack traces.
