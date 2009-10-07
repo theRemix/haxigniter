@@ -11,8 +11,7 @@ class NotFoundException extends haxigniter.exceptions.Exception {}
 
 class Request
 {
-	public static var defaultController : String = 'start';
-	public static var defaultMethod: String = 'index';
+	private static var config = haxigniter.application.config.Config.instance();	
 	public static var defaultPackage : String = 'haxigniter.application.controllers';
 
 	public static function fromString(request : String, ?method : String, ?query : Hash<String>) : Dynamic
@@ -43,7 +42,7 @@ class Request
 	private static function standardController(controller : Controller, uriSegments : Array<String>, method : String, query : Hash<String>) : Dynamic
 	{
 		var controllerType = Type.getClass(controller);
-		var controllerMethod : String = (uriSegments[1] == null) ? Request.defaultMethod : uriSegments[1];
+		var controllerMethod : String = (uriSegments[1] == null) ? config.defaultAction : uriSegments[1];
 
 		var callMethod : Dynamic = Reflect.field(controller, controllerMethod);
 		if(callMethod == null)
@@ -178,9 +177,9 @@ class Request
 	
 	private static function createController(uriSegments : Array<String>) : Controller
 	{
-		var controllerClass : String = (uriSegments[0] == null || uriSegments[0] == '') ? defaultController : uriSegments[0];
+		var controllerClass : String = (uriSegments[0] == null || uriSegments[0] == '') ? config.defaultController : uriSegments[0];
 		controllerClass = defaultPackage + '.' + controllerClass.substr(0, 1).toUpperCase() + controllerClass.substr(1);
-
+		
 		// Instantiate a controller with this class name.
 		var classType : Class<Dynamic> = Type.resolveClass(controllerClass);
 		if(classType == null)
