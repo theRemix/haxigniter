@@ -36,6 +36,9 @@ class Config
 	public var language : String;
 	public var encryptionKey : String;
 	
+	public var defaultController(default, null) : String;
+	public var defaultAction(default, null) : String;
+		
 	public var view : ViewEngine;
 	
 	private var runtimePath : String;
@@ -120,6 +123,16 @@ class Config
 			this.sessionPath = this.runtimePath + 'session/';
 		}
 		
+		if(this.defaultController == null)
+		{
+			this.defaultController = 'start';
+		}
+
+		if(this.defaultAction == null)
+		{
+			this.defaultAction = 'index';
+		}
+
 		if(debug != null)
 			this.dumpEnvironment(debug);
 	}

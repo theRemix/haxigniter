@@ -257,6 +257,28 @@ class Config extends haxigniter.libraries.Config
 		|
 		*/
 		encryptionKey = null;
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Default controller
+		|--------------------------------------------------------------------------
+		|
+		| If you want another controller than the default 'start' to be used
+		| when the URL is empty, specify it here. Null sets the default.
+		|
+		*/
+		defaultController = null;
+
+		/*
+		|--------------------------------------------------------------------------
+		| Default controller action
+		|--------------------------------------------------------------------------
+		|
+		| If you want another controller action than the default 'index' to be used
+		| when the URL is empty, specify it here. Null sets the default.
+		|
+		*/
+		defaultAction = null;
 
 		/*
 		|--------------------------------------------------------------------------
