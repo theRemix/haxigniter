@@ -1,7 +1,7 @@
 Changelog for haXigniter
 
-Current
-=======
+v0.55 (2009-09-07)
+==================
 Features
  - Support for SQLite v3 added to PHP in the haxigniter.php.db.Sqlite class. 
  - Added Input.htmlEscape() which translates &'"<> to html entities. Input.htmlUnescape() does the opposite.
