@@ -13,7 +13,7 @@ import haxigniter.libraries.Server;
  * The arguments will be automatically casted to the type you specify in the methods.
  * 
  */
-class Dev extends haxigniter.libraries.Controller
+class Dev extends haxigniter.controllers.Controller
 {
 	// For neko, a constructor is required for controllers. PHP doesn't care. :)
 	public function new() {}

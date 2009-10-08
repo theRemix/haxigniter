@@ -2,7 +2,7 @@ package haxigniter;
 
 import haxigniter.libraries.Config;
 
-import haxigniter.libraries.Controller;
+import haxigniter.controllers.Controller;
 import haxigniter.libraries.Url;
 import haxigniter.libraries.Debug;
 import haxigniter.libraries.Database;
@@ -136,7 +136,7 @@ class Application
 					this.closeNekoSession();
 				#end
 			}
-			catch(e : NotFoundException)
+			catch(e : haxigniter.exceptions.NotFoundException)
 			{
 				haxigniter.libraries.Server.error404();
 			}

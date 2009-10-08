@@ -4,11 +4,11 @@ import Type;
 import haxigniter.types.TypeFactory;
 import haxigniter.tests.TestCase;
 
-import haxigniter.libraries.Controller;
+import haxigniter.controllers.Controller;
 
 import haxigniter.libraries.Request;
 
-class Testrest extends haxigniter.libraries.RestController
+class Testrest extends haxigniter.controllers.RestController
 {
 	public function new() {}
 	
@@ -68,11 +68,11 @@ class Teststandard extends Controller
 	}
 }
 
-class Custom extends Controller, implements CustomRequest
+class Custom extends Controller
 {
 	public function new() {}
 	
-	public function customRequest(uriSegments : Array<String>, method : String, params : Hash<String>) : Dynamic
+	public override function handleRequest(uriSegments : Array<String>, method : String, params : Hash<String>) : Dynamic
 	{
 		return 'I am custom: ' + method + ' ' + params.get('one') + params.get('two') + params.get('three');
 	}
