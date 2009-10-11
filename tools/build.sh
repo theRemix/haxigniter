@@ -20,7 +20,7 @@ else
 fi
 
 # Strip end slash if it exists
-if [ "`expr match \"$OUTPUT\" '.*/$'`" != 0 ]
+if [ "${OUTPUT:(-1)}" == "/" ]
 then
 	OUTPUT=${OUTPUT:0:${#OUTPUT}-1}
 fi

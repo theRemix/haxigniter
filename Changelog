@@ -8,6 +8,9 @@ Features
 Changed
  - Controllers are now in the haxigniter.controllers package! Update your controllers as needed.
 
+Bug fixes
+ - Build scripts were broken on OSX.
+
 v0.55 (2009-09-07)
 ==================
 Features
