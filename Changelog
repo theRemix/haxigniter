@@ -2,6 +2,9 @@ Changelog for haXigniter
 
 Current
 =======
+Features
+ - Added tools/unittest.bat and tools/unittest.sh to run the unit tests from command prompt. Requires Neko.
+
 Changed
  - Controllers are now in the haxigniter.controllers package! Update your controllers as needed.
 
