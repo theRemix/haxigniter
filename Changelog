@@ -1,7 +1,7 @@
 Changelog for haXigniter
 
-Current
-=======
+v0.56 (2009-10-11)
+==================
 Features
  - Added tools/unittest.bat and tools/unittest.sh to run the unit tests from command prompt. Requires Neko.
 
