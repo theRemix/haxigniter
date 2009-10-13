@@ -3,6 +3,7 @@ package haxigniter.controllers;
 import haxigniter.libraries.Config;
 import haxigniter.libraries.Database;
 import haxigniter.libraries.Debug;
+import haxigniter.libraries.DebugLevel;
 
 import haxigniter.views.ViewEngine;
 import haxigniter.application.config.Session;

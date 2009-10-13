@@ -12,15 +12,6 @@ import neko.io.FileOutput;
 import neko.FileSystem;
 #end
 
-enum DebugLevel
-{
-	off;
-	error;
-	warning;
-	info;
-	verbose;
-}
-
 class Debug
 {
 	public static var traceLevel : DebugLevel = DebugLevel.info;

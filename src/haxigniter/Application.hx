@@ -5,6 +5,7 @@ import haxigniter.libraries.Config;
 import haxigniter.controllers.Controller;
 import haxigniter.libraries.Url;
 import haxigniter.libraries.Debug;
+import haxigniter.libraries.DebugLevel;
 import haxigniter.libraries.Database;
 import haxigniter.libraries.Request;
 
