@@ -1,17 +1,14 @@
 ﻿package haxigniter.libraries;
 
-import haxe.PosInfos;
 import Type;
+import haxe.PosInfos;
 import haxigniter.libraries.Debug;
-
-
 
 #if php
 import php.db.Connection;
 import php.db.ResultSet;
 import php.db.Mysql;
 import haxigniter.php.db.Sqlite;
-//import php.db.Sqlite;
 #elseif neko
 import neko.db.Connection;
 import neko.db.ResultSet;
@@ -36,7 +33,6 @@ class DatabaseException extends haxigniter.exceptions.Exception
 	}
 }
 
-// TODO: Debug query on error
 // TODO: Operators in where queries
 // TODO: Unquoted fields in where/data queries
 class DatabaseConnection
@@ -50,7 +46,9 @@ class DatabaseConnection
 	public var driver : DatabaseDriver;
 	public var debug : Bool;
 	
-	public var connection(default, null) : Connection;	
+	public var connection(default, null) : Connection;
+	
+	public var traceQueries : DebugLevel;
 	
 	/**
 	 * Set this value to change the string which is replaced by a parameter when executing a query.
@@ -75,7 +73,7 @@ class DatabaseConnection
 		else if(this.driver == DatabaseDriver.sqlite)
 			this.connection = Sqlite.open(this.database);
 		else
-			throw new DatabaseException('No valid DatabaseDriver found.', this);
+			throw new DatabaseException('No valid DatabaseDriver found.', this);		
 	}
 	
 	public function close() : Void
@@ -95,7 +93,7 @@ class DatabaseConnection
 
 	///// Query methods /////////////////////////////////////////////
 	
-	public function query(query : String, ?params : Iterable<Dynamic>) : ResultSet
+	public function query(query : String, ?params : Iterable<Dynamic>, ?pos : PosInfos) : ResultSet
 	{
 		this.testOpen();
 		
@@ -104,30 +102,30 @@ class DatabaseConnection
 		
 		this.lastQuery = query;
 		
-		return this.request(query);
+		return this.request(query, pos);
 	}
 
-	public function queryRow(query : String, ?params : Iterable<Dynamic>) : Dynamic
+	public function queryRow(query : String, ?params : Iterable<Dynamic>, ?pos : PosInfos) : Dynamic
 	{
-		var result = this.query(query, params);
+		var result = this.query(query, params, pos);
 		return result.hasNext() ? result.next() : null;
 	}
 
-	public function queryInt(query : String, ?params : Iterable<Dynamic>) : Int
+	public function queryInt(query : String, ?params : Iterable<Dynamic>, ?pos : PosInfos) : Int
 	{
-		var result = this.query(query, params);
+		var result = this.query(query, params, pos);
 		return result.hasNext() ? result.getIntResult(0) : null;
 	}
 
-	public function queryFloat(query : String, ?params : Iterable<Dynamic>) : Float
+	public function queryFloat(query : String, ?params : Iterable<Dynamic>, ?pos : PosInfos) : Float
 	{
-		var result = this.query(query, params);
+		var result = this.query(query, params, pos);
 		return result.hasNext() ? result.getFloatResult(0) : null;
 	}
 
-	public function queryString(query : String, ?params : Iterable<Dynamic>) : String
+	public function queryString(query : String, ?params : Iterable<Dynamic>, ?pos : PosInfos) : String
 	{
-		var result = this.query(query, params);
+		var result = this.query(query, params, pos);
 		return result.hasNext() ? result.getResult(0) : null;
 	}
 
@@ -293,6 +291,9 @@ class DatabaseConnection
 
 	private function request(query : String, ?pos : PosInfos) : ResultSet
 	{
+		if(traceQueries != null)
+			Debug.trace('[Executing SQL] ' + query, traceQueries, pos);
+
 		try
 		{
 			return this.connection.request(query);
