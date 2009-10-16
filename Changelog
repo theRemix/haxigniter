@@ -9,6 +9,7 @@ Features
  - haxigniter.libraries.Inflection added, with support for pluralizing/singularizing words.
 
 Changed
+ - Url.linkUrl() doesn't return a full URL anymore. Slightly faster for the browser to resolve.
  - The DebugLevel enum moved to its own package, haxigniter.libraries.DebugLevel.
 
 Bug fixes
