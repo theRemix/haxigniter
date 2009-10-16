@@ -11,6 +11,9 @@ Features
 Changed
  - The DebugLevel enum moved to its own package, haxigniter.libraries.DebugLevel.
 
+Bug fixes
+ - Input.post() and Input.get() for php didn't work properly.
+
 v0.56 (2009-10-11)
 ==================
 Features

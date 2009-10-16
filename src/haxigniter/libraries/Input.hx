@@ -193,7 +193,7 @@ class Input
 	}
 	
 	#if php
-	public static inline function post(param : String) : String
+	public static inline function post(parameter : String) : String
 	{
 		try
 		{
@@ -205,7 +205,7 @@ class Input
 		}		
 	}
 
-	public static inline function get(param : String) : String
+	public static inline function get(parameter : String) : String
 	{
 		try
 		{
