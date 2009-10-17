@@ -1,7 +1,7 @@
 Changelog for haXigniter
 
-Current
-=======
+v0.57 (2009-10-18)
+==================
 Features
  - The Input.escape methods can now optionally escape everything, not just strings.
  - Added Input.parseQuery() for parsing query strings and urls.
@@ -14,6 +14,7 @@ Changed
  - The DebugLevel enum moved to its own package, haxigniter.libraries.DebugLevel.
 
 Bug fixes
+ - The Flashdevelop project file now sends the correct output folder to the build scripts.
  - Fixed a PHP bug in Url.linkUrl().
  - Input.post() and Input.get() for php didn't work properly.
 
