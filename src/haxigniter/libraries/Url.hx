@@ -85,7 +85,7 @@ class Url
 		else
 		{
 			output = haxigniter.libraries.Server.dirname(output);
-			return (output == '.') ? '' : output;
+			return (output.length == 1) ? '' : output;
 		}
 	}
 	

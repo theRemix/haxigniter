@@ -1,15 +1,5 @@
 package haxigniter.tests;
 
-import haxigniter.libraries.Debug;
-import haxigniter.tests.unit.When_UnitTesting_With_TestCase;
-import haxigniter.tests.unit.When_using_a_TypeFactory;
-import haxigniter.tests.unit.When_using_Controllers;
-
-import haxigniter.tests.unit.When_using_library_Url;
-import haxigniter.tests.unit.When_using_library_Database;
-import haxigniter.tests.unit.When_using_library_Input;
-import haxigniter.tests.unit.When_using_library_Inflection;
-
 #if php
 import php.Lib;
 #elseif neko
@@ -25,7 +15,7 @@ class TestRunner extends haxe.unit.TestRunner
 	
 	private var output : String;
 
-	public function new(runHaxigniterTests = true)
+	public function new(runHaxigniterTests = false)
 	{
 		// Rebind the print method to capture output.
 		var self = this;
@@ -35,20 +25,6 @@ class TestRunner extends haxe.unit.TestRunner
 		}
 
 		super();
-
-		if(runHaxigniterTests)
-		{
-			// haXigniter framework tests
-			this.add(new When_UnitTesting_With_TestCase());
-			this.add(new When_using_a_TypeFactory());
-			this.add(new When_using_Controllers());
-			
-			this.add(new When_using_library_Database());
-			this.add(new When_using_library_Url());
-			this.add(new When_using_library_Input());
-			this.add(new When_using_library_Inflection());			
-		}
-		
 		this.addTestClasses();		
 	}
 	

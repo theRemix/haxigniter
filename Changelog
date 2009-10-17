@@ -9,10 +9,12 @@ Features
  - haxigniter.libraries.Inflection added, with support for pluralizing/singularizing words.
 
 Changed
+ - haXigniter unit tests are now separated from the application, to simplify deployment.
  - Url.linkUrl() doesn't return a full URL anymore. Slightly faster for the browser to resolve.
  - The DebugLevel enum moved to its own package, haxigniter.libraries.DebugLevel.
 
 Bug fixes
+ - Fixed a PHP bug in Url.linkUrl().
  - Input.post() and Input.get() for php didn't work properly.
 
 v0.56 (2009-10-11)
