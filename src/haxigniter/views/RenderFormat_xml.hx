@@ -8,13 +8,17 @@ class RenderFormat_xml implements IFormatRenderer{
 	{
 		php.Web.setHeader("Content-Type","application/xml;charset=UTF-8");
 		controller = haxigniter.Application.instance().controller.name;
+		
+		 // pluralize controller as the root node
+		var plural:String = (controller.charAt(controller.length-1) == "s")? controller : controller+'s';
+		
 		output = '<?xml version="1.0" encoding="UTF-8"?>\r\n';
-		output += "<"+controller+"s>\r\n"; // pluralize controller as the root node
+		output += "<"+plural+">\r\n";
 		var o:Dynamic;
 		for(o in obj){
 			renderXML(o);
 		}
-		output += "</"+controller+"s>"; // pluralize controller as the root node
+		output += "</"+plural+">";
 		return output;
 	}
 	
@@ -28,7 +32,10 @@ class RenderFormat_xml implements IFormatRenderer{
 			tabs += "\t ";
 		}
 		
-		output += tabs+"<"+controller+">\r\n";
+		//unpluralize
+		var single:String = (controller.charAt(controller.length-1) == "s")? controller.substr(0,controller.length-1) : controller;
+		
+		output += tabs+"<"+single+">\r\n";
 		
 		if(Reflect.hasField(obj, "iterator")){
 			var it:Iterable<Dynamic> = obj;
@@ -38,11 +45,12 @@ class RenderFormat_xml implements IFormatRenderer{
 		}else{
 			var it = Reflect.fields(obj);
 			for (i in it){
-				output += tabs + "\t" + tag(i, Reflect.field(obj, i)) + "\r\n";
+				if(Std.parseInt(i) == null) // don't parse the duplicate integer keys
+					output += tabs + "\t" + tag(i, Reflect.field(obj, i)) + "\r\n";
 			}
 		}
 		
-		output += tabs+"</"+controller+">\r\n";
+		output += tabs+"</"+single+">\r\n";
 		
 	}
 	
