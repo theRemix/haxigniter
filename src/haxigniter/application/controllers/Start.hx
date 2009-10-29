@@ -15,7 +15,7 @@ package haxigniter.application.controllers;
  * See that file for more information.
  * 
  */
-class Start extends haxigniter.libraries.RestController
+class Start extends haxigniter.controllers.RestController
 {
 	public function new()
 	{

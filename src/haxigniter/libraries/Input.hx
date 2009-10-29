@@ -21,35 +21,60 @@ class Input
 		return Web.getParams();
 	}
 
-	public static function escapeIterator(input : Iterator<Dynamic>, ?callBack : Dynamic -> Dynamic) : List<Dynamic>
+	/**
+	 * Parse a query string like name=this&email=that to a hash of key=value.
+	 * It also works with full urls, parsing only the query part of it.
+	 * @param	queryString
+	 * @return
+	 */
+	public static function parseQuery(queryString : String) : Hash<String>
 	{
-		return escapeIterable({ iterator: function() { return input; }}, callBack);
-	}
-	
-	public static function escapeIterable(input : Iterable<Dynamic>, ?callBack : Dynamic -> Dynamic) : List<Dynamic>
-	{
-		var output = new List<Dynamic>();
-		for(row in input)
+		var output = new Hash<String>();
+		var pairs : Array<String>;
+		
+		queryString = queryString.substr(queryString.indexOf('?') + 1);
+		pairs = queryString.split('&');
+		
+		for(pair in pairs)
 		{
-			output.add(escapeData(row, callBack));
+			var keyValue = pair.split('=');
+			
+			if(keyValue.length == 2)
+				output.set(keyValue[0], StringTools.urlDecode(keyValue[1]));
 		}
 		
 		return output;
 	}
 	
-	public static function escapeHash(input : Hash<Dynamic>, ?callBack : String -> String) : Hash<Dynamic>
+	public static function escapeIterator(input : Iterator<Dynamic>, ?callBack : Dynamic -> Dynamic, ?escapeAll : Bool = false) : List<Dynamic>
+	{
+		return escapeIterable({ iterator: function() { return input; }}, callBack, escapeAll);
+	}
+	
+	public static function escapeIterable(input : Iterable<Dynamic>, ?callBack : Dynamic -> Dynamic, ?escapeAll : Bool = false) : List<Dynamic>
+	{
+		var output = new List<Dynamic>();
+		for(row in input)
+		{
+			output.add(escapeData(row, callBack, escapeAll));
+		}
+		
+		return output;
+	}
+	
+	public static function escapeHash(input : Hash<Dynamic>, ?callBack : String -> String, ?escapeAll : Bool = false) : Hash<Dynamic>
 	{
 		var output = new Hash<Dynamic>();
 		for(field in input.keys())
 		{
 			var data = input.get(field);
-			output.set(field, escapeData(data, callBack));
+			output.set(field, escapeData(data, callBack, escapeAll));
 		}
 		
 		return output;
 	}
 
-	public static function escapeObject(input : Dynamic, ?callBack : String -> String) : Dynamic
+	public static function escapeObject(input : Dynamic, ?callBack : String -> String, ?escapeAll : Bool = false) : Dynamic
 	{
 		var output = { };
 		var field : String = null;
@@ -59,14 +84,14 @@ class Input
 		
 		untyped __php__('foreach($input as $field => $data) { ');
 		var data = Reflect.field(input, field);
-		Reflect.setField(output, field, escapeData(data, callBack));
+		Reflect.setField(output, field, escapeData(data, callBack, escapeAll));
 		untyped __php__(' } ');
 		
 		#elseif neko
 		for(field in Reflect.fields(input))
 		{
 			var data = Reflect.field(input, field);
-			Reflect.setField(output, field, escapeData(data, callBack));
+			Reflect.setField(output, field, escapeData(data, callBack, escapeAll));
 		}
 		#end
 		
@@ -84,8 +109,9 @@ class Input
 	 * 
 	 * @param	input Any of the supported types.
 	 * @param	?callBack A method used for filtering data. If null, Input.htmlSpecialChars will be used.
+	 * @param	?escapeAll If true, all scalar values will be converted to string and escaped.
 	 */
-	public static function escapeData(input : Dynamic, ?callBack : String -> String) : Dynamic
+	public static function escapeData(input : Dynamic, ?callBack : String -> String, ?escapeAll : Bool = false) : Dynamic
 	{
 		if(Std.is(input, String))
 		{
@@ -98,30 +124,38 @@ class Input
 		else if(Std.is(input, Hash))
 		{
 			//trace('Hash');
-			return escapeHash(input, callBack);
+			return escapeHash(input, callBack, escapeAll);
 		}
 		else if(Reflect.isObject(input))
 		{
 			if(isIterable(input))
 			{
 				//trace('Iterable');
-				return escapeIterable(input, callBack);
+				return escapeIterable(input, callBack, escapeAll);
 			}
 			else if(isIterator(input))
 			{
 				//trace('Iterator');
-				return escapeIterator(input, callBack);
+				return escapeIterator(input, callBack, escapeAll);
 			}
 			else
 			{
 				//trace('Object');
-				return escapeObject(input, callBack);
+				return escapeObject(input, callBack, escapeAll);
 			}
 		}
 		else
 		{
-			//trace('Other: ' + Type.typeof(input));
-			return input;
+			//trace('Other: ' + Type.typeof(input));'
+			if(!escapeAll)
+				return input;
+			else
+			{
+				if(callBack == null)
+					callBack = Input.htmlEscape;
+				
+				return callBack(Std.string(input));
+			}
 		}
 	}
 	
@@ -159,7 +193,7 @@ class Input
 	}
 	
 	#if php
-	public static inline function post(param : String) : String
+	public static inline function post(parameter : String) : String
 	{
 		try
 		{
@@ -171,7 +205,7 @@ class Input
 		}		
 	}
 
-	public static inline function get(param : String) : String
+	public static inline function get(parameter : String) : String
 	{
 		try
 		{

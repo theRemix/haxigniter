@@ -1,12 +1,9 @@
 package haxigniter.types;
 
-/**
-* This file contains all special classes that transforms input data from the user to
-* well-formed, typecased types and classes. The work is done in the class WebTypes.
-*/
+import haxigniter.rtti.RttiUtil;
 
 /**
- * Example class that only accepts integers > 0. Useful for database ids.
+ * Example of custom class that only accepts integers > 0. Useful for database ids.
  */
 class DbID
 {
@@ -29,6 +26,47 @@ class DbID
 class TypeFactory
 {
 	public static var arrayDelimiter : String = '-';
+
+	/**
+	 * Cast a list of strings to correct type based on a method in a class, throwing TypeException if typecast fails.
+	 * If a parameter is optional and string is empty or null, null is returned.
+	 * The class type must implement haxe.rtti.Infos.
+	 * @param	classType   Class type.
+	 * @param	classMethod Method in the class.
+	 * @param	arguments   List of strings to typecast.
+	 * @param	?offset = 0 Start position in list, output length will be arguments.length-offset.
+	 * @return  An array of typecasted arguments.
+	 */
+	public static function typecastArguments(classType : Class<Dynamic>, classMethod : String, arguments : Array<String>, ?offset = 0) : Array<Dynamic>
+	{
+		var output : Array<Dynamic> = [];		
+		var c = 0;
+		
+		for(method in RttiUtil.getMethod(classMethod, classType))
+		{
+			// The RestController only uses a range of the argument array, so an offset
+			// can be specified to adjust the method arguments to start from.
+			if(offset > 0)
+			{
+				--offset;
+				continue;
+			}
+			
+			// Test if value is optional, then push a null argument.
+			if(method.opt && (arguments[c] == '' || arguments[c] == null))
+			{
+				++c;
+				output.push(null);
+			}
+			else
+			{
+				// The methods come in the same order as the arguments, so match each argument with a method type.
+				output.push(TypeFactory.createType(method.type, arguments[c++]));
+			}
+		}
+
+		return output;		
+	}
 	
 	public static function createType(typeString : String, value : String) : Class<Dynamic>
 	{
@@ -49,7 +87,7 @@ class TypeFactory
 			case 'Float':
 				output = Std.parseFloat(value);
 			
-			case 'String':
+			case 'String', 'Dynamic':
 				output = value;
 
 			case 'Array', 'List':

@@ -1,27 +1,12 @@
-package haxigniter.libraries;
+package haxigniter.controllers;
 
 import haxigniter.libraries.Config;
 import haxigniter.libraries.Database;
 import haxigniter.libraries.Debug;
+import haxigniter.libraries.DebugLevel;
 
 import haxigniter.views.ViewEngine;
 import haxigniter.application.config.Session;
-
-/**
- * If you want your controller to handle its request processing by itself, 
- * implement this interface and you will have full control.
- */
-interface CustomRequest
-{
-	/**
-	 * Handle a page request.
-	 * @param	uriSegments Array of request segments (URL splitted with "/")
-	 * @param	method Request method, "GET" or "POST" most likely.
-	 * @param	params Query parameters
-	 * @return  Any value that the controller returns.
-	 */
-	function customRequest(uriSegments : Array<String>, method : String, params : Hash<String>) : Dynamic;
-}
 
 class Controller implements haxe.rtti.Infos
 {
@@ -49,7 +34,27 @@ class Controller implements haxe.rtti.Infos
 	public var name(getName, null) : String;
 	private function getName():String{ return Std.string(this).substr(Std.string(this).lastIndexOf(".")+1); }
 	
-	///// Convenience methods for debug and logging /////////////////
+	/**
+	 * Handle a page request.
+	 * @param	uriSegments Array of request segments (URL splitted with "/")
+	 * @param	method Request method, "GET" or "POST" most likely.
+	 * @param	params Query parameters
+	 * @return  Any value that the controller returns.
+	 */
+	public function handleRequest(uriSegments : Array<String>, method : String, query : Hash<String>) : Dynamic
+	{
+		var controllerType = Type.getClass(this);
+		var controllerMethod : String = (uriSegments[1] == null) ? config.defaultAction : uriSegments[1];
+
+		var callMethod : Dynamic = Reflect.field(this, controllerMethod);
+		if(callMethod == null)
+			throw new haxigniter.exceptions.NotFoundException(controllerType + ' method "' + controllerMethod + '" not found.');
+
+		// Typecast the arguments.
+		var arguments : Array<Dynamic> = haxigniter.types.TypeFactory.typecastArguments(controllerType, controllerMethod, uriSegments.slice(2));
+		
+		return Reflect.callMethod(this, callMethod, arguments);		
+	}
 	
 	private function trace(data : Dynamic, ?debugLevel : DebugLevel, ?pos : haxe.PosInfos) : Void
 	{

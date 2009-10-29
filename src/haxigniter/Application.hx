@@ -2,9 +2,10 @@ package haxigniter;
 
 import haxigniter.libraries.Config;
 
-import haxigniter.libraries.Controller;
+import haxigniter.controllers.Controller;
 import haxigniter.libraries.Url;
 import haxigniter.libraries.Debug;
+import haxigniter.libraries.DebugLevel;
 import haxigniter.libraries.Database;
 import haxigniter.libraries.Request;
 
@@ -94,19 +95,21 @@ class Application
 
 	public static function main()
 	{
+		// If development mode, run the unit tests.
 		if(Application.instance().config.development)
 		{
-			// Run the unit tests. 
-			// Pass true to run the whole haXigniter unit test suite.
 			Application.runTests();
 		}
 		
 		Application.instance().run();
 	}
 	
-	public static function runTests(runHaxigniterTests = false)
+	public static function runTests(displayOnlyErrors = true)
 	{
-		new haxigniter.application.tests.TestRunner(runHaxigniterTests).runAndDisplayOnError();
+		if(displayOnlyErrors)
+			new haxigniter.application.tests.TestRunner().runAndDisplayOnError();
+		else
+			new haxigniter.application.tests.TestRunner().runAndDisplay();
 	}
 
 	public static function genericError()
@@ -140,7 +143,7 @@ class Application
 					this.closeNekoSession();
 				#end
 			}
-			catch(e : NotFoundException)
+			catch(e : haxigniter.exceptions.NotFoundException)
 			{
 				haxigniter.libraries.Server.error404();
 			}

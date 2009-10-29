@@ -1,6 +1,7 @@
 package haxigniter.application.config;
 
 import haxigniter.libraries.Debug;
+import haxigniter.libraries.DebugLevel;
 
 #if php
 import php.Sys;
